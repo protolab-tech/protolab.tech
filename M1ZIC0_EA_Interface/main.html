@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA Settings Interface</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="appContent">
+        <h1>Expert Advisor Settings</h1>
+        <label for="eaSelect">Select EA:</label>
+        <select id="eaSelect"></select>
+        <span id="toggleParams" class="toggle-params hidden">Parameters</span>
+        <div id="paramsForm" class="params-form hidden">
+            <form id="eaSettingsForm" action="php/updateSettings.php" method="post"></form>
+        </div>        
+        <div>
+            <h2>Equity Chart</h2>
+            <canvas id="equityChart"></canvas>
+        </div>
+        <div>
+            <h2 id="assetTitle">Asset Price Chart</h2>
+            <canvas id="assetChart"></canvas>
+            <div id="rangeInfo" class="range-info">
+                <div id="dayRange" class="range-bar">Day's Range: <div class="range-bar-inner"></div></div>
+                <div id="yearRange" class="range-bar">Year's Range: <div class="range-bar-inner"></div></div>
+            </div>
+        </div>
+        <div class="chart-header">
+            <label for="assetTimeframe">Timeframe:</label>
+            <button id="assetTimeframe" type="button">Select Timeframe</button>
+            <div id="timeframePopup" class="asset-popup">
+                <div id="timeframeGrid" class="asset-grid">
+                    <div class="asset-item" data-value="M1">1 Minute</div>
+                    <div class="asset-item" data-value="M5">5 Minutes</div>
+                    <div class="asset-item" data-value="H1">1 Hour</div>
+                    <div class="asset-item" data-value="H4">4 Hours</div>
+                    <div class="asset-item" data-value="D1">1 Day</div>
+                    <div class="asset-item" data-value="W1">1 Week</div>
+                </div>
+            </div>
+            <button type="button" id="selectAssetButton">Select Asset</button>
+            <div id="assetPopup" class="asset-popup">
+                <div id="assetGrid" class="asset-grid"></div>
+            </div>
+        </div>
+    </div>
+    <script src="lib/chart.umd.js"></script>
+    <script src="lib/chartjs-chart-financial.js"></script>
+    <script src="js/scripts.js" type="module"></script>
+</body>
+</html>

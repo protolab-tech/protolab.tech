@@ -1,0 +1,4 @@
+[
+    {"name": "EA 1", "value": "ea1", "enabled": true},
+    {"name": "EA 2", "value": "ea2", "enabled": false}
+]
