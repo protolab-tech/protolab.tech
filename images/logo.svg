@@ -1,0 +1,29 @@
+<svg width="600" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Original radial gradient for the background -->
+        <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#1a1e7e"/>
+            <stop offset="100%" stop-color="#0b1f50"/>
+        </radialGradient>
+        <!-- Additional radial gradient for a soft outer glow -->
+        <radialGradient id="outerGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+        <!-- Drop shadow filter -->
+        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="3" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+        </filter>
+    </defs>
+    
+    <!-- "protolab.tech" text with a drop shadow -->
+    <text x="100" y="100"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          font-family="Helvetica, Arial, sans-serif"
+          font-size="100"
+          fill="#fff"
+          filter="url(#shadow)">
+        protolab.tech
+    </text>
+</svg>
