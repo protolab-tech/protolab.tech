@@ -34,13 +34,25 @@ main {
 footer {
     background: #333;
     color: white;
-    text-align: center;
-    padding: 10px 0;
+    padding: 10px 20px; /* fixed side margins */
     margin-top: 20px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* fixed spacing between items */
+    align-items: center; /* center items vertically */
 }
 
 footer form {
-    margin-top: 10px;
+    margin-top: 0;
+}
+
+footer a {
+    color: #f39c12;
+    text-decoration: none;
 }
 
 form label {

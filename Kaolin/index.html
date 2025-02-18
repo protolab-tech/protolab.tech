@@ -1,37 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaolin </title>
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaolin Spring Collection</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('main section');
+      sections.forEach(section => section.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+    }
+  </script>
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h1>KAOLIN Spring Collection</h1>
-            <p>Siamo nati per brillare</p>
-            <!-- Showcase of products -->
-        </section>
-    </main>
-    <footer>
-        <p>Contact us: info@kaolin.com</p>
-        <p>Follow us on social media</p>
-        <form>
-            <label for="newsletter">Subscribe to our newsletter:</label>
-            <input type="email" id="newsletter" name="newsletter">
-            <button type="submit">Subscribe</button>
-        </form>
-    </footer>
+<body onload="showSection('home')">
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="showSection('home')">Home</a></li>
+        <li><a href="#" onclick="showSection('shop')">Shop</a></li>
+        <li><a href="#" onclick="showSection('about')">About</a></li>
+        <li><a href="#" onclick="showSection('contact')">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="home">
+      <h1>Kaolin Spring Collection</h1>
+    </section>
+    <section id="shop">
+      <h1>Shop</h1>
+      <p>Explore our spring collection.</p>
+    </section>
+    <section id="about">
+      <h1>About Us</h1>
+      <p>Kaolin is a brand dedicated to providing high-quality clothing.</p>
+    </section>
+    <section id="contact">
+      <h1>Contact Us</h1>
+      <p>Feel free to reach out to us with any questions or comments.</p>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <p>Contact us: info@kaolin.com</p>
+    <p>Follow us on social media</p>
+  </footer>
 </body>
 </html>
