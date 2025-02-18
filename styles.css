@@ -134,11 +134,18 @@
   
   /* Footer */
   footer {
-    background: #222;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 40px;
+    background: #333;
+    color: white;
+    padding: 10px 20px; /* fixed side margins */
+    margin-top: 20px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* fixed spacing between items */
+    align-items: center; /* center items vertically */
   }
   
   footer a {
