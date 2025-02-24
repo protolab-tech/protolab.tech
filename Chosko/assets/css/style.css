@@ -57,6 +57,8 @@ main {
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
 #home::before {
@@ -83,6 +85,78 @@ main {
     position: relative;
     z-index: 1;
     font-style: italic;
+}
+
+/* Container for the falling logos */
+.raining-logos {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Style for each falling logo - increased dimensions */
+.logo-drop {
+    position: absolute;
+    width: 150px; /* Tripled from 50px */
+    height: 150px;
+    background: url('../images/logo_transparent.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0.5;
+    /* Default spin if none provided */
+    --spin: 0deg;
+    animation: fall linear infinite;
+}
+
+/* Different positions, durations, delays, and initial rotations for a varied effect */
+.raining-logos .logo-drop:nth-child(1) {
+    left: 10%;
+    animation-duration: 6s;
+    animation-delay: 0s;
+    --spin: 0deg;
+}
+
+.raining-logos .logo-drop:nth-child(2) {
+    left: 30%;
+    animation-duration: 8s;
+    animation-delay: 2s;
+    --spin: 45deg;
+}
+
+.raining-logos .logo-drop:nth-child(3) {
+    left: 50%;
+    animation-duration: 7s;
+    animation-delay: 1s;
+    --spin: 90deg;
+}
+
+.raining-logos .logo-drop:nth-child(4) {
+    left: 70%;
+    animation-duration: 9s;
+    animation-delay: 3s;
+    --spin: 135deg;
+}
+
+.raining-logos .logo-drop:nth-child(5) {
+    left: 90%;
+    animation-duration: 5s;
+    animation-delay: 0.5s;
+    --spin: 180deg;
+}
+
+/* Keyframes for falling effect with rotation */
+@keyframes fall {
+    0% {
+        top: -150px; /* Start completely above view (matches increased height) */
+        transform: translateY(0) rotate(var(--spin));
+    }
+    100% {
+        top: 100%;
+        transform: translateY(50vh) rotate(var(--spin));
+    }
 }
 
 /* Shop Section */
