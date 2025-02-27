@@ -3,75 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Protolab</title>
-  <link rel="icon" type="image/svg+xml" href="images/logo.svg" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Protolab - Professional 3D printing, laser cutting, CNC engraving, and creative design support services for prototype development." />
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/images/logo.svg" as="image" />
+  <link rel="preload" href="assets/css/styles.css" as="style" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Protolab - Innovative Prototyping Solutions" />
+  <meta property="og:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services." />
+  <meta property="og:image" content="https://protolab.tech/assets/images/hero.jpg" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Protolab - Innovative Prototyping Solutions" />
+  <meta name="twitter:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services." />
+  <meta name="twitter:image" content="https://protolab.tech/assets/images/hero.jpg" />
+  
+  <title>Protolab - Innovative Prototyping Solutions</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <header>
+  <header role="banner">
     <div class="header-container">
-      <!-- Logo image: Replace with your logo image -->
-      <img src="images/logo.svg" alt="Protolab Logo" class="logo" />
-      <nav>
-        <ul>
-          <li><a href="/Chosko/">Chosko</a></li>
-          <li><a href="/Kaolin/">Kaolin</a></li>
-          <li><a href="/M1ZIC0_EA_Interface/">Expert</a></li>
+      <a href="/" class="logo-link">
+        <img 
+          src="assets/images/logo.svg" 
+          alt="Protolab Logo" 
+          class="logo" 
+          width="150" 
+          height="50" 
+          loading="eager" 
+        />
+      </a>
+      <nav role="navigation" aria-label="Main navigation">
+        <ul id="main-menu">
+          <li><a href="/Chosko/" aria-label="Visit Chosko website">Chosko</a></li>
+          <li><a href="/Kaolin/" aria-label="Visit Kaolin website">Kaolin</a></li>
+          <li><a href="/Service Appointments/" aria-label="Book a service appointment">Service Appointments</a></li>
         </ul>
       </nav>
     </div>
   </header>
-  <main>
-    <section class="hero">
-      <img src="images/hero.jpg" alt="Creative workspace" class="hero-image" />
+  
+  <main id="main-content" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <picture>
+        <source srcset="assets/images/hero.jpg" type="image/jpeg" />
+        <img 
+          src="assets/images/hero.jpg" 
+          alt="Creative workspace showcasing prototyping equipment" 
+          class="hero-image" 
+          width="1920" 
+          height="1080"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
       <div class="hero-content">
-        <h1>Welcome to protolab.tech</h1>
+        <h1 id="hero-title">Welcome to protolab.tech</h1>
         <p>
           We provide services to creative realities wanting to prototype their product ideas using innovative methods.
           Our expertise includes 3D printing, laser cutting, CNC engraving, and creative design support.
         </p>
       </div>
     </section>
-    <section class="projects">
-      <h2>Our services</h2>
+    
+    <section class="projects" aria-labelledby="services-title">
+      <h2 id="services-title">Our services</h2>
       <div class="project-list">
         <article class="project">
-          <img src="images/3dprinters.jpg" alt="3D Printed Prototype" class="project-image" />
+          <img 
+            src="assets/images/3dprinters.jpg" 
+            alt="Advanced 3D printer in action" 
+            class="project-image" 
+            loading="lazy" 
+            width="300" 
+            height="200"
+            decoding="async"
+          />
           <h3>3D Printed Prototype</h3>
           <p>Experience our state-of-the-art 3D printing capabilities.</p>
         </article>
         <article class="project">
-          <img src="images/laser.jpg" alt="Laser Cutting Process" class="project-image" />
+          <img 
+            src="assets/images/laser.jpg" 
+            alt="Precision laser cutting machine" 
+            class="project-image" 
+            loading="lazy" 
+            width="300" 
+            height="200"
+            decoding="async"
+          />
           <h3>Laser Cutting</h3>
           <p>Precision laser cutting for intricate and detailed designs.</p>
         </article>
         <article class="project">
-          <img src="images/cnc.jpg" alt="CNC Engraving" class="project-image" />
+          <img 
+            src="assets/images/cnc.jpg" 
+            alt="Professional CNC machine engraving" 
+            class="project-image" 
+            loading="lazy" 
+            width="300" 
+            height="200"
+            decoding="async"
+          />
           <h3>CNC Engraving</h3>
           <p>Intricate engraving that brings bespoke designs to life.</p>
         </article>
       </div>
     </section>
   </main>
-  <footer>
-    <span>
-        <a href="https://protolab.tech" target="_blank" rel="noopener">
-        <img src="https://protolab.tech/images/logo.svg" alt="protolab.tech icon" width="100" height="30" />
+  
+  <footer role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <a href="https://protolab.tech" target="_blank" rel="noopener" aria-label="Visit Protolab website">
+          <img src="assets/images/logo.svg" alt="protolab.tech" width="100" height="30" loading="lazy" />
         </a>
-    </span>
-    <span>
-        <a href="https://instagram.com/protolab.tech" target="_blank" rel="noopener">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram (@protolab.tech)" width="30" height="30" />
+      </div>
+      <div class="social-links">
+        <a href="https://instagram.com/protolab.tech" target="_blank" rel="noopener" aria-label="Follow us on Instagram">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="" width="30" height="30" loading="lazy" />
         </a>
-    </span>
-    <span>
-        <a href="https://tiktok.com/@zlessioo" target="_blank" rel="noopener">
-            <img src="https://tiktok.com/favicon.ico" alt="TikTok (@protolab.tech)" width="30" height="30" />
+        <a href="https://tiktok.com/@zlessioo" target="_blank" rel="noopener" aria-label="Follow us on TikTok">
+          <img src="https://tiktok.com/favicon.ico" alt="" width="30" height="30" loading="lazy" />
         </a>
-    </span>
-    <span> | Contact us: <a href="mailto:info@chosko.com" class="email-link">info@protolab.tech</a></span>
-</footer>
+      </div>
+      <div class="contact-info">
+        <span>Contact us: <a href="mailto:info@protolab.tech" class="email-link">info@protolab.tech</a></span>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Protolab",
+      "url": "https://protolab.tech",
+      "logo": "https://protolab.tech/assets/images/logo.svg",
+      "description": "Professional 3D printing, laser cutting, CNC engraving, and creative design support services.",
+      "sameAs": [
+        "https://instagram.com/protolab.tech",
+        "https://tiktok.com/@zlessioo"
+      ]
+    }
+  </script>
 </body>
 </html>
