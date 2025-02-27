@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Service Appointments</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <meta name="description" content="Book service appointments with Protolab. Schedule your 3D printing, laser cutting, or CNC engraving consultation." />
+    
+    <!-- Preload critical assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://calendar.google.com">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Service Appointments - Protolab" />
+    <meta property="og:description" content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
+    <meta property="og:image" content="https://protolab.tech/images/hero.jpg" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Service Appointments - Protolab" />
+    <meta name="twitter:description" content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
+    <meta name="twitter:image" content="https://protolab.tech/images/hero.jpg" />
+    
+    <title>Service Appointments - Protolab</title>
+    <link rel="icon" type="image/svg+xml" href="/Service Appointments/images/logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
         /* Reset */
         * {
@@ -12,106 +33,230 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
+        /* Custom Properties */
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #f39c12;
+            --text-color: #ffffff;
+            --background-dark: #121212;
+            --border-color: #333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --transition-speed: 0.3s;
+        }
+        
+        /* Base Styles */
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f9f9f9;
+            color: var(--text-color);
+            background: var(--background-dark);
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+        
         /* Header */
         header {
-            background: #222;
-            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
             padding: 15px 0;
             margin-bottom: 30px;
         }
+        
         .header-container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+        
+        .header-container h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+        }
+        
         /* Main Content */
         .container {
             width: 90%;
             max-width: 800px;
             margin: 0 auto;
+            flex-grow: 1;
         }
-        h1, h2 {
-            margin-bottom: 20px;
+        
+        section {
+            margin-bottom: 40px;
         }
+        
         h2 {
             font-size: 1.8rem;
-            color: #222;
-            margin-top: 30px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
         }
+        
         p {
             margin-bottom: 20px;
         }
-        /* Google Calendar iframe */
-        iframe {
-            border: 0;
+        
+        /* Calendar */
+        .calendar-container {
+            position: relative;
             width: 100%;
-            height: 600px;
+            height: 0;
+            padding-bottom: 75%;
             margin-bottom: 30px;
         }
+        
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
         /* Form Styling */
         form {
-            background: #fff;
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
-        label {
-            display: block;
-            margin: 15px 0 5px;
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        
+        .form-group {
             margin-bottom: 15px;
         }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+        }
+        
+        /* Details/Summary Styling */
+        details {
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        summary {
+            cursor: pointer;
+            padding: 5px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        summary::before {
+            content: '▸';
+            margin-right: 8px;
+            transition: transform var(--transition-speed);
+        }
+        
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+        
+        .dropdown-content {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Button Styling */
         button {
-            background: #222;
-            color: #fff;
+            background: var(--primary-color);
+            color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background-color var(--transition-speed);
         }
-        button:hover {
-            background: #555;
+        
+        button:hover,
+        button:focus {
+            background: #d35400;
         }
-        /* Dropdown Styling */
-        details {
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px;
-            background: #f1f1f1;
+        
+        /* Links */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
         }
-        details summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
+        
+        a:hover,
+        a:focus {
+            color: #d35400;
+            text-decoration: underline;
         }
-        details summary::-webkit-details-marker {
-            display: none;
-        }
-        .dropdown-content {
-            margin-top: 10px;
-        }
-        /* Responsive */
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
-            iframe {
-                height: 400px;
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                width: 95%;
+            }
+            
+            .calendar-container {
+                padding-bottom: 100%;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 20px;
+            }
+            
+            .calendar-container {
+                page-break-inside: avoid;
+            }
+            
+            button {
+                display: none;
             }
         }
     </style>
@@ -120,61 +265,190 @@
     <header>
         <div class="header-container">
             <h1>Service Appointments</h1>
+            <a href="/" aria-label="Return to homepage">
+                <img src="/Service Appointments/images/logo.svg" alt="Protolab Logo" width="100" height="30">
+            </a>
         </div>
     </header>
     
-    <div class="container">
-        <section>
-            <h2>My Schedule</h2>
-            <!-- Replace 'YOUR_CALENDAR_ID' and 'YOUR_TIMEZONE' with your actual Google Calendar details -->
-            <iframe title="Google Calendar" src="https://calendar.google.com/calendar/embed?src=alban.zalli@outlook.com&amp;ctz=Europe/Rome" frameborder="0" scrolling="no"></iframe>
+    <main id="main-content" class="container">
+        <section aria-labelledby="schedule-title">
+            <h2 id="schedule-title">My Schedule</h2>
+            <div class="calendar-container">
+                <iframe 
+                    title="Availability Calendar"
+                    src="https://calendar.google.com/calendar/embed?src=alban.zalli@outlook.com&amp;ctz=Europe/Rome"
+                    loading="lazy"
+                    frameborder="0"
+                ></iframe>
+            </div>
         </section>
         
-        <section>
-            <h2>Request an Appointment</h2>
+        <section aria-labelledby="appointment-title">
+            <h2 id="appointment-title">Request an Appointment</h2>
             <p>Please fill out the form below to request an appointment. Your request will be sent directly to 
                 <a href="mailto:alban.zalli@outlook.com" class="mailto-link">alban.zalli@outlook.com</a>.
             </p>
             
-            <form action="mailto:alban.zalli@outlook.com" method="post" enctype="text/plain">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="Name" required>
+            <form 
+                action="mailto:alban.zalli@outlook.com" 
+                method="post" 
+                enctype="text/plain"
+                class="appointment-form"
+                novalidate
+            >
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="Name" 
+                        required 
+                        aria-required="true"
+                        autocomplete="name"
+                    >
+                </div>
                 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="Email" required>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="Email" 
+                        required 
+                        aria-required="true"
+                        autocomplete="email"
+                    >
+                </div>
                 
-                <label for="date">Preferred Date:</label>
-                <input type="date" id="date" name="Preferred Date" required>
+                <div class="form-group">
+                    <label for="date">Preferred Date:</label>
+                    <input 
+                        type="date" 
+                        id="date" 
+                        name="Preferred Date" 
+                        required 
+                        aria-required="true"
+                        min="2024-02-27"
+                    >
+                </div>
                 
-                <!-- Dropdown for End Date -->
                 <details>
-                    <summary>Include appointment end date?</summary>
+                    <summary>Specify End Date and Time</summary>
                     <div class="dropdown-content">
-                        <label for="end-date">End Date:</label>
-                        <input type="date" id="end-date" name="End Date">
-                    </div>
-                </details>
-                
-                <!-- Dropdown for Hours -->
-                <details>
-                    <summary>Include appointment hours?</summary>
-                    <div class="dropdown-content">
-                        <label for="start-time">Start Time:</label>
-                        <input type="time" id="start-time" name="Start Time">
+                        <div class="form-group">
+                            <label for="end-date">End Date (Optional):</label>
+                            <input 
+                                type="date" 
+                                id="end-date" 
+                                name="End Date"
+                                min="2024-02-27"
+                            >
+                        </div>
                         
-                        <label for="end-time">End Time:</label>
-                        <input type="time" id="end-time" name="End Time">
+                        <div class="form-group">
+                            <label for="start-time">Start Time (Optional):</label>
+                            <input 
+                                type="time" 
+                                id="start-time" 
+                                name="Start Time"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end-time">End Time (Optional):</label>
+                            <input 
+                                type="time" 
+                                id="end-time" 
+                                name="End Time"
+                            >
+                        </div>
                     </div>
                 </details>
                 
-                <label for="message">Message:</label>
-                <textarea id="message" name="Message" rows="4" required></textarea>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea 
+                        id="message" 
+                        name="Message" 
+                        rows="4" 
+                        required 
+                        aria-required="true"
+                        placeholder="Please describe the service you're interested in..."
+                    ></textarea>
+                </div>
                 
                 <button type="submit">Submit Appointment Request</button>
             </form>
         </section>
-    </div>
+    </main>
     
-    <!-- No additional JavaScript is needed as details/summary handles the dropdown -->
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "Protolab Service Appointments",
+            "provider": {
+                "@type": "Organization",
+                "name": "Protolab",
+                "url": "https://protolab.tech"
+            },
+            "serviceType": ["3D Printing", "Laser Cutting", "CNC Engraving"],
+            "areaServed": "Italy",
+            "availableChannel": {
+                "@type": "ServiceChannel",
+                "serviceUrl": "https://protolab.tech/Service-Appointments",
+                "servicePhone": "",
+                "serviceLocation": {
+                    "@type": "Place",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressCountry": "IT"
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Performance optimized JavaScript -->
+    <script defer>
+        // Form validation and enhancement
+        const form = document.querySelector('form');
+        const dateInput = document.getElementById('date');
+        const endDateInput = document.getElementById('end-date');
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        if (endDateInput) endDateInput.min = today;
+        
+        form.addEventListener('submit', function(e) {
+            // Basic form validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('error');
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+        
+        // Remove error class on input
+        form.addEventListener('input', function(e) {
+            if (e.target.classList.contains('error')) {
+                e.target.classList.remove('error');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,15 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KAOLIN - Premium Streetwear Brand. Discover our latest collection of urban fashion and streetwear designs." />
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/css/style.css" as="style">
+  <link rel="preload" href="assets/images/logo.jpg" as="image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="KAOLIN - Premium Streetwear Brand" />
+  <meta property="og:description" content="Discover our latest collection of urban fashion and streetwear designs." />
+  <meta property="og:image" content="https://protolab.tech/Kaolin/assets/images/logo.jpg" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="KAOLIN - Premium Streetwear Brand" />
+  <meta name="twitter:description" content="Discover our latest collection of urban fashion and streetwear designs." />
+  <meta name="twitter:image" content="https://protolab.tech/Kaolin/assets/images/logo.jpg" />
+  
   <title>KAOLIN - Streetwear Brand</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <header>
-    <nav>
-      <ul>
-        <li><a href="#home">Home</a></li>
+    <nav aria-label="Main navigation">
+      <ul id="main-menu">
+        <li><a href="#home" aria-current="page">Home</a></li>
         <li><a href="#shop">Shop</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#about">About</a></li>
@@ -19,92 +40,163 @@
       </ul>
     </nav>
   </header>
-  <main>
-    <section id="home">
+  
+  <main id="main-content">
+    <section id="home" aria-labelledby="brand-title">
       <div class="logo-animation">
-        <img src="assets/images/logo.jpg" alt="KAOLIN Logo" width="120" height="120" style="border-radius: 50%;">
+        <img 
+          src="assets/images/logo.jpg" 
+          alt="KAOLIN Logo" 
+          width="120" 
+          height="120" 
+          style="border-radius: 50%;"
+          loading="eager"
+        >
       </div>
-      <h1>KAOLIN</h1>
+      <h1 id="brand-title">KAOLIN</h1>
       <p>Premium Streetwear</p>
     </section>
 
-    <section id="shop">
-      <h2 class="section-title">Latest Collection</h2>
+    <section id="shop" aria-labelledby="collection-title">
+      <h2 id="collection-title" class="section-title">Latest Collection</h2>
       <div class="product-grid">
-        <div class="product-card">
-          <img src="assets/images/greyTshirtskaolinestyle.jpg" alt="Kaolin T-Shirt" class="product-image">
+        <article class="product-card">
+          <img 
+            src="assets/images/greyTshirtskaolinestyle.jpg" 
+            alt="Grey KAOLIN Urban T-Shirt" 
+            class="product-image"
+            loading="lazy"
+            width="300"
+            height="400"
+          >
           <div class="product-info">
             <h3>KAOLIN Urban Tee</h3>
-            <p>€45.99</p>
+            <p class="price">€45.99</p>
           </div>
-        </div>
-        <div class="product-card">
-          <img src="assets/images/kaolinegreenbackground.jpg" alt="Kaolin Streetwear" class="product-image">
+        </article>
+        <article class="product-card">
+          <img 
+            src="assets/images/kaolinegreenbackground.jpg" 
+            alt="KAOLIN Digital Print Hoodie in Green" 
+            class="product-image"
+            loading="lazy"
+            width="300"
+            height="400"
+          >
           <div class="product-info">
             <h3>KAOLIN Digital Print Hoodie</h3>
-            <p>€79.99</p>
+            <p class="price">€79.99</p>
           </div>
-        </div>
-        <div class="product-card">
-          <img src="assets/images/kaolinelimeonpink.jpg" alt="Kaolin Sticker" class="product-image">
+        </article>
+        <article class="product-card">
+          <img 
+            src="assets/images/kaolinelimeonpink.jpg" 
+            alt="KAOLIN Sticker Pack featuring Lime on Pink design" 
+            class="product-image"
+            loading="lazy"
+            width="300"
+            height="400"
+          >
           <div class="product-info">
             <h3>KAOLIN Sticker Pack</h3>
-            <p>€12.99</p>
+            <p class="price">€12.99</p>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
-    <section id="gallery">
-      <h2 class="section-title">Street Gallery</h2>
-      <div class="gallery">
-        <div class="gallery-item">
-          <img src="assets/images/stickeronlightpolesupermarketparking.jpg" alt="Kaolin Sticker on Light Pole">
-        </div>
-        <div class="gallery-item">
-          <img src="assets/images/stickeronglass.jpg" alt="Kaolin Sticker on Glass">
-        </div>
-        <div class="gallery-item">
-          <img src="assets/images/stickeronrustymetalskybackground.jpg" alt="Kaolin Sticker on Rusty Metal">
-        </div>
-        <div class="gallery-item">
-          <img src="assets/images/stickeronshoppingcartholderbar.jpg" alt="Kaolin Sticker on Shopping Cart">
-        </div>
-        <div class="gallery-item">
-          <img src="assets/images/digitalabstractrgbbcgrnd.jpg.jpg" alt="Kaolin Digital Abstract Background">
-        </div>
-        <div class="gallery-item">
-          <img src="assets/images/digitalabstractpurpleorangegreenbcgrnd.jpg" alt="Kaolin Digital Abstract Background">
-        </div>
+    <section id="gallery" aria-labelledby="gallery-title">
+      <h2 id="gallery-title" class="section-title">Street Gallery</h2>
+      <div class="gallery" role="region" aria-label="Street art gallery">
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/stickeronlightpolesupermarketparking.jpg" 
+            alt="KAOLIN Sticker on Light Pole in Supermarket Parking"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/stickeronglass.jpg" 
+            alt="KAOLIN Sticker on Glass Surface"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/stickeronrustymetalskybackground.jpg" 
+            alt="KAOLIN Sticker on Rusty Metal against Sky"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/stickeronshoppingcartholderbar.jpg" 
+            alt="KAOLIN Sticker on Shopping Cart Handle"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/digitalabstractrgbbcgrnd.jpg" 
+            alt="KAOLIN Digital Abstract Design in RGB Colors"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
+        <figure class="gallery-item">
+          <img 
+            src="assets/images/digitalabstractpurpleorangegreenbcgrnd.jpg" 
+            alt="KAOLIN Digital Abstract Design in Purple, Orange, and Green"
+            loading="lazy"
+            width="300"
+            height="300"
+          >
+        </figure>
       </div>
     </section>
 
-    <section id="about">
-      <h2 class="section-title">Our Story</h2>
-      <div>
-        <img src="assets/images/galvanizedmetalgreen5.jpg" alt="Kaolin Background">
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">Our Story</h2>
+      <div class="about-image">
+        <img 
+          src="assets/images/galvanizedmetalgreen5.jpg" 
+          alt="Artistic background representing KAOLIN's urban roots"
+          loading="lazy"
+          width="800"
+          height="400"
+        >
       </div>
-      <div>
+      <div class="about-content">
         <p>KAOLIN is a streetwear brand born from the fusion of urban culture and contemporary fashion. We create clothing that embodies the spirit of street art and self-expression.</p>
         <p>Each piece in our collection is designed with attention to detail and quality, bringing a unique aesthetic to your everyday style. Our designs are inspired by digital art, urban environments, and the raw energy of street culture.</p>
         <p>We believe that clothing is more than just fabric – it's a statement of identity. Join us on our journey as we continue to push the boundaries of streetwear fashion.</p>
       </div>
     </section>
 
-    <section id="contact">
-      <h2 class="section-title">Get in Touch</h2>
-      <form>
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Get in Touch</h2>
+      <form class="contact-form" action="/submit-form" method="POST" novalidate>
         <div class="form-group">
           <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
+          <input type="text" id="name" name="name" required aria-required="true">
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="email" required aria-required="true">
         </div>
         <div class="form-group full-width">
           <label for="message">Message:</label>
-          <textarea id="message" name="message" required></textarea>
+          <textarea id="message" name="message" required aria-required="true"></textarea>
         </div>
         <button type="submit">Send Message</button>
       </form>
@@ -112,27 +204,41 @@
   </main>
 
   <footer>
-    <span>
-      <a href="https://protolab.tech" target="_blank" rel="noopener">
-        <img src="https://protolab.tech/images/logo.svg" alt="protolab.tech icon" width="100" height="30" />
-      </a>
-    </span>
-    <span class="social-icons">
-      <a href="https://www.instagram.com/kaoline.streetwear/" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram (@kaoline.streetwear)" width="30" height="30" />
-      </a>
-      <a href="#" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" width="30" height="30" />
-      </a>
-      <a href="#" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Twitter-logo.svg" alt="Twitter" width="30" height="30" />
-      </a>
-    </span>
-    <span> | Contact us: <a href="mailto:info@kaolin.com" class="email-link">info@kaolin.com</a></span>
+    <div class="footer-container">
+      <div class="footer-logo">
+        <a href="https://protolab.tech" target="_blank" rel="noopener" aria-label="Visit Protolab website">
+          <img src="https://protolab.tech/images/logo.svg" alt="protolab.tech" width="100" height="30" loading="lazy">
+        </a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.instagram.com/kaoline.streetwear/" target="_blank" rel="noopener" aria-label="Follow KAOLIN on Instagram">
+          <img src="assets/images/instagram-icon.svg" alt="" width="30" height="30" loading="lazy">
+        </a>
+      </div>
+      <div class="contact-info">
+        <span>Contact us: <a href="mailto:info@kaolin.com" class="email-link">info@kaolin.com</a></span>
+      </div>
+    </div>
   </footer>
 
-  <script>
-    // Smooth scrolling for navigation links
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Brand",
+      "name": "KAOLIN",
+      "description": "Premium streetwear brand focusing on urban fashion and street culture",
+      "url": "https://protolab.tech/Kaolin",
+      "logo": "https://protolab.tech/Kaolin/assets/images/logo.jpg",
+      "sameAs": [
+        "https://www.instagram.com/kaoline.streetwear/"
+      ]
+    }
+  </script>
+
+  <!-- Performance optimized JavaScript -->
+  <script defer>
+    // Smooth scrolling
     document.querySelectorAll('nav a').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -141,15 +247,32 @@
       });
     });
 
+    // Menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainMenu = document.getElementById('main-menu');
+    
+    if (menuToggle) {
+      menuToggle.hidden = false;
+      menuToggle.addEventListener('click', () => {
+        const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !expanded);
+        mainMenu.classList.toggle('show');
+      });
+    }
+
     // Header scroll effect
+    const header = document.querySelector('header');
+    let lastScroll = 0;
+    
     window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 50) {
+      const currentScroll = window.scrollY;
+      if (currentScroll > lastScroll && currentScroll > 50) {
         header.classList.add('scrolled');
       } else {
         header.classList.remove('scrolled');
       }
-    });
+      lastScroll = currentScroll;
+    }, { passive: true });
   </script>
 </body>
 </html>

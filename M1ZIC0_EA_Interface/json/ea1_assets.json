@@ -1,9 +1,0 @@
-[
-    {"name": "EUR/USD", "value": "EURUSD", "enabled": true},
-    {"name": "GBP/USD", "value": "GBPUSD", "enabled": true},
-    {"name": "USD/JPY", "value": "USDJPY", "enabled": false},
-    {"name": "AUD/USD", "value": "AUDUSD", "enabled": true},
-    {"name": "NZD/USD", "value": "NZDUSD", "enabled": true},
-    {"name": "USD/CAD", "value": "USDCAD", "enabled": true},
-    {"name": "USD/CHF", "value": "USDCHF", "enabled": true}
-]

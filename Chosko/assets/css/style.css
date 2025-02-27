@@ -1,3 +1,32 @@
+/* Custom Properties */
+:root {
+  --primary-color: #f39c12;
+  --background-dark: #121212;
+  --text-light: #ffffff;
+  --spacing-unit: 1rem;
+  --transition-speed: 0.3s;
+  --logo-size: 150px;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .logo-drop {
+    animation: none;
+  }
+  
+  .product-card {
+    transform: none;
+  }
+}
+
 body {
     font-family: 'Montserrat', Arial, sans-serif;
     margin: 0;
@@ -101,14 +130,16 @@ main {
 /* Style for each falling logo - increased dimensions */
 .logo-drop {
     position: absolute;
-    width: 150px; /* Tripled from 50px */
-    height: 150px;
+    width: var(--logo-size);
+    height: var(--logo-size);
     background: url('../images/logo_transparent.png') no-repeat center center;
     background-size: contain;
     opacity: 0.5;
     /* Default spin if none provided */
     --spin: 0deg;
     animation: fall linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 /* Different positions, durations, delays, and initial rotations for a varied effect */
@@ -277,4 +308,169 @@ footer a {
     margin-bottom: 50px;
     text-transform: uppercase;
     letter-spacing: 3px;
+}
+
+/* Brands Section */
+#brands {
+    padding: 100px 20px;
+    background: #121212;
+}
+
+.brands-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.brand-card {
+    flex: 1;
+    min-height: 400px;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transition: transform 0.3s ease;
+}
+
+.brand-card:hover {
+    transform: translateY(-10px);
+}
+
+.brand-card.design {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('../images/design-bg.jpg') center/cover;
+}
+
+.brand-card.skateboarding {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('../images/sb-bg.jpg') center/cover;
+}
+
+.brand-content {
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+.brand-content h3 {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.brand-content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.brand-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.brand-features li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.brand-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #f39c12;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease;
+}
+
+.brand-button:hover {
+    background: #e67e22;
+}
+
+/* Shop Sections Differentiation */
+#shop-design {
+    background: #121212;
+    padding: 100px 20px;
+}
+
+#shop-sb {
+    background: #1a1a1a;
+    padding: 100px 20px;
+}
+
+#shop-sb .section-title::after {
+    background: #f39c12;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .brands-container {
+        flex-direction: column;
+    }
+
+    .brand-card {
+        min-height: 300px;
+    }
+    
+    nav ul {
+        text-align: center;
+    }
+    
+    nav ul li {
+        display: block;
+        margin: var(--spacing-unit) 0;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #home h1 {
+        font-size: 2.5em;
+    }
+}
+
+/* Form Accessibility */
+form input:focus,
+form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 2cm;
+    }
+    
+    body {
+        background: none;
+        color: #000;
+    }
+    
+    .raining-logos,
+    nav,
+    button {
+        display: none;
+    }
+    
+    .product-card {
+        break-inside: avoid;
+        border: 1px solid #000;
+    }
+    
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+    }
 }
