@@ -1,75 +1,318 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+    overflow-x: hidden;
 }
 
 header {
-    background: #333;
+    background: rgba(0, 0, 0, 0.8);
     color: white;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: background 0.3s ease;
+}
+
+header.scrolled {
+    background: rgba(0, 0, 0, 0.95);
     padding: 10px 0;
-    text-align: center;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
     text-align: center;
+    margin: 0;
 }
 
 nav ul li {
-    display: inline;
-    margin: 0 15px;
+    display: inline-block;
+    margin: 0 20px;
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+    font-size: 14px;
+}
+
+nav ul li a:hover {
+    color: #52c988; /* Water green color from Kaolin's assets */
 }
 
 main {
+    padding: 80px 20px 100px;
+}
+
+section {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    padding: 40px 0;
+}
+
+#home {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('../images/watergreengradient.jpg') center/cover;
+    margin-top: -80px;
+    margin-bottom: 0;
+    position: relative;
+    color: white;
+}
+
+#home h1 {
+    font-size: 72px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#home p {
+    font-size: 24px;
+    margin-top: 0;
+    letter-spacing: 3px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    color: #333;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #52c988;
+    margin: 15px auto 0;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.product-info {
     padding: 20px;
+    text-align: center;
+}
+
+.product-info h3 {
+    margin-top: 0;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.product-info p {
+    color: #52c988;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+#about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+#about .section-title {
+    grid-column: 1 / -1;
+}
+
+#about p {
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+#about img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#contact {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+form .full-width {
+    grid-column: 1 / -1;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+form textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+form button {
+    grid-column: 1 / -1;
+    padding: 15px 30px;
+    background: #52c988;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease;
+    justify-self: center;
+    font-size: 16px;
+}
+
+form button:hover {
+    background: #3ca66e;
 }
 
 footer {
     background: #333;
     color: white;
-    padding: 10px 20px; /* fixed side margins */
-    margin-top: 20px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 30px; /* fixed spacing between items */
-    align-items: center; /* center items vertically */
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
 }
 
-footer form {
-    margin-top: 0;
+footer span {
+    margin: 0 15px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
-footer a {
-    color: #f39c12;
+.social-icons a {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.social-icons img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.social-icons img:hover {
+    transform: scale(1.2);
+}
+
+.email-link {
+    color: #52c988;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-form label {
-    display: block;
-    margin: 10px 0 5px;
+.email-link:hover {
+    color: #3ca66e;
 }
 
-form input, form textarea {
+/* Gallery Section */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
+
+.gallery-item img {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-form button {
-    padding: 10px 20px;
-    background: #555;
-    color: white;
-    border: none;
-    cursor: pointer;
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    #home h1 {
+        font-size: 48px;
+    }
+    
+    #about {
+        grid-template-columns: 1fr;
+    }
+    
+    form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation for logo */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-animation {
+    animation: fadeIn 1.5s ease-out;
 }
