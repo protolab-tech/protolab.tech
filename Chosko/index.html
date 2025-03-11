@@ -14,18 +14,21 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="CHOSKO - Siamo nati per brillare" />
     <meta property="og:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta property="og:image" content="https://protolab.tech/Chosko/assets/images/logo.jpg" />
+    <meta property="og:image" content="/Chosko/assets/images/logo.jpg" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="CHOSKO - Siamo nati per brillare" />
     <meta name="twitter:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta name="twitter:image" content="https://protolab.tech/Chosko/assets/images/logo.jpg" />
+    <meta name="twitter:image" content="/Chosko/assets/images/logo.jpg" />
     
     <title>Chosko - Siamo nati per brillare</title>
     <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
     <header>
@@ -194,7 +197,7 @@
 
         <section id="contact" aria-labelledby="contact-title">
             <h2 id="contact-title" class="section-title">Get in Touch</h2>
-            <form class="contact-form" action="/submit-form" method="POST" novalidate>
+            <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required aria-required="true">
@@ -240,15 +243,15 @@
             "@type": "Brand",
             "name": "CHOSKO",
             "description": "Premium streetwear and skateboarding brand with two distinct lines: CHOSKO DESIGN and CHOSKO SB",
-            "url": "https://protolab.tech/Chosko",
-            "logo": "https://protolab.tech/Chosko/assets/images/logo.jpg",
+            "url": "",
+            "logo": "/Chosko/assets/images/logo.jpg",
             "sameAs": [
                 "https://instagram.com/chosko.design",
                 "https://tiktok.com/@zlessioo"
             ]
         }
     </script>
-
+    
     <!-- Performance optimized JavaScript -->
     <script defer>
         // Smooth scrolling
@@ -259,19 +262,6 @@
                 section.scrollIntoView({ behavior: 'smooth' });
             });
         });
-
-        // Menu toggle functionality
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mainMenu = document.getElementById('main-menu');
-        
-        if (menuToggle) {
-            menuToggle.hidden = false;
-            menuToggle.addEventListener('click', () => {
-                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-                menuToggle.setAttribute('aria-expanded', !expanded);
-                mainMenu.classList.toggle('show');
-            });
-        }
 
         // Header scroll effect
         const header = document.querySelector('header');
@@ -286,6 +276,9 @@
             }
             lastScroll = currentScroll;
         }, { passive: true });
+        
+        // Update canonical URL with JavaScript for custom domain support
+        document.head.innerHTML += '<link rel="canonical" href="' + window.location.protocol + '//' + window.location.host + window.location.pathname + '">';
     </script>
 </body>
 </html>

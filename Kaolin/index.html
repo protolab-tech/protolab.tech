@@ -15,18 +15,21 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="KAOLIN - Premium Streetwear Brand" />
   <meta property="og:description" content="Discover our latest collection of urban fashion and streetwear designs." />
-  <meta property="og:image" content="https://protolab.tech/Kaolin/assets/images/logo.jpg" />
+  <meta property="og:image" content="/Kaolin/assets/images/logo.jpg" />
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="KAOLIN - Premium Streetwear Brand" />
   <meta name="twitter:description" content="Discover our latest collection of urban fashion and streetwear designs." />
-  <meta name="twitter:image" content="https://protolab.tech/Kaolin/assets/images/logo.jpg" />
+  <meta name="twitter:image" content="/Kaolin/assets/images/logo.jpg" />
   
   <title>KAOLIN - Streetwear Brand</title>
   <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  
+  <!-- Security headers -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
   <header>
@@ -185,7 +188,7 @@
 
     <section id="contact" aria-labelledby="contact-title">
       <h2 id="contact-title" class="section-title">Get in Touch</h2>
-      <form class="contact-form" action="/submit-form" method="POST" novalidate>
+      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
         <div class="form-group">
           <label for="name">Name:</label>
           <input type="text" id="name" name="name" required aria-required="true">
@@ -228,8 +231,8 @@
       "@type": "Brand",
       "name": "KAOLIN",
       "description": "Premium streetwear brand focusing on urban fashion and street culture",
-      "url": "https://protolab.tech/Kaolin",
-      "logo": "https://protolab.tech/Kaolin/assets/images/logo.jpg",
+      "url": "",
+      "logo": "/Kaolin/assets/images/logo.jpg",
       "sameAs": [
         "https://www.instagram.com/kaoline.streetwear/"
       ]
@@ -273,6 +276,9 @@
       }
       lastScroll = currentScroll;
     }, { passive: true });
+
+    // Update canonical URL with JavaScript for custom domain support
+    document.head.innerHTML += '<link rel="canonical" href="' + window.location.protocol + '//' + window.location.host + window.location.pathname + '">';
   </script>
 </body>
 </html>
