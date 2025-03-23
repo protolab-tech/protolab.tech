@@ -14,16 +14,16 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="CHOSKO - Siamo nati per brillare" />
     <meta property="og:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta property="og:image" content="/Chosko/assets/images/logo.jpg" />
+    <meta property="og:image" content="/Chosko/assets/images/logo_transparent.png" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="CHOSKO - Siamo nati per brillare" />
     <meta name="twitter:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta name="twitter:image" content="/Chosko/assets/images/logo.jpg" />
+    <meta name="twitter:image" content="/Chosko/assets/images/logo_transparent.png" />
     
     <title>Chosko - Siamo nati per brillare</title>
-    <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+    <link rel="icon" type="image/png" href="assets/images/logo_transparent.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     
@@ -197,18 +197,25 @@
 
         <section id="contact" aria-labelledby="contact-title">
             <h2 id="contact-title" class="section-title">Get in Touch</h2>
-            <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
+            <p class="contact-intro">
+                Clicking "Send Message" will open your default email application with a pre-filled message ready for you to review and send.
+            </p>
+            <form class="contact-form" 
+                  action="mailto:chosko@protolab.tech" 
+                  method="post" 
+                  enctype="text/plain"
+                  novalidate>
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required aria-required="true">
+                    <input type="text" id="name" name="Name" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required aria-required="true">
+                    <input type="email" id="email" name="Email" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="message">Message:</label>
-                    <textarea id="message" name="message" required aria-required="true"></textarea>
+                    <textarea id="message" name="Message" required aria-required="true"></textarea>
                 </div>
                 <button type="submit">Send Message</button>
             </form>
@@ -231,7 +238,7 @@
                 </a>
             </div>
             <div class="contact-info">
-                <span>Contact us: <a href="mailto:info@chosko.com" class="email-link">info@chosko.com</a></span>
+                <span>Contact us: <a href="mailto:chosko@protolab.tech" class="email-link">chosko@protolab.tech</a></span>
             </div>
         </div>
     </footer>
@@ -244,7 +251,7 @@
             "name": "CHOSKO",
             "description": "Premium streetwear and skateboarding brand with two distinct lines: CHOSKO DESIGN and CHOSKO SB",
             "url": "",
-            "logo": "/Chosko/assets/images/logo.jpg",
+            "logo": "/Chosko/assets/images/logo_transparent.png",
             "sameAs": [
                 "https://instagram.com/chosko.design",
                 "https://tiktok.com/@zlessioo"

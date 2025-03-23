@@ -52,7 +52,7 @@
           alt="KAOLIN Logo" 
           width="120" 
           height="120" 
-          style="border-radius: 50%;"
+          class="logo-image"
           loading="eager"
         >
       </div>
@@ -188,18 +188,25 @@
 
     <section id="contact" aria-labelledby="contact-title">
       <h2 id="contact-title" class="section-title">Get in Touch</h2>
-      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
+      <p class="contact-intro">
+        Clicking "Send Message" will open your default email application with a pre-filled message ready for you to review and send.
+      </p>
+      <form class="contact-form" 
+            action="mailto:kaolin@protolab.tech" 
+            method="post" 
+            enctype="text/plain"
+            novalidate>
         <div class="form-group">
           <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required aria-required="true">
+          <input type="text" id="name" name="Name" required aria-required="true">
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required aria-required="true">
+          <input type="email" id="email" name="Email" required aria-required="true">
         </div>
         <div class="form-group full-width">
           <label for="message">Message:</label>
-          <textarea id="message" name="message" required aria-required="true"></textarea>
+          <textarea id="message" name="Message" required aria-required="true"></textarea>
         </div>
         <button type="submit">Send Message</button>
       </form>
@@ -219,7 +226,7 @@
         </a>
       </div>
       <div class="contact-info">
-        <span>Contact us: <a href="mailto:info@kaolin.com" class="email-link">info@kaolin.com</a></span>
+        <span>Contact us: <a href="mailto:kaolin@protolab.tech" class="email-link">kaolin@protolab.tech</a></span>
       </div>
     </div>
   </footer>
