@@ -3,223 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CHOSKO - Premium streetwear and skateboarding apparel. Two souls, one vision. Discover our Design and SB collections." />
-    
-    <!-- Preload critical assets -->
-    <link rel="preload" href="assets/css/style.css" as="style">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="CHOSKO - Siamo nati per brillare" />
-    <meta property="og:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta property="og:image" content="/Chosko/assets/images/logo_transparent.png" />
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CHOSKO - Siamo nati per brillare" />
-    <meta name="twitter:description" content="Premium streetwear and skateboarding apparel. Two souls, one vision." />
-    <meta name="twitter:image" content="/Chosko/assets/images/logo_transparent.png" />
-    
     <title>Chosko - Siamo nati per brillare</title>
     <link rel="icon" type="image/png" href="assets/images/logo_transparent.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    
-    <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
+    <div class="raining-logos" aria-hidden="true">
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+        <div class="logo-drop"></div>
+    </div>
+
     <header>
         <nav aria-label="Main navigation">
-            <ul id="main-menu">
-                <li><a href="#home" aria-current="page">Home</a></li>
-                <li><a href="#brands">Shop</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="header-container">
+                <button class="menu-button" aria-label="Open menu">
+                    <span class="menu-icon"></span>
+                </button>
+                <div class="brand-name">CHOSKO</div>
+                <div class="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+            <div class="menu-overlay">
+                <ul id="main-menu">
+                    <li class="has-submenu">
+                        <a href="#products">Products</a>
+                        <ul class="submenu">
+                            <li><a href="#shop-design">Chosko SB</a></li>
+                            <li><a href="#shop-sb">Chosko Design</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="policy.html">Policy</a></li>
+                </ul>
+            </div>
         </nav>
     </header>
-    
+
     <main id="main-content">
-        <section id="home" aria-labelledby="brand-title">
-            <div class="raining-logos" aria-hidden="true">
-                <div class="logo-drop"></div>
-                <div class="logo-drop"></div>
-                <div class="logo-drop"></div>
-                <div class="logo-drop"></div>
-                <div class="logo-drop"></div>
-            </div>
-            <h1 id="brand-title">CHOSKO</h1>
-            <p>Two souls, one vision</p>
-        </section>
-
-        <section id="brands" aria-labelledby="brands-title">
-            <h2 id="brands-title" class="section-title">Our Brands</h2>
-            <div class="brands-container">
-                <article class="brand-card design">
-                    <div class="brand-content">
-                        <h3>CHOSKO DESIGN</h3>
-                        <p>Contemporary fashion meets artistic expression</p>
-                        <ul class="brand-features">
-                            <li>Premium Streetwear</li>
-                            <li>Artistic Collections</li>
-                            <li>Limited Editions</li>
-                        </ul>
-                        <a href="#shop-design" class="brand-button">Explore Design</a>
-                    </div>
-                </article>
-                <article class="brand-card skateboarding">
-                    <div class="brand-content">
-                        <h3>CHOSKO SB</h3>
-                        <p>Born in the streets, made for skaters</p>
-                        <ul class="brand-features">
-                            <li>Skate Apparel</li>
-                            <li>Durable Construction</li>
-                            <li>Street Culture</li>
-                        </ul>
-                        <a href="#shop-sb" class="brand-button">Explore SB</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section id="shop-design" aria-labelledby="design-collection-title">
-            <h2 id="design-collection-title" class="section-title">CHOSKO DESIGN Collection</h2>
-            <div class="product-grid">
-                <article class="product-card">
-                    <img 
-                        src="assets/images/tshirtbluelogo.jpg" 
-                        alt="CHOSKO Star T-Shirt in Blue" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO Star Tee</h3>
-                        <p class="price">€49.99</p>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <img 
-                        src="assets/images/shopbrownt1.JPG" 
-                        alt="CHOSKO Premium Hoodie in Brown" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO Premium Hoodie</h3>
-                        <p class="price">€89.99</p>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <img 
-                        src="assets/images/backcap1.jpg" 
-                        alt="CHOSKO Signature Cap" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO Signature Cap</h3>
-                        <p class="price">€29.99</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section id="shop-sb" aria-labelledby="sb-collection-title">
-            <h2 id="sb-collection-title" class="section-title">CHOSKO SB Collection</h2>
-            <div class="product-grid">
-                <article class="product-card">
-                    <img 
-                        src="assets/images/sb-tee1.jpg" 
-                        alt="CHOSKO SB Street T-Shirt" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO SB Street Tee</h3>
-                        <p class="price">€44.99</p>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <img 
-                        src="assets/images/shopbrownt1.JPG" 
-                        alt="CHOSKO Premium Hoodie in Brown" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO Premium Hoodie</h3>
-                        <p class="price">€89.99</p>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <img 
-                        src="assets/images/backcap1.jpg" 
-                        alt="CHOSKO Signature Cap" 
-                        class="product-image"
-                        loading="lazy"
-                        width="300"
-                        height="400"
-                        decoding="async"
-                    >
-                    <div class="product-info">
-                        <h3>CHOSKO Signature Cap</h3>
-                        <p class="price">€29.99</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section id="about" aria-labelledby="about-title">
-            <h2 id="about-title" class="section-title">Our Story</h2>
-            <div class="about-content">
-                <p>Born from the streets, CHOSKO represents the fusion of skateboarding culture and contemporary fashion. We believe in creating clothing that not only looks good but can handle the demands of skateboarding.</p>
-                <p>Our mission is simple: to make you shine - Siamo nati per brillare. Each piece in our collection is crafted with attention to detail and designed to make you stand out, whether you're hitting the park or cruising through the city.</p>
-            </div>
-        </section>
-
-        <section id="contact" aria-labelledby="contact-title">
-            <h2 id="contact-title" class="section-title">Get in Touch</h2>
-            <p class="contact-intro">
-                Clicking "Send Message" will open your default email application with a pre-filled message ready for you to review and send.
-            </p>
-            <form class="contact-form" 
-                  action="mailto:chosko@protolab.tech" 
-                  method="post" 
-                  enctype="text/plain"
-                  novalidate>
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="Name" required aria-required="true">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="Email" required aria-required="true">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="Message" required aria-required="true"></textarea>
-                </div>
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
+        <div class="product-grid">
+            <article class="product-card">
+                <a href="product/tshirtbluelogo.html" class="product-link">
+                    <img src="assets/images/tshirtbluelogo.jpg" alt="CHOSKO Star T-Shirt in Blue" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+            <article class="product-card">
+                <a href="product/shopbrownt1.html" class="product-link">
+                    <img src="assets/images/shopbrownt1.JPG" alt="CHOSKO Premium Hoodie in Brown" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+            <article class="product-card">
+                <a href="product/backcap1.html" class="product-link">
+                    <img src="assets/images/backcap1.jpg" alt="CHOSKO Signature Cap" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+            <article class="product-card">
+                <a href="product/sb-tee1.html" class="product-link">
+                    <img src="assets/images/sb-tee1.jpg" alt="CHOSKO SB Street T-Shirt" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+            <article class="product-card">
+                <a href="product/shopbrownt1.html" class="product-link">
+                    <img src="assets/images/shopbrownt1.JPG" alt="CHOSKO Premium Hoodie in Brown" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+            <article class="product-card">
+                <a href="product/backcap1.html" class="product-link">
+                    <img src="assets/images/backcap1.jpg" alt="CHOSKO Signature Cap" class="product-image" loading="lazy" width="300" height="400" decoding="async">
+                </a>
+            </article>
+        </div>
     </main>
 
     <footer>
@@ -243,49 +105,65 @@
         </div>
     </footer>
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Brand",
-            "name": "CHOSKO",
-            "description": "Premium streetwear and skateboarding brand with two distinct lines: CHOSKO DESIGN and CHOSKO SB",
-            "url": "",
-            "logo": "/Chosko/assets/images/logo_transparent.png",
-            "sameAs": [
-                "https://instagram.com/chosko.design",
-                "https://tiktok.com/@zlessioo"
-            ]
-        }
-    </script>
-    
-    <!-- Performance optimized JavaScript -->
-    <script defer>
-        // Smooth scrolling
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const section = document.querySelector(this.getAttribute('href'));
-                section.scrollIntoView({ behavior: 'smooth' });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.menu-button');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const hasSubmenuItems = document.querySelectorAll('.has-submenu');
+            const cartIcon = document.querySelector('.cart-icon');
+            const cartCount = document.querySelector('.cart-count');
+            let cartItems = 0;
+
+            // Toggle menu overlay
+            menuButton.addEventListener('click', function() {
+                menuOverlay.classList.toggle('active');
+                menuButton.classList.toggle('active');
+            });
+
+            // Handle submenu toggles
+            hasSubmenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target === this.querySelector('a')) {
+                        e.preventDefault();
+                        this.classList.toggle('active');
+                    }
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!menuOverlay.contains(e.target) && !menuButton.contains(e.target)) {
+                    menuOverlay.classList.remove('active');
+                    menuButton.classList.remove('active');
+                    hasSubmenuItems.forEach(item => item.classList.remove('active'));
+                }
+            });
+
+            // Cart functionality
+            cartIcon.addEventListener('click', function() {
+                // Here you would typically open a cart modal or navigate to cart page
+                console.log('Cart clicked');
+            });
+
+            // Update cart count
+            function updateCartCount(count) {
+                cartItems = count;
+                cartCount.textContent = cartItems;
+                cartCount.style.display = cartItems > 0 ? 'flex' : 'none';
+            }
+
+            // Initialize cart count
+            updateCartCount(0);
+
+            // Handle keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    menuOverlay.classList.remove('active');
+                    menuButton.classList.remove('active');
+                    hasSubmenuItems.forEach(item => item.classList.remove('active'));
+                }
             });
         });
-
-        // Header scroll effect
-        const header = document.querySelector('header');
-        let lastScroll = 0;
-        
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.scrollY;
-            if (currentScroll > lastScroll && currentScroll > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-            lastScroll = currentScroll;
-        }, { passive: true });
-        
-        // Update canonical URL with JavaScript for custom domain support
-        document.head.innerHTML += '<link rel="canonical" href="' + window.location.protocol + '//' + window.location.host + window.location.pathname + '">';
     </script>
 </body>
 </html>
