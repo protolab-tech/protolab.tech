@@ -150,7 +150,7 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Protolab",
-      "url": "",
+      "url": "https://protolab.tech",
       "logo": "/assets/images/logo.svg",
       "description": "Professional 3D printing, laser cutting, CNC engraving, and creative design support services.",
       "sameAs": [
@@ -162,7 +162,10 @@
   
   <!-- Canonical URL with JavaScript for custom domain support -->
   <script>
-    document.head.innerHTML += '<link rel="canonical" href="' + window.location.protocol + '//' + window.location.host + window.location.pathname + '">';
+    const canonicalLink = document.createElement('link');
+    canonicalLink.rel = 'canonical';
+    canonicalLink.href = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    document.head.appendChild(canonicalLink);
   </script>
 </body>
 </html>
