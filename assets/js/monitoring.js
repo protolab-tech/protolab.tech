@@ -41,7 +41,7 @@
   function loadAnalytics() {
     if (window.gtag) return; // Avoid loading multiple times
     var gtagScript = document.createElement('script');
-    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-5B3MWGZ9SZ';
     gtagScript.async = true;
     document.head.appendChild(gtagScript);
 
@@ -49,6 +49,6 @@
     function gtag(){dataLayer.push(arguments);}
     window.gtag = gtag;
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'G-5B3MWGZ9SZ');
   }
 })();
