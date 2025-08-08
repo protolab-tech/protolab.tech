@@ -93,7 +93,7 @@ main {
 /* Hero Section */
 #home {
     height: 100vh;
-    background: url('../images/csbackground1.jpg') center/cover no-repeat;
+    background: url('../images/csbbackground1.jpg') center/cover no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -241,7 +241,7 @@ main {
 /* About Section */
 #about {
     padding: 100px 20px;
-    background: url('../images/csbbackground3.jpg') center/cover fixed;
+    background: url('../images/csbnackground3.jpg') center/cover fixed;
     position: relative;
 }
 
@@ -394,12 +394,12 @@ footer a {
 
 .brand-card.design {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url('../images/design-bg.jpg') center/cover;
+                url('../images/csbbackground14.JPG') center/cover;
 }
 
 .brand-card.skateboarding {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url('../images/sb-bg.jpg') center/cover;
+                url('../images/csbbackground6.JPG') center/cover;
 }
 
 .brand-content {
