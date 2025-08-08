@@ -150,35 +150,17 @@ main {
     background-size: contain;
     background-repeat: no-repeat;
     opacity: 0.2;
-    animation: drop 10s linear infinite;
+    top: -80px;
+    animation: fall 10s linear infinite;
 }
 
-.logo-drop:nth-child(1) { left: 10%; animation-delay: 0s; }
-.logo-drop:nth-child(2) { left: 20%; animation-delay: 2s; }
-.logo-drop:nth-child(3) { left: 30%; animation-delay: 4s; }
-.logo-drop:nth-child(4) { left: 40%; animation-delay: 6s; }
-.logo-drop:nth-child(5) { left: 50%; animation-delay: 8s; }
-.logo-drop:nth-child(6) { left: 60%; animation-delay: 10s; }
-.logo-drop:nth-child(7) { left: 70%; animation-delay: 12s; }
-.logo-drop:nth-child(8) { left: 80%; animation-delay: 14s; }
-.logo-drop:nth-child(9) { left: 90%; animation-delay: 16s; }
-.logo-drop:nth-child(10) { left: 100%; animation-delay: 18s; }
+/* randomized via JS */
 
-@keyframes drop {
-    0% {
-        transform: translateY(-100%) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.2;
-    }
-    90% {
-        opacity: 0.2;
-    }
-    100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-    }
+@keyframes fall {
+    0% { top: -80px; opacity: 0; }
+    10% { opacity: 0.2; }
+    90% { opacity: 0.2; }
+    100% { top: 100vh; opacity: 0; }
 }
 
 /* Product Grid */
@@ -744,42 +726,41 @@ form textarea:focus {
     }
 }
 
-/* Product Grid Styles */
+/* Product Grid Styles - single column, centered */
 .product-grid {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: 20px 0;
-    gap: 20px;
-    scrollbar-width: none;
-}
-
-.product-grid::-webkit-scrollbar {
-    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    padding: 30px 30px 60px;
+    margin: calc(var(--header-height) + 40px) auto 80px;
+    max-width: 100%;
 }
 
 .product-card {
-    flex: 0 0 auto;
-    width: 300px;
-    scroll-snap-align: start;
+    width: 100%;
+    max-width: 480px;
     background: #1a1a1a;
     border-radius: 10px;
     overflow: hidden;
     transition: transform var(--transition-speed);
+    height: auto; /* override earlier fixed height */
 }
 
-@media (max-width: 768px) {
-    .product-grid {
-        flex-direction: column;
-        overflow-x: visible;
-        scroll-snap-type: none;
-    }
-
-    .product-card {
-        width: 100%;
-    }
+@media (min-width: 1200px) {
+    .product-card { max-width: 520px; }
 }
+
+/* Make product imagery square and nicely cropped */
+.product-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Ensure anchor does not force height */
+.product-link { height: auto; }
 
 /* About Page Styles */
 .about-container {
@@ -877,5 +858,95 @@ form textarea:focus {
     .policy-section h2 {
         font-size: 1.5em;
     }
+}
+
+/* Order Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: #1a1a1a;
+  color: #fff;
+  width: 90%;
+  max-width: 520px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+/* Cart Drawer */
+.cart-drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 2100; }
+.cart-drawer-overlay.show { display: block; }
+.cart-drawer { position: fixed; right: 0; top: 0; height: 100%; width: min(420px, 100%); background: #1a1a1a; color: #fff; display: flex; flex-direction: column; box-shadow: -8px 0 24px rgba(0,0,0,0.4); transform: translateX(100%); transition: transform 0.3s ease; z-index: 2200; }
+.cart-drawer.show { transform: translateX(0); }
+.cart-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: rgba(255,255,255,0.05); }
+.cart-title { font-weight: 700; letter-spacing: 1px; }
+.cart-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+.cart-items { flex: 1; overflow: auto; }
+.cart-item { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #333; }
+.cart-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; }
+.cart-item-title { font-weight: 600; }
+.cart-item-meta { color: #aaa; font-size: 0.9em; margin-top: 4px; }
+.qty-controls { display: flex; align-items: center; gap: 6px; }
+.qty-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #333; background: #111; color: #fff; cursor: pointer; }
+.qty-input { width: 44px; text-align: center; border: 1px solid #333; background: #111; color: #fff; border-radius: 6px; padding: 6px; }
+.remove-btn { background: none; border: none; color: #f39c12; cursor: pointer; font-size: 0.9em; margin-left: 8px; }
+.cart-footer { padding: 16px; border-top: 1px solid #333; }
+.cart-total { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-weight: 700; }
+.cart-actions { display: flex; gap: 10px; }
+.btn-block { width: 100%; }
+
+/* Prevent background scroll when overlays are open */
+body.no-scroll { overflow: hidden; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.05);
+}
+
+.modal-title { font-weight: 700; letter-spacing: 1px; }
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-body { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 16px 20px; }
+.modal-body img { width: 120px; height: 120px; object-fit: cover; border-radius: 8px; }
+
+.modal-field { margin-bottom: 12px; }
+.modal-field label { display: block; margin-bottom: 6px; font-weight: 600; }
+.modal-field select, .modal-field input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+}
+
+.modal-actions { display: flex; gap: 12px; padding: 0 20px 20px; }
+.btn { padding: 12px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; letter-spacing: 0.5px; }
+.btn-primary { background: #f39c12; color: #000; }
+.btn-secondary { background: #333; color: #fff; }
+
+@media (max-width: 520px) {
+  .modal-body { grid-template-columns: 1fr; }
+  .modal-body img { width: 100%; height: 200px; }
 }
 

@@ -69,36 +69,93 @@
 
     <main id="main-content">
         <div class="product-grid">
-            <article class="product-card">
+            <article class="product-card" data-sku="tee-blue">
                 <a href="product/tshirtbluelogo.html" class="product-link">
                     <img src="assets/images/tshirtbluelogo.jpg" alt="CHOSKO Star T-Shirt in Blue" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
-            <article class="product-card">
+            <article class="product-card" data-sku="hoodie-brown">
                 <a href="product/shopbrownt1.html" class="product-link">
                     <img src="assets/images/shopbrownt1.JPG" alt="CHOSKO Premium Hoodie in Brown" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
-            <article class="product-card">
+            <article class="product-card" data-sku="cap-black">
                 <a href="product/backcap1.html" class="product-link">
                     <img src="assets/images/backcap1.jpg" alt="CHOSKO Signature Cap" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
-            <article class="product-card">
+            <article class="product-card" data-sku="sb-tee">
                 <a href="product/sb-tee1.html" class="product-link">
                     <img src="assets/images/csbbackground5.JPG" alt="CHOSKO SB Street T-Shirt" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
-            <article class="product-card">
+            <article class="product-card" data-sku="hoodie-brown">
                 <a href="product/shopbrownt1.html" class="product-link">
                     <img src="assets/images/shopbrownt1.JPG" alt="CHOSKO Premium Hoodie in Brown" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
-            <article class="product-card">
+            <article class="product-card" data-sku="cap-black">
                 <a href="product/backcap1.html" class="product-link">
                     <img src="assets/images/backcap1.jpg" alt="CHOSKO Signature Cap" class="product-image" loading="lazy" width="300" height="400" decoding="async">
                 </a>
             </article>
+        </div>
+
+        <!-- Cart Drawer -->
+        <div class="cart-drawer-overlay" id="cartOverlay" aria-hidden="true"></div>
+        <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="cartTitle" role="dialog">
+          <div class="cart-header">
+            <div class="cart-title" id="cartTitle">Your Cart</div>
+            <button class="cart-close" aria-label="Close">×</button>
+          </div>
+          <div class="cart-items" id="cartItems"></div>
+          <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotal">€0.00</span></div>
+            <div class="cart-actions">
+              <button class="btn btn-secondary btn-block" id="continueBtn">Continue shopping</button>
+              <button class="btn btn-primary btn-block" id="checkoutBtn">Checkout (demo)</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Order Modal -->
+        <div class="modal-overlay" id="orderModal" aria-hidden="true" role="dialog" aria-labelledby="orderTitle">
+          <div class="modal" role="document">
+            <div class="modal-header">
+              <div class="modal-title" id="orderTitle">Order item</div>
+              <button class="modal-close" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+              <img id="orderImage" src="" alt="">
+              <div>
+                <div class="modal-field">
+                  <label for="orderItem">Item</label>
+                  <div id="orderItem" style="font-weight:600"></div>
+                </div>
+                <div class="modal-field">
+                  <label for="orderPrice">Price</label>
+                  <div id="orderPrice"></div>
+                </div>
+                <div class="modal-field">
+                  <label for="orderSize">Size</label>
+                  <select id="orderSize">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                  </select>
+                </div>
+                <div class="modal-field">
+                  <label for="orderQty">Quantity</label>
+                  <input id="orderQty" type="number" min="1" value="1">
+                </div>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-secondary" id="orderCancel">Cancel</button>
+              <button class="btn btn-primary" id="orderAdd">Add to cart</button>
+            </div>
+          </div>
         </div>
     </main>
 
@@ -119,6 +176,9 @@
             </div>
             <div class="contact-info">
                 <span>Contact us: <a href="mailto:chosko@protolab.tech" class="email-link">chosko@protolab.tech</a></span>
+            </div>
+            <div class="policy-link">
+                <a href="/policy.html">Policies</a>
             </div>
         </div>
     </footer>
@@ -146,6 +206,15 @@
             const cartIcon = document.querySelector('.cart-icon');
             const cartCount = document.querySelector('.cart-count');
             let cartItems = 0;
+            const cartOverlay = document.getElementById('cartOverlay');
+            const cartDrawer = document.getElementById('cartDrawer');
+            const cartItemsEl = document.getElementById('cartItems');
+            const cartTotalEl = document.getElementById('cartTotal');
+            const cartCloseBtn = cartDrawer.querySelector('.cart-close');
+            const continueBtn = document.getElementById('continueBtn');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const CART_KEY = 'chosko_cart_v1';
+            let cart = [];
 
             // Toggle menu overlay
             menuButton.addEventListener('click', function() {
@@ -173,9 +242,24 @@
             });
 
             // Cart functionality
-            cartIcon.addEventListener('click', function() {
-                // Here you would typically open a cart modal or navigate to cart page
-                console.log('Cart clicked');
+            function openCart() {
+                cartOverlay.classList.add('show');
+                cartDrawer.classList.add('show');
+                cartDrawer.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('no-scroll');
+            }
+            function closeCart() {
+                cartOverlay.classList.remove('show');
+                cartDrawer.classList.remove('show');
+                cartDrawer.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('no-scroll');
+            }
+            cartIcon.addEventListener('click', openCart);
+            cartCloseBtn.addEventListener('click', closeCart);
+            cartOverlay.addEventListener('click', closeCart);
+            continueBtn.addEventListener('click', closeCart);
+            checkoutBtn.addEventListener('click', function(){
+                alert('Demo checkout. Connect to backend later.');
             });
 
             // Update cart count
@@ -185,8 +269,160 @@
                 cartCount.style.display = cartItems > 0 ? 'flex' : 'none';
             }
 
+            function loadCart() {
+                try {
+                    const raw = localStorage.getItem(CART_KEY);
+                    cart = raw ? JSON.parse(raw) : [];
+                } catch { cart = []; }
+                renderCart();
+            }
+
+            function saveCart() {
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            }
+
+            function renderCart() {
+                cartItemsEl.innerHTML = '';
+                let total = 0;
+                let count = 0;
+                cart.forEach((item, idx) => {
+                    total += item.price * item.quantity;
+                    count += item.quantity;
+                    const row = document.createElement('div');
+                    row.className = 'cart-item';
+                    row.innerHTML = `
+                      <img src="${item.image}" alt="${item.title}">
+                      <div>
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-meta">Size: ${item.size} · €${item.price.toFixed(2)}</div>
+                        <div class="qty-controls" data-idx="${idx}">
+                          <button class="qty-btn" data-act="dec">-</button>
+                          <input class="qty-input" type="number" min="1" value="${item.quantity}">
+                          <button class="qty-btn" data-act="inc">+</button>
+                          <button class="remove-btn" data-act="rm">Remove</button>
+                        </div>
+                      </div>
+                      <div>€${(item.price * item.quantity).toFixed(2)}</div>
+                    `;
+                    cartItemsEl.appendChild(row);
+                });
+                cartTotalEl.textContent = '€' + total.toFixed(2);
+                updateCartCount(count);
+            }
+
+            cartItemsEl.addEventListener('click', function(e){
+                const controls = e.target.closest('.qty-controls');
+                if (!controls) return;
+                const idx = parseInt(controls.dataset.idx, 10);
+                const act = e.target.dataset.act;
+                if (act === 'inc') { cart[idx].quantity++; }
+                if (act === 'dec') { cart[idx].quantity = Math.max(1, cart[idx].quantity - 1); }
+                if (act === 'rm') { cart.splice(idx, 1); }
+                saveCart();
+                renderCart();
+                if (cart.length === 0) closeCart();
+            });
+            cartItemsEl.addEventListener('change', function(e){
+                const controls = e.target.closest('.qty-controls');
+                if (!controls) return;
+                const idx = parseInt(controls.dataset.idx, 10);
+                const val = Math.max(1, parseInt(e.target.value || '1', 10));
+                cart[idx].quantity = val;
+                saveCart();
+                renderCart();
+            });
+
             // Initialize cart count
             updateCartCount(0);
+
+            // RANDOMIZE RAINING LOGOS (position, delay, duration, rotation)
+            const drops = document.querySelectorAll('.logo-drop');
+            function randomizeDrop(drop, withDelay) {
+              const left = Math.random() * 100; // vw percent
+              const delay = Math.random() * 10; // 0-10s
+              const duration = 8 + Math.random() * 8; // 8-16s
+              const angle = Math.floor(Math.random() * 360); // 0-360deg
+              const startOffset = Math.random() * 200; // random start above viewport
+              drop.style.left = left + '%';
+              drop.style.top = (-80 - startOffset) + 'px';
+              drop.style.transform = 'rotate(' + angle + 'deg)';
+              drop.style.animationDuration = duration + 's';
+              if (withDelay) drop.style.animationDelay = delay + 's';
+            }
+            drops.forEach(drop => {
+              randomizeDrop(drop, true);
+              drop.addEventListener('animationiteration', () => randomizeDrop(drop, false));
+            });
+
+            // PRODUCT ORDER MODAL (frontend-only cart)
+            const modal = document.getElementById('orderModal');
+            const closeBtn = modal.querySelector('.modal-close');
+            const cancelBtn = document.getElementById('orderCancel');
+            const addBtn = document.getElementById('orderAdd');
+            const orderItemEl = document.getElementById('orderItem');
+            const orderPriceEl = document.getElementById('orderPrice');
+            const orderImageEl = document.getElementById('orderImage');
+            const orderSizeEl = document.getElementById('orderSize');
+            const orderQtyEl = document.getElementById('orderQty');
+            const productMeta = {
+              'tee-blue': { title: 'CHOSKO Star Tee (Blue)', price: 29.0, image: 'assets/images/tshirtbluelogo.jpg' },
+              'hoodie-brown': { title: 'CHOSKO Premium Hoodie (Brown)', price: 59.0, image: 'assets/images/shopbrownt1.JPG' },
+              'cap-black': { title: 'CHOSKO Signature Cap', price: 24.0, image: 'assets/images/backcap1.jpg' },
+              'sb-tee': { title: 'CHOSKO SB Street Tee', price: 29.0, image: 'assets/images/csbbackground5.JPG' }
+            };
+            let activeSku = null;
+
+            function openModalBySku(sku) {
+              const p = productMeta[sku];
+              if (!p) return;
+              activeSku = sku;
+              orderItemEl.textContent = p.title;
+              orderPriceEl.textContent = '€' + p.price.toFixed(2);
+              orderImageEl.src = p.image;
+              orderImageEl.alt = p.title;
+              orderSizeEl.value = 'M';
+              orderQtyEl.value = 1;
+              modal.classList.add('show');
+              modal.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeModal() {
+              modal.classList.remove('show');
+              modal.setAttribute('aria-hidden', 'true');
+              activeSku = null;
+            }
+
+            // Intercept product clicks for demo (open modal instead of navigating)
+            document.querySelectorAll('.product-card .product-link').forEach(link => {
+              link.addEventListener('click', function(e) {
+                const card = this.closest('.product-card');
+                const sku = card && card.getAttribute('data-sku');
+                if (sku) {
+                  e.preventDefault();
+                  openModalBySku(sku);
+                }
+              });
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+
+            addBtn.addEventListener('click', function(){
+              const qty = parseInt(orderQtyEl.value || '1', 10);
+              const meta = productMeta[activeSku];
+              if (!meta) return;
+              const existing = cart.findIndex(i => i.sku === activeSku && i.size === orderSizeEl.value);
+              if (existing >= 0) {
+                cart[existing].quantity += qty;
+              } else {
+                cart.push({ sku: activeSku, title: meta.title, price: meta.price, image: meta.image, size: orderSizeEl.value, quantity: qty });
+              }
+              saveCart();
+              renderCart();
+              closeModal();
+              openCart();
+            });
 
             // Handle keyboard navigation
             document.addEventListener('keydown', function(e) {
@@ -194,8 +430,13 @@
                     menuOverlay.classList.remove('active');
                     menuButton.classList.remove('active');
                     hasSubmenuItems.forEach(item => item.classList.remove('active'));
+                    closeModal();
+                    closeCart();
                 }
             });
+
+            // Load cart from storage
+            loadCart();
         });
     </script>
 </body>

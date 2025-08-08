@@ -23,7 +23,7 @@
         dismiss: 'Allow',
         deny: 'Decline',
         link: 'Learn more',
-        href: '/Chosko/policy.html'
+        href: '/policy.html'
       },
       onInitialise: function(status) {
         if (status === cookieconsent.status.allow) {
