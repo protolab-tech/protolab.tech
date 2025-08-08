@@ -20,11 +20,16 @@
       type: 'opt-in',
       content: {
         message: 'This website uses cookies for analytics.',
-        dismiss: 'Allow',
+        allow: 'Allow',
         deny: 'Decline',
-        link: 'Learn more',
+        link: 'Policies',
         href: '/policy.html'
       },
+      elements: {
+        messagelink: '<span id="cookieconsent:desc" class="cc-message">{{message}} <a aria-label="learn more about cookies" tabindex="0" class="cc-link" href="{{href}}" target="_blank">{{link}}</a></span>',
+        dismiss: '<a aria-label="dismiss cookie message" tabindex="0" class="cc-btn cc-dismiss">{{allow}}</a>'
+      },
+      position: 'bottom-left',
       onInitialise: function(status) {
         if (status === cookieconsent.status.allow) {
           loadAnalytics();
