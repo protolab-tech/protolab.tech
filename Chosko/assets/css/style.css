@@ -921,6 +921,7 @@ body.no-scroll { overflow: hidden; }
 }
 
 .modal-title { font-weight: 700; letter-spacing: 1px; }
+.order-item-title { font-weight: 600; }
 
 .modal-close {
   background: none;

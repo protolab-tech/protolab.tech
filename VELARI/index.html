@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VELARI — performance apparel inspired by sea and sky. Breathable, sweat‑wicking, and built for motion.">
+  <title>VELARI — Performance Apparel</title>
+  <link rel="canonical" href="https://protolab.tech/Velari/" />
+  <link rel="icon" type="image/svg+xml" href="/VELARI/assets/images/logo.svg" />
+
+  <!-- Preload/Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="assets/css/style.css" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="VELARI — Performance Apparel" />
+  <meta property="og:description" content="Performance apparel inspired by sea and sky. Breathable, sweat‑wicking, and built for motion." />
+  <meta property="og:url" content="https://protolab.tech/Velari/" />
+  <meta property="og:image" content="/VELARI/assets/images/og.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VELARI — Performance Apparel" />
+  <meta name="twitter:description" content="Performance apparel inspired by sea and sky. Breathable, sweat‑wicking, and built for motion." />
+  <meta name="twitter:image" content="/VELARI/assets/images/og.png" />
+
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+</head>
+<body>
+  <header class="v-header">
+    <nav class="v-nav" aria-label="Main navigation">
+      <a class="v-brand" href="#home" aria-label="VELARI home">VELARI</a>
+      <ul class="v-menu" id="main-menu">
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="v-actions">
+        <div class="v-cart-icon" role="button" tabindex="0" aria-label="Shopping cart"><span class="v-cart-count">0</span></div>
+        <button class="v-menu-toggle" aria-label="Toggle Menu" aria-expanded="false">☰</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- HERO -->
+    <section id="home" class="v-hero" aria-labelledby="hero-title">
+      <div class="v-hero-bg" aria-hidden="true"></div>
+      <div class="v-hero-content">
+        <img class="v-logo" src="/VELARI/assets/images/logo.svg" alt="VELARI logo" width="120" height="120" loading="eager">
+        <h1 id="hero-title">Engineered for Motion</h1>
+        <p>Performance apparel inspired by sea and sky.</p>
+        <div class="v-cta">
+          <a class="v-btn v-btn-primary" href="#shop">Shop now</a>
+          <a class="v-btn v-btn-ghost" href="#features">Why Velari</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES STRIP -->
+    <section id="features" class="v-features" aria-label="Key features">
+      <div class="v-feature"><span>Breathable</span></div>
+      <div class="v-feature"><span>Sweat‑wicking</span></div>
+      <div class="v-feature"><span>4‑way stretch</span></div>
+      <div class="v-feature"><span>Featherweight</span></div>
+    </section>
+
+    <!-- SHOP -->
+    <section id="shop" class="v-shop" aria-labelledby="shop-title">
+      <h2 id="shop-title" class="v-section-title">Latest Drop</h2>
+      <div class="v-products">
+        <article class="v-card" data-sku="tee-grey" data-title="Training Tee" data-price="34.00" data-image="/VELARI/assets/images/training-tee.png">
+          <div class="v-card-media">
+            <img src="/VELARI/assets/images/training-tee.png" alt="Velari Training Tee in Grey" loading="lazy" width="400" height="400">
+          </div>
+          <div class="v-card-body">
+            <h3 class="v-card-title">Training Tee</h3>
+            <p class="v-card-desc">Ultra‑soft, sweat‑wicking tee built for everyday performance.</p>
+            <div class="v-card-footer">
+              <span class="v-price">€34.00</span>
+              <select class="v-size" aria-label="Select size">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="v-btn v-btn-primary v-add" type="button">Add to bag</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="v-card" data-sku="hoodie-sea" data-title="Performance Hoodie" data-price="79.00" data-image="/VELARI/assets/images/performance-hoodie.png">
+          <div class="v-card-media">
+            <img src="/VELARI/assets/images/performance-hoodie.png" alt="Velari Performance Hoodie in Sea Green" loading="lazy" width="400" height="400">
+          </div>
+          <div class="v-card-body">
+            <h3 class="v-card-title">Performance Hoodie</h3>
+            <p class="v-card-desc">Warmth without weight. Breathable fabric with 4‑way stretch.</p>
+            <div class="v-card-footer">
+              <span class="v-price">€79.00</span>
+              <select class="v-size" aria-label="Select size">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="v-btn v-btn-primary v-add" type="button">Add to bag</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="v-card" data-sku="shorts-blue" data-title="Compression Shorts" data-price="39.00" data-image="/VELARI/assets/images/compression-shorts.png">
+          <div class="v-card-media">
+            <img src="/VELARI/assets/images/compression-shorts.png" alt="Velari Compression Shorts" loading="lazy" width="400" height="400">
+          </div>
+          <div class="v-card-body">
+            <h3 class="v-card-title">Compression Shorts</h3>
+            <p class="v-card-desc">Second‑skin feel with targeted support for intense training.</p>
+            <div class="v-card-footer">
+              <span class="v-price">€39.00</span>
+              <select class="v-size" aria-label="Select size">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="v-btn v-btn-primary v-add" type="button">Add to bag</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="v-card" data-sku="tee-velari" data-title="Signature Tee" data-price="36.00" data-image="/VELARI/assets/images/VelariT.png">
+          <div class="v-card-media">
+            <img src="/VELARI/assets/images/VelariT.png" alt="Velari Signature Tee" loading="lazy" width="400" height="400">
+          </div>
+          <div class="v-card-body">
+            <h3 class="v-card-title">Signature Tee</h3>
+            <p class="v-card-desc">Iconic Velari graphic on our breathable performance tee.</p>
+            <div class="v-card-footer">
+              <span class="v-price">€36.00</span>
+              <select class="v-size" aria-label="Select size">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="v-btn v-btn-primary v-add" type="button">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- STREET GALLERY / LIFESTYLE -->
+    <section class="v-gallery" aria-labelledby="gallery-title">
+      <h2 id="gallery-title" class="v-section-title">Move in your element</h2>
+      <div class="v-gallery-grid">
+        <img src="/VELARI/assets/images/gallery-1.jpg" alt="Ocean run" loading="lazy" width="300" height="300">
+        <img src="/VELARI/assets/images/gallery-2.jpg" alt="Skyline session" loading="lazy" width="300" height="300">
+        <img src="/VELARI/assets/images/gallery-3.jpg" alt="Sea gradient" loading="lazy" width="300" height="300">
+        <img src="/VELARI/assets/images/gallery-4.jpg" alt="Flow state" loading="lazy" width="300" height="300">
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="v-about" aria-labelledby="about-title">
+      <h2 id="about-title" class="v-section-title">Built to breathe. Made to move.</h2>
+      <div class="v-about-content">
+        <p>Every Velari piece blends technical comfort with streamlined design. From dawn runs to late‑night lifts, our fabrics keep you cool, dry, and locked‑in—so you can go further.</p>
+        <ul class="v-bullets">
+          <li>Featherweight, breathable knits</li>
+          <li>Fast‑dry, sweat‑wicking finishes</li>
+          <li>4‑way stretch with shape retention</li>
+          <li>Tailored athletic silhouettes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="v-contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="v-section-title">Get in touch</h2>
+      <p class="v-contact-intro">Want to stock Velari or collaborate? Drop us a line.</p>
+      <p><a class="v-btn v-btn-ghost" href="mailto:info@protolab.tech?subject=VELARI%20Inquiry">info@protolab.tech</a></p>
+    </section>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div class="v-cart-overlay" id="vCartOverlay" aria-hidden="true"></div>
+  <aside class="v-cart-drawer" id="vCartDrawer" aria-hidden="true" aria-labelledby="vCartTitle" role="dialog">
+    <div class="v-cart-header">
+      <div class="v-cart-title" id="vCartTitle">Your Bag</div>
+      <button class="v-cart-close" aria-label="Close">×</button>
+    </div>
+    <div class="v-cart-items" id="vCartItems"></div>
+    <div class="v-cart-footer">
+      <div class="v-cart-total"><span>Total</span><span id="vCartTotal">€0.00</span></div>
+      <div class="v-cart-actions">
+        <button class="v-btn v-btn-ghost v-btn-block" id="vContinue">Continue</button>
+        <button class="v-btn v-btn-primary v-btn-block" id="vCheckout">Checkout (demo)</button>
+      </div>
+    </div>
+  </aside>
+
+  <footer class="v-footer">
+    <div class="v-footer-inner">
+      <a href="/" aria-label="Back to protolab.tech">
+        <img src="/assets/images/logo.svg" alt="protolab.tech" width="100" height="30" loading="lazy">
+      </a>
+      <a class="v-footer-link" href="/policy.html">Policies</a>
+    </div>
+  </footer>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Brand",
+      "name": "VELARI",
+      "description": "Performance apparel inspired by sea and sky.",
+      "url": "https://protolab.tech/Velari/",
+      "logo": "/assets/images/logo.svg"
+    }
+  </script>
+  <script src="../assets/js/monitoring.js" defer></script>
+  <script>
+    // Simple nav toggle
+    const toggle = document.querySelector('.v-menu-toggle');
+    const menu = document.querySelector('.v-menu');
+    if (toggle && menu) {
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        menu.classList.toggle('show');
+      });
+    }
+
+    // Cart drawer logic (frontend-only)
+    const vCartIcon = document.querySelector('.v-cart-icon');
+    const vCartCount = document.querySelector('.v-cart-count');
+    const vCartOverlay = document.getElementById('vCartOverlay');
+    const vCartDrawer = document.getElementById('vCartDrawer');
+    const vCartItems = document.getElementById('vCartItems');
+    const vCartTotal = document.getElementById('vCartTotal');
+    const vCartClose = document.querySelector('.v-cart-close');
+    const vContinue = document.getElementById('vContinue');
+    const vCheckout = document.getElementById('vCheckout');
+    const V_CART_KEY = 'velari_cart_v1';
+    let vCart = [];
+
+    function vUpdateCount() {
+      const count = vCart.reduce((a,c)=>a+c.quantity,0);
+      vCartCount.textContent = count;
+      vCartCount.style.display = count>0 ? 'flex' : 'none';
+    }
+    function vSave() { localStorage.setItem(V_CART_KEY, JSON.stringify(vCart)); }
+    function vLoad() { try { vCart = JSON.parse(localStorage.getItem(V_CART_KEY)||'[]'); } catch { vCart=[]; } vRender(); }
+    function vOpen() { vCartOverlay.classList.add('show'); vCartDrawer.classList.add('show'); vCartDrawer.setAttribute('aria-hidden','false'); document.body.classList.add('no-scroll'); }
+    function vClose() { vCartOverlay.classList.remove('show'); vCartDrawer.classList.remove('show'); vCartDrawer.setAttribute('aria-hidden','true'); document.body.classList.remove('no-scroll'); }
+    function vRender() {
+      vCartItems.innerHTML = '';
+      let total = 0;
+      vCart.forEach((item, idx)=>{
+        total += item.price * item.quantity;
+        const row = document.createElement('div');
+        row.className = 'v-cart-item';
+        row.innerHTML = `
+          <img src="${item.image}" alt="${item.title}">
+          <div>
+            <div class="v-cart-item-title">${item.title}</div>
+            <div class="v-cart-item-meta">€${item.price.toFixed(2)}</div>
+            <div class="v-qty-controls" data-idx="${idx}">
+              <button class="v-qty-btn" data-act="dec">-</button>
+              <input class="v-qty-input" type="number" min="1" value="${item.quantity}">
+              <button class="v-qty-btn" data-act="inc">+</button>
+              <button class="v-remove-btn" data-act="rm">Remove</button>
+            </div>
+          </div>
+          <div>€${(item.price*item.quantity).toFixed(2)}</div>`;
+        vCartItems.appendChild(row);
+      });
+      vCartTotal.textContent = '€' + total.toFixed(2);
+      vUpdateCount();
+    }
+
+    vCartIcon.addEventListener('click', vOpen);
+    vCartClose.addEventListener('click', vClose);
+    vCartOverlay.addEventListener('click', vClose);
+    vContinue.addEventListener('click', vClose);
+    vCheckout.addEventListener('click', ()=> alert('Demo checkout. Connect to backend later.'));
+    vCartItems.addEventListener('click', (e)=>{
+      const controls = e.target.closest('.v-qty-controls'); if (!controls) return;
+      const idx = parseInt(controls.dataset.idx,10); const act = e.target.dataset.act;
+      if (act==='inc') vCart[idx].quantity++;
+      if (act==='dec') vCart[idx].quantity = Math.max(1, vCart[idx].quantity-1);
+      if (act==='rm') vCart.splice(idx,1);
+      vSave(); vRender(); if (!vCart.length) vClose();
+    });
+    vCartItems.addEventListener('change', (e)=>{
+      const controls = e.target.closest('.v-qty-controls'); if (!controls) return;
+      const idx = parseInt(controls.dataset.idx,10); const val = Math.max(1, parseInt(e.target.value||'1',10));
+      vCart[idx].quantity = val; vSave(); vRender();
+    });
+
+    // Add buttons
+    document.querySelectorAll('.v-card .v-add').forEach(btn=>{
+      btn.addEventListener('click', function(){
+        const card = this.closest('.v-card');
+        const sku = card.dataset.sku;
+        const title = card.dataset.title;
+        const price = parseFloat(card.dataset.price);
+        const image = card.dataset.image;
+        const sizeSel = card.querySelector('.v-size');
+        const size = sizeSel ? sizeSel.value : 'M';
+        const existing = vCart.findIndex(i=>i.sku===sku && i.size===size);
+        if (existing>=0) vCart[existing].quantity += 1; else vCart.push({ sku, title, price, image, size, quantity:1 });
+        vSave(); vRender(); vOpen();
+      });
+    });
+
+    vLoad();
+  </script>
+</body>
+</html>
+
+
