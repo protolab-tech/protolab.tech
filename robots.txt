@@ -1,6 +1,22 @@
 User-agent: *
 Allow: /
+Disallow: /assets/private/
+Disallow: /*?*
+Disallow: /*.pdf$
 
+# Allow important directories
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: https://protolab.tech/sitemap.xml
+
+# Additional info
+# Contact: info@protolab.tech
+# Preferred time for crawling: 02:00-06:00 UTC
 
 

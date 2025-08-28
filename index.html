@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Protolab - Professional 3D printing, laser cutting, CNC engraving, and creative design support services for prototype development." />
+  <meta name="description" content="Protolab - Professional 3D printing, laser cutting, CNC engraving, and creative design support services for prototype development in Italy." />
+  <meta name="keywords" content="3D printing, laser cutting, CNC engraving, prototype development, creative design, Italy, rapid prototyping, manufacturing" />
+  <meta name="author" content="Protolab" />
+  <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://protolab.tech/" />
   
   <!-- Preload critical assets -->
@@ -12,18 +15,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   
+  <!-- Alternative language versions (if available) -->
+  <link rel="alternate" hreflang="en" href="https://protolab.tech/" />
+  <link rel="alternate" hreflang="it" href="https://protolab.tech/it/" />
+  
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Protolab - Innovative Prototyping Solutions" />
-  <meta property="og:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services." />
-  <meta property="og:image" content="/assets/images/hero.jpg" />
+  <meta property="og:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services in Italy." />
+  <meta property="og:image" content="https://protolab.tech/assets/images/hero.jpg" />
+  <meta property="og:image:width" content="1920" />
+  <meta property="og:image:height" content="1080" />
+  <meta property="og:image:alt" content="Creative workspace showcasing prototyping equipment" />
   <meta property="og:url" content="https://protolab.tech/" />
+  <meta property="og:site_name" content="Protolab" />
+  <meta property="og:locale" content="en_US" />
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Protolab - Innovative Prototyping Solutions" />
-  <meta name="twitter:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services." />
-  <meta name="twitter:image" content="/assets/images/hero.jpg" />
+  <meta name="twitter:description" content="Professional 3D printing, laser cutting, CNC engraving, and creative design support services in Italy." />
+  <meta name="twitter:image" content="https://protolab.tech/assets/images/hero.jpg" />
+  <meta name="twitter:image:alt" content="Creative workspace showcasing prototyping equipment" />
   
   <title>Protolab - Innovative Prototyping Solutions</title>
   <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg" />
@@ -34,6 +47,9 @@
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="sr-only sr-only-focusable" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">Skip to main content</a>
+  
   <header role="banner">
     <div class="header-container">
       <a href="/" class="logo-link">
@@ -157,12 +173,58 @@
       "@type": "Organization",
       "name": "Protolab",
       "url": "https://protolab.tech/",
-      "logo": "/assets/images/logo.svg",
-      "description": "Professional 3D printing, laser cutting, CNC engraving, and creative design support services.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://protolab.tech/assets/images/logo.svg",
+        "width": 150,
+        "height": 50
+      },
+      "description": "Professional 3D printing, laser cutting, CNC engraving, and creative design support services for prototype development.",
+      "foundingDate": "2020",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IT"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "info@protolab.tech",
+        "contactType": "Customer Service",
+        "availableLanguage": ["English", "Italian"]
+      },
       "sameAs": [
         "https://instagram.com/protolab.tech",
         "https://tiktok.com/@protolab.tech"
-      ]
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Prototyping Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "3D Printing",
+              "description": "Professional 3D printing services for prototypes"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Laser Cutting",
+              "description": "Precision laser cutting for intricate designs"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "CNC Engraving",
+              "description": "Professional CNC engraving services"
+            }
+          }
+        ]
+      }
     }
   </script>
   
