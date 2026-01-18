@@ -44,8 +44,8 @@ const EvoSimConfig = {
     
     // Energy and health
     foodEnergy: 18,
-    baseDrain: 0.65, // Energy drain per second (increased for more natural death cycles)
-    healthDrainTemp: 8.0, // Health drain from temperature mismatch (increased)
+    baseDrain: 0.325, // Energy drain per second (halved for 2x longevity)
+    healthDrainTemp: 12.0, // Health drain from temperature mismatch (increased for stronger delta effect)
     reproductionThreshold: 60, // Energy needed to reproduce
     reproductionCost: 35, // Energy cost to split
     
@@ -200,6 +200,11 @@ const EvoSimConfig = {
     // Rendering optimizations
     skipRenderWhenFast: false, // Skip rendering when simulation is too fast
     maxRenderObjects: 5000, // Maximum objects to render per frame
+    enableViewportCulling: true, // Only render visible objects
+    enableGlowEffects: true, // Enable/disable glow effects for performance
+    glowMinZoom: 0.5, // Minimum zoom level to show glow effects
+    maxShadowBlur: 12, // Maximum shadow blur radius (lower = better performance)
+    radiationParticleCount: 6, // Number of radiation particles (lower = better performance)
   },
 
   // ========== EXPERIMENTAL FEATURES ==========

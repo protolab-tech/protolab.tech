@@ -113,3 +113,72 @@
 .ecosystem-stats.collapsed {
   min-width: auto;
 }
+
+/* Population Graph Styles */
+.graph-controls {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.graph-toggle-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.graph-toggle-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.population-graph {
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(15, 22, 32, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+#popGraphCanvas {
+  width: 100%;
+  height: 150px;
+  display: block;
+  border-radius: 4px;
+  background: var(--bg);
+}
+
+/* Desktop: Graph unfolds to the left of stats */
+@media (min-width: 769px) {
+  .population-graph.expanded {
+    position: fixed;
+    right: 680px; /* Left of the stats panel (380px + 300px width) */
+    bottom: 138px; /* Same height as stats panel */
+    width: 320px;
+    margin: 0;
+    z-index: 100;
+    background: rgba(15, 22, 32, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .population-graph.expanded #popGraphCanvas {
+    width: 320px;
+    height: 200px;
+  }
+}
+
+/* Mobile: Graph stays above stats in normal flow */
+@media (max-width: 768px) {
+  .population-graph {
+    /* Keep default positioning - above stats in normal document flow */
+  }
+}

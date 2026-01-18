@@ -231,6 +231,7 @@
         <button id="zoomIn" class="control-btn" title="Zoom In">+</button>
         <button id="zoomOut" class="control-btn" title="Zoom Out">−</button>
         <button id="resetZoom" class="control-btn" title="Reset View">⌂</button>
+        <button id="pauseBtn" class="control-btn" title="Pause/Resume Simulation">⏸️</button>
       </div>
       <div class="zoom-display">
         <span id="vZoom">1.0x</span>
@@ -283,11 +284,71 @@
           <span class="stat-value" id="statAvgLifespan">0.0s</span>
         </div>
         </div>
+        
+        <!-- Population Graph Toggle -->
+        <div class="graph-controls">
+          <button id="togglePopGraph" class="graph-toggle-btn">📊 Show Population Graph</button>
+        </div>
+        
+        <!-- Population Graph Container -->
+        <div id="populationGraph" class="population-graph" style="display: none;">
+          <canvas id="popGraphCanvas" width="300" height="150"></canvas>
+        </div>
       </div>
     </div>
     
     <!-- Main Canvas -->
     <canvas id="c"></canvas>
+    
+    <!-- Stats Summary Modal -->
+    <div id="statsSummaryModal" class="stats-modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>📊 Simulation Summary</h2>
+          <button id="closeStatsModal" class="close-btn">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-label">Total Runtime</span>
+              <span class="summary-value" id="summaryRuntime">0s</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Peak Population</span>
+              <span class="summary-value" id="summaryPeakPop">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Births</span>
+              <span class="summary-value" id="summaryTotalBirths">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Deaths</span>
+              <span class="summary-value" id="summaryTotalDeaths">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Max Generation Reached</span>
+              <span class="summary-value" id="summaryMaxGen">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Average Lifespan</span>
+              <span class="summary-value" id="summaryAvgLifespan">0.0s</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Extinction Events</span>
+              <span class="summary-value" id="summaryExtinctions">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Final Population</span>
+              <span class="summary-value" id="summaryFinalPop">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="resumeBtn" class="modal-btn primary">▶️ Resume</button>
+          <button id="restartBtn" class="modal-btn secondary">🔄 Restart</button>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -390,6 +451,11 @@
   let isDragging = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
+  
+  // Touch support variables
+  let touches = [];
+  let lastTouchDistance = 0;
+  let isPinching = false;
 
   const el = {
     resources: document.getElementById('resources'),
@@ -438,6 +504,7 @@
     zoomIn: document.getElementById('zoomIn'),
     zoomOut: document.getElementById('zoomOut'),
     resetZoom: document.getElementById('resetZoom'),
+    pauseBtn: document.getElementById('pauseBtn'),
     scatter: document.getElementById('scatter'),
     vScatter: document.getElementById('vScatter'),
     variance: document.getElementById('variance'),
@@ -451,6 +518,25 @@
     statsToggle: document.getElementById('statsToggle'),
     minimapContent: document.getElementById('minimapContent'),
     statsContent: document.getElementById('statsContent'),
+    
+    // Population graph
+    togglePopGraph: document.getElementById('togglePopGraph'),
+    populationGraph: document.getElementById('populationGraph'),
+    popGraphCanvas: document.getElementById('popGraphCanvas'),
+    
+    // Stats summary modal
+    statsSummaryModal: document.getElementById('statsSummaryModal'),
+    closeStatsModal: document.getElementById('closeStatsModal'),
+    resumeBtn: document.getElementById('resumeBtn'),
+    restartBtn: document.getElementById('restartBtn'),
+    summaryRuntime: document.getElementById('summaryRuntime'),
+    summaryPeakPop: document.getElementById('summaryPeakPop'),
+    summaryTotalBirths: document.getElementById('summaryTotalBirths'),
+    summaryTotalDeaths: document.getElementById('summaryTotalDeaths'),
+    summaryMaxGen: document.getElementById('summaryMaxGen'),
+    summaryAvgLifespan: document.getElementById('summaryAvgLifespan'),
+    summaryExtinctions: document.getElementById('summaryExtinctions'),
+    summaryFinalPop: document.getElementById('summaryFinalPop'),
   };
 
   function syncLabels(){
@@ -720,8 +806,8 @@
     if (isDragging) {
       const deltaX = e.clientX - lastMouseX;
       const deltaY = e.clientY - lastMouseY;
-      viewportX += deltaX / zoomLevel;
-      viewportY += deltaY / zoomLevel;
+      viewportX += deltaX / zoomLevel; // Natural dragging: drag left = move viewport left
+      viewportY += deltaY / zoomLevel; // Natural dragging: drag up = move viewport up
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
     }
@@ -742,6 +828,75 @@
     const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
     zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel * zoomFactor));
     syncLabels();
+  });
+
+  // Touch event handlers for mobile support
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    touches = Array.from(e.touches);
+    
+    if (touches.length === 1) {
+      // Single touch - start panning
+      isDragging = true;
+      lastMouseX = touches[0].clientX;
+      lastMouseY = touches[0].clientY;
+    } else if (touches.length === 2) {
+      // Two touches - start pinch zoom
+      isPinching = true;
+      isDragging = false;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+    }
+  });
+
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    touches = Array.from(e.touches);
+    
+    if (touches.length === 1 && isDragging && !isPinching) {
+      // Single touch panning
+      const deltaX = touches[0].clientX - lastMouseX;
+      const deltaY = touches[0].clientY - lastMouseY;
+      
+      viewportX += deltaX / zoomLevel; // Natural dragging: drag left = move viewport left
+      viewportY += deltaY / zoomLevel; // Natural dragging: drag up = move viewport up
+      
+      lastMouseX = touches[0].clientX;
+      lastMouseY = touches[0].clientY;
+    } else if (touches.length === 2 && isPinching) {
+      // Pinch to zoom
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (lastTouchDistance > 0) {
+        const zoomFactor = distance / lastTouchDistance;
+        zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel * zoomFactor));
+        syncLabels();
+      }
+      
+      lastTouchDistance = distance;
+    }
+  });
+
+  canvas.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    touches = Array.from(e.touches);
+    
+    if (touches.length === 0) {
+      // No more touches
+      isDragging = false;
+      isPinching = false;
+      lastTouchDistance = 0;
+    } else if (touches.length === 1) {
+      // Back to single touch
+      isPinching = false;
+      lastTouchDistance = 0;
+      // Update single touch position
+      lastMouseX = touches[0].clientX;
+      lastMouseY = touches[0].clientY;
+    }
   });
 
   canvas.style.cursor = 'grab';
@@ -936,6 +1091,117 @@
     // Average lifespan
     const avgLifespan = totalDeaths > 0 ? (totalLifespan / totalDeaths) : 0;
     el.statAvgLifespan.textContent = avgLifespan.toFixed(1) + 's';
+    
+    // Update population graph if visible
+    if (isGraphVisible && popGraphCtx) {
+      updatePopulationGraph();
+    }
+  }
+  
+  function updatePopulationGraph() {
+    const currentTime = (performance.now() - graphStartTime) / 1000; // Time in seconds
+    
+    // Add current population data point
+    populationHistory.push({
+      time: currentTime,
+      population: cells.length
+    });
+    
+    // Keep only last 60 seconds of data
+    const maxTime = 60;
+    populationHistory = populationHistory.filter(point => currentTime - point.time <= maxTime);
+    
+    // Draw the graph
+    drawPopulationGraph();
+  }
+  
+  function drawPopulationGraph() {
+    if (!popGraphCtx || populationHistory.length < 2) return;
+    
+    const canvas = el.popGraphCanvas;
+    const width = canvas.width;
+    const height = canvas.height;
+    const padding = 20;
+    
+    // Clear canvas
+    popGraphCtx.clearRect(0, 0, width, height);
+    
+    // Background
+    popGraphCtx.fillStyle = 'rgba(15, 22, 32, 0.9)';
+    popGraphCtx.fillRect(0, 0, width, height);
+    
+    // Find data ranges
+    const maxPop = Math.max(...populationHistory.map(p => p.population), 10);
+    const minTime = Math.min(...populationHistory.map(p => p.time));
+    const maxTime = Math.max(...populationHistory.map(p => p.time));
+    const timeRange = Math.max(maxTime - minTime, 1);
+    
+    // Draw grid lines
+    popGraphCtx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    popGraphCtx.lineWidth = 1;
+    
+    // Horizontal grid lines
+    for (let i = 0; i <= 4; i++) {
+      const y = padding + (i / 4) * (height - 2 * padding);
+      popGraphCtx.beginPath();
+      popGraphCtx.moveTo(padding, y);
+      popGraphCtx.lineTo(width - padding, y);
+      popGraphCtx.stroke();
+    }
+    
+    // Vertical grid lines
+    for (let i = 0; i <= 6; i++) {
+      const x = padding + (i / 6) * (width - 2 * padding);
+      popGraphCtx.beginPath();
+      popGraphCtx.moveTo(x, padding);
+      popGraphCtx.lineTo(x, height - padding);
+      popGraphCtx.stroke();
+    }
+    
+    // Draw population line
+    popGraphCtx.strokeStyle = 'rgba(94, 234, 212, 0.8)';
+    popGraphCtx.lineWidth = 2;
+    popGraphCtx.beginPath();
+    
+    for (let i = 0; i < populationHistory.length; i++) {
+      const point = populationHistory[i];
+      const x = padding + ((point.time - minTime) / timeRange) * (width - 2 * padding);
+      const y = height - padding - (point.population / maxPop) * (height - 2 * padding);
+      
+      if (i === 0) {
+        popGraphCtx.moveTo(x, y);
+      } else {
+        popGraphCtx.lineTo(x, y);
+      }
+    }
+    
+    popGraphCtx.stroke();
+    
+    // Draw labels
+    popGraphCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    popGraphCtx.font = '10px monospace';
+    popGraphCtx.textAlign = 'left';
+    
+    // Y-axis labels (population)
+    for (let i = 0; i <= 4; i++) {
+      const pop = Math.round((maxPop * (4 - i)) / 4);
+      const y = padding + (i / 4) * (height - 2 * padding) + 3;
+      popGraphCtx.fillText(pop.toString(), 2, y);
+    }
+    
+    // X-axis labels (time)
+    popGraphCtx.textAlign = 'center';
+    for (let i = 0; i <= 3; i++) {
+      const time = Math.round(minTime + (i / 3) * timeRange);
+      const x = padding + (i / 3) * (width - 2 * padding);
+      popGraphCtx.fillText(time + 's', x, height - 5);
+    }
+    
+    // Title
+    popGraphCtx.textAlign = 'center';
+    popGraphCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    popGraphCtx.font = '12px monospace';
+    popGraphCtx.fillText('Population vs Time', width / 2, 15);
   }
 
   function updateMinimap() {
@@ -968,25 +1234,13 @@
   function updateViewportIndicator() {
     if (!el.viewportIndicator) return;
     
-    // Since world is square but viewport might not be, we need to maintain aspect ratio
-    const worldAspect = WORLD_W / WORLD_H; // Should be 1.0 for square world
-    const viewportAspect = W / H;
+    // Calculate actual viewport size in world coordinates
+    const viewWidthInWorld = W / zoomLevel;
+    const viewHeightInWorld = H / zoomLevel;
     
-    // Calculate the actual visible world area based on viewport aspect ratio
-    let visibleWorldW, visibleWorldH;
-    if (viewportAspect > worldAspect) {
-      // Viewport is wider than world aspect - world height constrains
-      visibleWorldH = WORLD_H;
-      visibleWorldW = WORLD_H * viewportAspect;
-    } else {
-      // Viewport is taller than world aspect - world width constrains  
-      visibleWorldW = WORLD_W;
-      visibleWorldH = WORLD_W / viewportAspect;
-    }
-    
-    // Calculate viewport size on minimap using the visible world dimensions
-    const viewWidth = (visibleWorldW / WORLD_W) * minimapWidth / zoomLevel;
-    const viewHeight = (visibleWorldH / WORLD_H) * minimapHeight / zoomLevel;
+    // Calculate viewport size on minimap (direct proportion)
+    const viewWidth = (viewWidthInWorld / WORLD_W) * minimapWidth;
+    const viewHeight = (viewHeightInWorld / WORLD_H) * minimapHeight;
     
     // Calculate viewport position on minimap
     const centerX = minimapWidth / 2;
@@ -1033,6 +1287,21 @@
     }
   }
   window.addEventListener('resize', resize);
+  
+  // Handle window resize for population graph positioning
+  window.addEventListener('resize', function() {
+    if (isGraphVisible && el.popGraphCanvas) {
+      if (window.innerWidth > 768) {
+        // Desktop: expanded view
+        el.popGraphCanvas.width = 320;
+        el.popGraphCanvas.height = 200;
+      } else {
+        // Mobile: compact view
+        el.popGraphCanvas.width = 300;
+        el.popGraphCanvas.height = 150;
+      }
+    }
+  });
 
   // Ensure canvas fills remaining area
   function fitCanvasHeight(){
@@ -1104,6 +1373,18 @@
   let totalDeaths = 0;
   let totalLifespan = 0;
   let maxGeneration = 0;
+  
+  // Population graph data
+  let populationHistory = [];
+  let graphStartTime = performance.now();
+  let isGraphVisible = false;
+  let popGraphCtx = null;
+  
+  // Simulation state and tracking
+  let isPaused = false;
+  let simulationStartTime = performance.now();
+  let peakPopulation = 0;
+  let extinctionEvents = 0;
   
   // Evolution Database
   let evolutionDB = null;
@@ -1240,6 +1521,7 @@
       this.health = 100;
       this.age = 0;
       this.generation = generation; // Track how many times this lineage has divided
+      this.naturalRadiationResistance = 0.5; // 50% natural immunity to radiation damage
 
       this.infected = false;
       this.plagueT = 0;
@@ -1589,11 +1871,17 @@
         name: "Meteor Impact",
         description: "A meteor strikes! High radiation and cell death.",
         effect: () => {
-          // Kill random cells and increase radiation temporarily
-          const killCount = Math.floor(cells.length * 0.3);
+          // Kill most cells, leaving 0.1% to 50% survivors (extremely dramatic range)
+          const survivalRate = 0.001 + Math.random() * 0.499; // 0.1% to 50%
+          const survivorCount = Math.max(1, Math.floor(cells.length * survivalRate));
+          const killCount = cells.length - survivorCount;
+          
+          // Kill random cells
           for (let i = 0; i < killCount; i++) {
-            const idx = Math.floor(Math.random() * cells.length);
-            cells.splice(idx, 1);
+            if (cells.length > survivorCount) {
+              const idx = Math.floor(Math.random() * cells.length);
+              cells.splice(idx, 1);
+            }
           }
           // Temporarily increase radiation
           el.rad.value = Math.min(15, Number(el.rad.value) + 5);
@@ -1769,6 +2057,112 @@
   setupPanelToggle(el.statsToggle, el.statsContent);
   console.log('Panel toggles initialized');
   
+  // Initialize population graph
+  if (el.popGraphCanvas) {
+    popGraphCtx = el.popGraphCanvas.getContext('2d');
+  }
+  
+  // Population graph toggle
+  if (el.togglePopGraph) {
+    el.togglePopGraph.addEventListener('click', function() {
+      isGraphVisible = !isGraphVisible;
+      
+      if (isGraphVisible) {
+        el.populationGraph.style.display = 'block';
+        el.populationGraph.classList.add('expanded');
+        el.togglePopGraph.textContent = '📊 Hide Population Graph';
+        
+        // Reset graph data when showing
+        populationHistory = [];
+        graphStartTime = performance.now();
+        
+        // Resize canvas for desktop expanded view
+        if (window.innerWidth > 768) {
+          el.popGraphCanvas.width = 320;
+          el.popGraphCanvas.height = 200;
+        }
+      } else {
+        el.populationGraph.style.display = 'none';
+        el.populationGraph.classList.remove('expanded');
+        el.togglePopGraph.textContent = '📊 Show Population Graph';
+        
+        // Reset canvas size
+        el.popGraphCanvas.width = 300;
+        el.popGraphCanvas.height = 150;
+      }
+    });
+  }
+  
+  // Pause button functionality
+  if (el.pauseBtn) {
+    el.pauseBtn.addEventListener('click', function() {
+      isPaused = !isPaused;
+      el.pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
+      el.pauseBtn.title = isPaused ? 'Resume Simulation' : 'Pause Simulation';
+      
+      if (isPaused) {
+        showStatsSummary();
+      } else {
+        hideStatsSummary();
+      }
+    });
+  }
+  
+  // Stats summary modal controls
+  if (el.closeStatsModal) {
+    el.closeStatsModal.addEventListener('click', hideStatsSummary);
+  }
+  
+  if (el.resumeBtn) {
+    el.resumeBtn.addEventListener('click', function() {
+      isPaused = false;
+      el.pauseBtn.textContent = '⏸️';
+      el.pauseBtn.title = 'Pause Simulation';
+      hideStatsSummary();
+    });
+  }
+  
+  if (el.restartBtn) {
+    el.restartBtn.addEventListener('click', function() {
+      // Reset simulation
+      resetWorld([3,3,4,2,0]);
+      isPaused = false;
+      el.pauseBtn.textContent = '⏸️';
+      el.pauseBtn.title = 'Pause Simulation';
+      simulationStartTime = performance.now();
+      peakPopulation = 0;
+      extinctionEvents = 0;
+      totalBorn = 0;
+      totalDeaths = 0;
+      totalLifespan = 0;
+      maxGeneration = 0;
+      hideStatsSummary();
+    });
+  }
+  
+  function showStatsSummary() {
+    updateStatsSummary();
+    el.statsSummaryModal.style.display = 'flex';
+  }
+  
+  function hideStatsSummary() {
+    el.statsSummaryModal.style.display = 'none';
+  }
+  
+  function updateStatsSummary() {
+    const runtime = (performance.now() - simulationStartTime) / 1000;
+    const avgLifespan = totalDeaths > 0 ? (totalLifespan / totalDeaths) : 0;
+    
+    el.summaryRuntime.textContent = runtime.toFixed(1) + 's';
+    el.summaryPeakPop.textContent = peakPopulation;
+    el.summaryTotalBirths.textContent = totalBorn;
+    el.summaryTotalDeaths.textContent = totalDeaths;
+    el.summaryMaxGen.textContent = maxGeneration;
+    el.summaryAvgLifespan.textContent = avgLifespan.toFixed(1) + 's';
+    el.summaryExtinctions.textContent = extinctionEvents;
+    el.summaryFinalPop.textContent = cells.length;
+  }
+  
   // Start the simulation
   console.log('Starting EvoSimGame simulation...');
 
@@ -1807,11 +2201,29 @@
   const foodGrid = new Grid(gridCellSize);
 
   let last = performance.now();
+  let renderFrameCount = 0;
+  let lastFPSCheck = 0;
+  let currentFPS = 60;
 
   function step(now){
     try {
+      // Always render even when paused, but don't update simulation
+      if (isPaused) {
+        draw(Number(el.temp.value), Number(el.stability.value), Number(el.rad.value), 0);
+        requestAnimationFrame(step);
+        return;
+      }
+      
       const dt = Math.min(0.033, (now - last)/1000); // cap for stability
       last = now;
+      
+      // Performance monitoring and adaptive rendering
+      renderFrameCount++;
+      if (now - lastFPSCheck > 1000) { // Check FPS every second
+        currentFPS = renderFrameCount;
+        renderFrameCount = 0;
+        lastFPSCheck = now;
+      }
       
       // Performance monitoring
       if (cells.length > MAX_CELLS_SOFT * 1.5) {
@@ -1882,9 +2294,12 @@
 
       // Radiation: only affects health/death, not genome (genome is immutable after birth)
       if(rad > 0){
-        // High radiation damages health instead of mutating genome
-        const radiationDamage = (rad / 8) * EvoSimConfig.genetics.radiationHealthDamage * dt;
-        c.health -= radiationDamage;
+        // Apply natural radiation resistance (50% immunity by default)
+        const effectiveRadiation = Math.max(0, rad - (8 * c.naturalRadiationResistance));
+        if(effectiveRadiation > 0) {
+          const radiationDamage = (effectiveRadiation / 8) * EvoSimConfig.genetics.radiationHealthDamage * dt;
+          c.health -= radiationDamage;
+        }
       }
 
       // Brownian wandering
@@ -1915,10 +2330,10 @@
       const drain = BASE_DRAIN * lerp(1.35, 0.35, eff/7); // 3-bit genome scaling
       c.energy -= drain * dt * 10;
 
-      // Temperature mismatch health drain
+      // Temperature mismatch health drain (quadratic scaling for stronger delta effect)
       const res = c.genome[1];
       const mismatch = Math.abs(res - idealRes) / 7; // 3-bit genome range
-      const tempDamage = HEALTH_DRAIN_TEMP * mismatch * dt * 10;
+      const tempDamage = HEALTH_DRAIN_TEMP * (mismatch * mismatch) * dt * 10; // Quadratic for stronger delta punishment
       c.health -= tempDamage;
 
       // Low energy also hurts
@@ -2144,15 +2559,37 @@
     const anyPlague = cells.some(c => c.infected);
     el.hudPlague.textContent = anyPlague ? "on" : "off";
     
-    // Update ecosystem stats panel
-    updateEcosystemStats();
+    // Track peak population and extinction events
+    if (cells.length > peakPopulation) {
+      peakPopulation = cells.length;
+    }
+    
+    // Detect extinction events (population drops to very low levels)
+    if (cells.length <= 5 && peakPopulation > 50) {
+      extinctionEvents++;
+      peakPopulation = cells.length; // Reset peak after extinction
+    }
+    
+    // Update ecosystem stats panel (less frequently when performance is poor)
+    if (renderFrameCount % (currentFPS < 30 ? 3 : 1) === 0) {
+      updateEcosystemStats();
+    }
     
     // Random ecosystem events
     if (Math.random() < 0.0001 && cells.length > 50) { // Very rare events
       triggerEcosystemEvent();
     }
 
-    draw(temp, stability, rad, dt);
+    // Adaptive rendering based on performance
+    const shouldRender = currentFPS > 30 || renderFrameCount % 2 === 0; // Skip every other frame if FPS drops
+    const totalObjects = cells.length + food.length;
+    
+    if (shouldRender && totalObjects < EvoSimConfig.performance.maxRenderObjects) {
+      draw(temp, stability, rad, dt);
+    } else if (renderFrameCount % 3 === 0) { // Render every 3rd frame when performance is poor
+      draw(temp, stability, rad, dt);
+    }
+    
     requestAnimationFrame(step);
     
     } catch (error) {
@@ -2173,6 +2610,19 @@
     ctx.scale(zoomLevel, zoomLevel);
     ctx.translate(-WORLD_W/2 + viewportX, -WORLD_H/2 + viewportY);
     
+    // Calculate visible area for culling (with generous margin for smooth scrolling)
+    const margin = 200; // Generous margin to prevent pop-in
+    const viewWidthHalf = W / (2 * zoomLevel);
+    const viewHeightHalf = H / (2 * zoomLevel);
+    
+    // Calculate actual visible bounds in world coordinates
+    // The viewport transform is: translate(-WORLD_W/2 + viewportX, -WORLD_H/2 + viewportY)
+    // So visible area in world coords is:
+    const visibleLeft = (WORLD_W / 2) - viewportX - viewWidthHalf - margin;
+    const visibleRight = (WORLD_W / 2) - viewportX + viewWidthHalf + margin;
+    const visibleTop = (WORLD_H / 2) - viewportY - viewHeightHalf - margin;
+    const visibleBottom = (WORLD_H / 2) - viewportY + viewHeightHalf + margin;
+    
     // Background: temperature tint + subtle noise
     const t = temp / 100;
     const bgHue = lerp(220, 12, t);
@@ -2191,44 +2641,46 @@
     ctx.fillStyle = grd;
     ctx.fillRect(0,0,WORLD_W,WORLD_H);
 
-    // Food with enhanced visuals for recycled resources
+    // Food with enhanced visuals for recycled resources (viewport culled)
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
+    let renderedFood = 0;
     for(const f of food){
-      // Enhanced visuals for recycled food (death site resources)
+      // Viewport culling for food
+      if(f.x < visibleLeft || f.x > visibleRight || f.y < visibleTop || f.y > visibleBottom) {
+        continue;
+      }
+      renderedFood++;
+      // Optimized food visuals (reduced shadow effects for performance)
       if(f.recycled){
-        // Fresh carrion gets a distinctive orange-red glow
+        // Fresh carrion - simplified rendering
         if(f.fresh){
-          ctx.save();
-          ctx.shadowColor = 'rgba(251, 146, 60, 1.0)'; // Bright orange glow
-          ctx.shadowBlur = 12*DPR; // Larger glow
-          ctx.fillStyle = `rgba(251,146,60,${0.9*f.a})`; // Brighter orange color
+          ctx.fillStyle = `rgba(251,146,60,${0.9*f.a})`; // Bright orange color
           ctx.beginPath();
           ctx.arc(f.x, f.y, 3.6*DPR, 0, Math.PI*2); // Much larger (+28%)
           ctx.fill();
           
-          // Add pulsing effect for fresh carrion
-          const pulseTime = (performance.now() - (f.deathTime || 0)) / 1000;
-          const pulse = 0.8 + 0.2 * Math.sin(pulseTime * 4); // Pulse every 0.25 seconds
-          ctx.globalAlpha = pulse;
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, 4.0*DPR, 0, Math.PI*2); // White highlight (+25%)
-          ctx.fill();
-          ctx.restore();
+          // Simplified pulsing effect (no shadow)
+          if(zoomLevel > 0.7) { // Only show pulse when zoomed in
+            const pulseTime = (performance.now() - (f.deathTime || 0)) / 1000;
+            const pulse = 0.8 + 0.2 * Math.sin(pulseTime * 4);
+            ctx.save();
+            ctx.globalAlpha = pulse * 0.4;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(f.x, f.y, 4.0*DPR, 0, Math.PI*2);
+            ctx.fill();
+            ctx.restore();
+          }
         } else {
-          // Regular recycled food gets enhanced yellow visibility
-          ctx.save();
-          ctx.shadowColor = 'rgba(234, 179, 8, 0.8)'; // Brighter yellow glow
-          ctx.shadowBlur = 6*DPR; // Larger glow
-          ctx.fillStyle = `rgba(234,179,8,${0.8*f.a})`; // Brighter yellow-green color
+          // Regular recycled food - no shadow
+          ctx.fillStyle = `rgba(234,179,8,${0.8*f.a})`; // Bright yellow-green color
           ctx.beginPath();
           ctx.arc(f.x, f.y, 3.0*DPR, 0, Math.PI*2); // Larger (+36%)
           ctx.fill();
-          ctx.restore();
         }
       } else {
-        // Regular environmental food (standard cyan) - INCREASED SIZE
+        // Regular environmental food (standard cyan)
         ctx.fillStyle = `rgba(94,234,212,${0.35*f.a})`;
         ctx.beginPath();
         ctx.arc(f.x, f.y, 2.4*DPR, 0, Math.PI*2); // Increased from 1.6 to 2.4 (+50%)
@@ -2237,11 +2689,20 @@
     }
     ctx.restore();
 
-    // Cells
-    // Draw aggressive/glowy last for nicer visuals
+    // Cells (viewport culled and performance optimized)
     const normal = [];
     const glowy = [];
+    let renderedCells = 0;
+    
     for(const c of cells){
+      // Viewport culling for cells
+      const cellRadius = c.r + 20; // Include glow radius in culling
+      if(c.x + cellRadius < visibleLeft || c.x - cellRadius > visibleRight || 
+         c.y + cellRadius < visibleTop || c.y - cellRadius > visibleBottom) {
+        continue;
+      }
+      
+      renderedCells++;
       const effectiveAgg = c.genome[3] * EvoSimConfig.genetics.aggressivityGlowScale;
       if(effectiveAgg >= 8.75) glowy.push(c); // Half of max scaled range (17.5/2)
       else normal.push(c);
@@ -2262,21 +2723,49 @@
         const bright = lerp(0.45, 1.2, effectiveAgg/17.5);
         const fill = resistanceColor(res, bright);
 
-        // Glow for aggressivity (3-bit with config scaling)
+        // Optimized glow for aggressivity (only for high-aggression cells)
         const glow = effectiveAgg/17.5;
-        if(glow > 0.3){ // Lower threshold for glow effect
+        const shouldGlow = glow > 0.45 && zoomLevel > 0.5; // Skip glow when zoomed out
+        if(shouldGlow){ 
           ctx.save();
           ctx.shadowColor = fill;
-          ctx.shadowBlur = lerp(0, 18*DPR, glow);
+          ctx.shadowBlur = Math.min(12*DPR, lerp(0, 18*DPR, glow)); // Cap blur for performance
         }
 
-        // Body
+        // Body - Always render as circle for performance, fertility affects border style
         ctx.fillStyle = fill;
         ctx.strokeStyle = 'rgba(0,0,0,0.35)';
         ctx.lineWidth = 1*DPR;
 
-        drawShape(ctx, c.x, c.y, r, sides);
+        // Draw circle (much faster than polygons)
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, r, 0, Math.PI*2);
         ctx.fill();
+        
+        // Fertility affects border pattern instead of shape
+        if(fert > 0) {
+          // Higher fertility = more complex border pattern
+          const segments = Math.min(fert + 2, 8); // 2-8 segments based on fertility
+          ctx.save();
+          ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+          ctx.lineWidth = 0.8*DPR;
+          for(let i = 0; i < segments; i++) {
+            const angle = (i / segments) * Math.PI * 2;
+            const x1 = c.x + Math.cos(angle) * (r - 1);
+            const y1 = c.y + Math.sin(angle) * (r - 1);
+            const x2 = c.x + Math.cos(angle) * (r + 1);
+            const y2 = c.y + Math.sin(angle) * (r + 1);
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        
+        // Standard border
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, r, 0, Math.PI*2);
         ctx.stroke();
 
         // Infectivity indicator: ring radius
@@ -2322,17 +2811,20 @@
         
         ctx.restore();
 
-        if(glow > 0.45) ctx.restore();
+        if(shouldGlow) ctx.restore();
       }
     }
 
-    // Radiation overlay (subtle)
-      if(rad > 0){
-        ctx.save();
-        ctx.globalAlpha = 0.04 + 0.06*(rad/15); // Updated radiation scaling
+    // Optimized radiation overlay (only in visible area)
+    if(rad > 0 && zoomLevel > 0.3){
+      ctx.save();
+      ctx.globalAlpha = 0.04 + 0.06*(rad/15);
       ctx.fillStyle = 'rgba(251,191,36,1)';
-      for(let i=0;i<12;i++){
-        const x = rand(0,WORLD_W), y = rand(0,WORLD_H);
+      const particleCount = EvoSimConfig.performance.radiationParticleCount;
+      for(let i=0;i<particleCount;i++){
+        // Only spawn particles in visible area
+        const x = rand(Math.max(0, visibleLeft), Math.min(WORLD_W, visibleRight));
+        const y = rand(Math.max(0, visibleTop), Math.min(WORLD_H, visibleBottom));
         ctx.fillRect(x,y,1*DPR,1*DPR);
       }
       ctx.restore();
@@ -2451,23 +2943,7 @@
     ctx.restore();
   }
 
-  function drawShape(ctx, x, y, r, sides){
-    ctx.beginPath();
-    if(sides === 0){
-      ctx.arc(x, y, r, 0, Math.PI*2);
-      return;
-    }
-    // Regular polygon
-    const rot = -Math.PI/2;
-    for(let i=0;i<sides;i++){
-      const a = rot + (i/sides)*Math.PI*2;
-      const px = x + Math.cos(a)*r;
-      const py = y + Math.sin(a)*r;
-      if(i===0) ctx.moveTo(px,py);
-      else ctx.lineTo(px,py);
-    }
-    ctx.closePath();
-  }
+  // drawShape function removed - now using circles for performance
 
   requestAnimationFrame(step);
 })();
