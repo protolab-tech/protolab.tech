@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="KAOLIN - Premium Streetwear Brand. Discover our latest collection of urban fashion and streetwear designs inspired by street culture." />
-  <meta name="keywords" content="streetwear, urban fashion, KAOLIN, street art, clothing, fashion, apparel, stickers, hoodies, t-shirts" />
+  <meta name="description" content="KAOLIN - Premium Streetwear Brand. Discover our latest collection of urban fashion and streetwear designs inspired by street culture and digital art." />
+  <meta name="keywords" content="streetwear, urban fashion, KAOLIN, street art, clothing, fashion, apparel, stickers, hoodies, t-shirts, digital art" />
   <meta name="author" content="KAOLIN" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://protolab.tech/Kaolin/" />
@@ -18,19 +18,19 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="KAOLIN - Premium Streetwear Brand" />
-  <meta property="og:description" content="Discover our latest collection of urban fashion and streetwear designs." />
+  <meta property="og:description" content="Discover our latest collection of urban fashion and streetwear designs inspired by street culture and digital art." />
   <meta property="og:image" content="/Kaolin/assets/images/logo.jpg" />
   <meta property="og:url" content="https://protolab.tech/Kaolin/" />
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="KAOLIN - Premium Streetwear Brand" />
-  <meta name="twitter:description" content="Discover our latest collection of urban fashion and streetwear designs." />
+  <meta name="twitter:description" content="Discover our latest collection of urban fashion and streetwear designs inspired by street culture and digital art." />
   <meta name="twitter:image" content="/Kaolin/assets/images/logo.jpg" />
   
-  <title>KAOLIN - Streetwear Brand</title>
+  <title>KAOLIN - Premium Streetwear</title>
   <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   
   <!-- Security headers -->
@@ -40,95 +40,130 @@
   <!-- Skip navigation for accessibility -->
   <a href="#main-content" class="sr-only sr-only-focusable" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">Skip to main content</a>
   
-  <header>
-    <nav aria-label="Main navigation">
-      <ul id="main-menu">
-        <li><a href="#home" aria-current="page">Home</a></li>
+  <header class="k-header">
+    <nav class="k-nav" aria-label="Main navigation">
+      <a class="k-brand" href="#home" aria-label="KAOLIN home">KAOLIN</a>
+      <ul class="k-menu" id="main-menu">
         <li><a href="#shop">Shop</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <div class="k-actions">
+        <button class="k-menu-toggle" aria-label="Toggle Menu" aria-expanded="false">☰</button>
+      </div>
     </nav>
   </header>
-  
+
   <main id="main-content">
-    <section id="home" aria-labelledby="brand-title">
-      <div class="logo-animation">
-        <img 
-          src="assets/images/logo.jpg" 
-          alt="KAOLIN Logo" 
-          width="120" 
-          height="120" 
-          class="logo-image"
-          loading="eager"
-        >
-      </div>
-      <h1 id="brand-title">KAOLIN</h1>
-      <p>Premium Streetwear</p>
-    </section>
-
-    <section id="shop" aria-labelledby="collection-title">
-      <h2 id="collection-title" class="section-title">Latest Collection</h2>
-      <div class="product-grid">
-        <article class="product-card">
+    <!-- HERO -->
+    <section id="home" class="k-hero" aria-labelledby="hero-title">
+      <div class="k-hero-bg" aria-hidden="true"></div>
+      <div class="k-hero-content">
+        <div class="logo-animation">
           <img 
-            src="assets/images/greyTshirtskaolinestyle.jpg" 
-            alt="Grey KAOLIN Urban T-Shirt" 
-            class="product-image"
-            loading="lazy"
-            width="300"
-            height="400"
+            class="k-logo"
+            src="assets/images/logo.jpg" 
+            alt="KAOLIN Logo" 
+            width="120" 
+            height="120" 
+            loading="eager"
           >
-          <div class="product-info">
-            <h3>KAOLIN Urban Tee</h3>
-            <p class="price">€45.99</p>
-          </div>
-        </article>
-        <article class="product-card">
-          <img 
-            src="assets/images/kaolinegreenbackground.jpg" 
-            alt="KAOLIN Digital Print Hoodie in Green" 
-            class="product-image"
-            loading="lazy"
-            width="300"
-            height="400"
-          >
-          <div class="product-info">
-            <h3>KAOLIN Digital Print Hoodie</h3>
-            <p class="price">€79.99</p>
-          </div>
-        </article>
-        <article class="product-card">
-          <img 
-            src="assets/images/kaolinelimeonpink.jpg" 
-            alt="KAOLIN Sticker Pack featuring Lime on Pink design" 
-            class="product-image"
-            loading="lazy"
-            width="300"
-            height="400"
-          >
-          <div class="product-info">
-            <h3>KAOLIN Sticker Pack</h3>
-            <p class="price">€12.99</p>
-          </div>
-        </article>
+        </div>
+        <h1 id="hero-title">KAOLIN</h1>
+        <p>Premium Streetwear</p>
+        <div class="k-cta">
+          <a class="k-btn k-btn-primary" href="#shop">Shop Collection</a>
+          <a class="k-btn k-btn-ghost" href="#about">Our Story</a>
+        </div>
       </div>
     </section>
 
-    <section id="gallery" aria-labelledby="gallery-title">
-      <h2 id="gallery-title" class="section-title">Street Gallery</h2>
-      <div class="gallery" role="region" aria-label="Street art gallery">
-        <figure class="gallery-item">
+    <!-- FEATURES STRIP -->
+    <section id="features" class="k-features" aria-label="Key features">
+      <div class="k-feature"><span>Street Culture</span></div>
+      <div class="k-feature"><span>Digital Art</span></div>
+      <div class="k-feature"><span>Urban Style</span></div>
+      <div class="k-feature"><span>Premium Quality</span></div>
+    </section>
+
+    <!-- SHOP -->
+    <section id="shop" class="k-shop" aria-labelledby="shop-title">
+      <h2 id="shop-title" class="k-section-title">Latest Collection</h2>
+      <div class="k-products">
+        <article class="k-card">
+          <div class="k-card-media">
+            <img 
+              src="assets/images/greyTshirtskaolinestyle.jpg" 
+              alt="KAOLIN Urban T-Shirt in Grey" 
+              loading="lazy"
+              width="400"
+              height="400"
+            >
+          </div>
+          <div class="k-card-body">
+            <h3 class="k-card-title">KAOLIN Urban Tee</h3>
+            <p class="k-card-desc">Premium streetwear tee featuring our signature urban design aesthetic.</p>
+            <div class="k-card-footer">
+              <span class="k-price">€45.99</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="k-card">
+          <div class="k-card-media">
+            <img 
+              src="assets/images/kaolinegreenbackground.jpg" 
+              alt="KAOLIN Digital Print Hoodie in Green" 
+              loading="lazy"
+              width="400"
+              height="400"
+            >
+          </div>
+          <div class="k-card-body">
+            <h3 class="k-card-title">Digital Print Hoodie</h3>
+            <p class="k-card-desc">Comfort meets style with our signature digital art print design.</p>
+            <div class="k-card-footer">
+              <span class="k-price">€79.99</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="k-card">
+          <div class="k-card-media">
+            <img 
+              src="assets/images/kaolinelimeonpink.jpg" 
+              alt="KAOLIN Sticker Pack featuring Lime on Pink design" 
+              loading="lazy"
+              width="400"
+              height="400"
+            >
+          </div>
+          <div class="k-card-body">
+            <h3 class="k-card-title">Signature Sticker Pack</h3>
+            <p class="k-card-desc">Express your style with our exclusive street art sticker collection.</p>
+            <div class="k-card-footer">
+              <span class="k-price">€12.99</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- STREET GALLERY -->
+    <section id="gallery" class="k-gallery" aria-labelledby="gallery-title">
+      <h2 id="gallery-title" class="k-section-title">Street Gallery</h2>
+      <div class="k-gallery-grid" role="region" aria-label="Street art gallery">
+        <figure class="k-gallery-item">
           <img 
             src="assets/images/stickeronlightpolesupermarketparking.jpg" 
-            alt="KAOLIN Sticker on Light Pole in Supermarket Parking"
+            alt="KAOLIN Sticker on Light Pole in Urban Setting"
             loading="lazy"
             width="300"
             height="300"
           >
         </figure>
-        <figure class="gallery-item">
+        <figure class="k-gallery-item">
           <img 
             src="assets/images/stickeronglass.jpg" 
             alt="KAOLIN Sticker on Glass Surface"
@@ -137,7 +172,7 @@
             height="300"
           >
         </figure>
-        <figure class="gallery-item">
+        <figure class="k-gallery-item">
           <img 
             src="assets/images/stickeronrustymetalskybackground.jpg" 
             alt="KAOLIN Sticker on Rusty Metal against Sky"
@@ -146,7 +181,7 @@
             height="300"
           >
         </figure>
-        <figure class="gallery-item">
+        <figure class="k-gallery-item">
           <img 
             src="assets/images/stickeronshoppingcartholderbar.jpg" 
             alt="KAOLIN Sticker on Shopping Cart Handle"
@@ -155,16 +190,7 @@
             height="300"
           >
         </figure>
-        <figure class="gallery-item">
-          <img 
-            src="assets/images/digitalabstractrgbbcgrnd.jpg" 
-            alt="KAOLIN Digital Abstract Design in RGB Colors"
-            loading="lazy"
-            width="300"
-            height="300"
-          >
-        </figure>
-        <figure class="gallery-item">
+        <figure class="k-gallery-item">
           <img 
             src="assets/images/digitalabstractpurpleorangegreenbcgrnd.jpg" 
             alt="KAOLIN Digital Abstract Design in Purple, Orange, and Green"
@@ -176,9 +202,10 @@
       </div>
     </section>
 
-    <section id="about" aria-labelledby="about-title">
-      <h2 id="about-title" class="section-title">Our Story</h2>
-      <div class="about-image">
+    <!-- ABOUT -->
+    <section id="about" class="k-about" aria-labelledby="about-title">
+      <h2 id="about-title" class="k-section-title">Our Story</h2>
+      <div class="k-about-image">
         <img 
           src="assets/images/galvanizedmetalgreen5.jpg" 
           alt="Artistic background representing KAOLIN's urban roots"
@@ -187,17 +214,18 @@
           height="400"
         >
       </div>
-      <div class="about-content">
+      <div class="k-about-content">
         <p>KAOLIN is a streetwear brand born from the fusion of urban culture and contemporary fashion. We create clothing that embodies the spirit of street art and self-expression.</p>
         <p>Each piece in our collection is designed with attention to detail and quality, bringing a unique aesthetic to your everyday style. Our designs are inspired by digital art, urban environments, and the raw energy of street culture.</p>
         <p>We believe that clothing is more than just fabric – it's a statement of identity. Join us on our journey as we continue to push the boundaries of streetwear fashion.</p>
       </div>
     </section>
 
-    <section id="contact" aria-labelledby="contact-title">
-      <h2 id="contact-title" class="section-title">Get in Touch</h2>
-      <p class="contact-intro">
-        Clicking "Send Message" will open your default email application with a pre-filled message ready for you to review and send.
+    <!-- CONTACT -->
+    <section id="contact" class="k-contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="k-section-title">Get in Touch</h2>
+      <p class="k-contact-intro">
+        Ready to collaborate or have questions about our collection? We'd love to hear from you.
       </p>
       <form class="contact-form" 
             action="mailto:kaolin@protolab.tech" 
@@ -214,34 +242,33 @@
         </div>
         <div class="form-group full-width">
           <label for="message">Message:</label>
-          <textarea id="message" name="Message" required aria-required="true"></textarea>
+          <textarea id="message" name="Message" required aria-required="true" placeholder="Tell us about your project or inquiry..."></textarea>
         </div>
         <button type="submit">Send Message</button>
       </form>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-container">
-      <div class="footer-logo">
+  <footer class="k-footer">
+    <div class="k-footer-container">
+      <div class="k-footer-logo">
         <a href="/" rel="noopener" aria-label="Visit Protolab website">
           <img src="/assets/images/logo.svg" alt="protolab.tech" width="100" height="30" loading="lazy">
         </a>
       </div>
-      <div class="social-links">
+      <div class="k-social-links">
         <a href="https://www.instagram.com/kaoline.streetwear/" target="_blank" rel="noopener" aria-label="Follow KAOLIN on Instagram">
           <img src="assets/images/instagram-icon.svg" alt="" width="30" height="30" loading="lazy">
         </a>
       </div>
-      <div class="contact-info">
+      <div class="k-contact-info">
         <span>Contact us: <a href="mailto:kaolin@protolab.tech" class="email-link">kaolin@protolab.tech</a></span>
       </div>
-      <div class="policy-link">
+      <div class="k-policy-link">
         <a href="/policy.html">Policies</a>
       </div>
     </div>
   </footer>
-  <script src="../assets/js/monitoring.js" defer></script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -254,27 +281,61 @@
       "logo": "/Kaolin/assets/images/logo.jpg",
       "sameAs": [
         "https://www.instagram.com/kaoline.streetwear/"
-      ]
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Streetwear Collection",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "KAOLIN Urban Tee",
+              "description": "Premium streetwear t-shirt"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Digital Print Hoodie",
+              "description": "Streetwear hoodie with digital art design"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Signature Sticker Pack",
+              "description": "Street art sticker collection"
+            }
+          }
+        ]
+      }
     }
   </script>
+
+  <script src="/assets/js/monitoring.js" defer></script>
 
   <!-- Performance optimized JavaScript -->
   <script defer>
     // Smooth scrolling
-    document.querySelectorAll('nav a').forEach(anchor => {
+    document.querySelectorAll('.k-menu a, .k-btn[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        const section = document.querySelector(this.getAttribute('href'));
-        section.scrollIntoView({ behavior: 'smooth' });
+        const targetId = this.getAttribute('href');
+        const section = document.querySelector(targetId);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
       });
     });
 
     // Menu toggle functionality
-    const menuToggle = document.querySelector('.menu-toggle');
+    const menuToggle = document.querySelector('.k-menu-toggle');
     const mainMenu = document.getElementById('main-menu');
     
-    if (menuToggle) {
-      menuToggle.hidden = false;
+    if (menuToggle && mainMenu) {
       menuToggle.addEventListener('click', () => {
         const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
         menuToggle.setAttribute('aria-expanded', !expanded);
@@ -283,7 +344,7 @@
     }
 
     // Header scroll effect
-    const header = document.querySelector('header');
+    const header = document.querySelector('.k-header');
     let lastScroll = 0;
     
     window.addEventListener('scroll', () => {
@@ -296,7 +357,25 @@
       lastScroll = currentScroll;
     }, { passive: true });
 
-    // Canonical is static in markup
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (mainMenu && menuToggle && 
+          !mainMenu.contains(e.target) && 
+          !menuToggle.contains(e.target)) {
+        mainMenu.classList.remove('show');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Handle keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mainMenu) {
+        mainMenu.classList.remove('show');
+        if (menuToggle) {
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
   </script>
 </body>
 </html>

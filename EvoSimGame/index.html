@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EvoSimGame - Interactive evolutionary cell simulation. Watch cells evolve, adapt, and survive in a dynamic environment with mutation, predation, and environmental pressures." />
+  <meta name="keywords" content="evolution simulation, cellular automata, biology game, genetic algorithm, mutation, natural selection, interactive simulation" />
+  <meta name="author" content="Protolab" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://protolab.tech/EvoSimGame/" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="EvoSimGame - Interactive Evolution Simulation" />
+  <meta property="og:description" content="Watch cells evolve, adapt, and survive in a dynamic environment with mutation, predation, and environmental pressures." />
+  <meta property="og:url" content="https://protolab.tech/EvoSimGame/" />
+  <meta property="og:site_name" content="Protolab" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EvoSimGame - Interactive Evolution Simulation" />
+  <meta name="twitter:description" content="Watch cells evolve, adapt, and survive in a dynamic environment with mutation, predation, and environmental pressures." />
+  
+  <title>EvoSimGame - Interactive Evolution Simulation | Protolab</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/css/style.css" as="style">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  
+  <!-- Configuration -->
+  <script src="assets/js/config.js"></script>
+  
+  <!-- Security headers -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+</head>
+<body>
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+  
+  <header role="banner" class="evosim-header">
+    <div class="evosim-header-container">
+      <div class="evosim-header-title">
+        <h1>EvoSimGame</h1>
+        <span class="evosim-subtitle">Interactive Evolution Simulation</span>
+      </div>
+      <a href="/" class="evosim-header-logo">
+        <img 
+          src="/assets/images/logo.svg" 
+          alt="protolab.tech" 
+          loading="eager" 
+        />
+        <span class="evosim-header-brand">protolab.tech</span>
+      </a>
+    </div>
+  </header>
+
+<main id="main-content" role="main" class="evosim-main">
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-toggle">
+      <button id="sidebarToggle" class="toggle-btn" aria-label="Toggle sidebar">
+        <span class="toggle-icon">‹</span>
+      </button>
+    </div>
+    
+    <div class="card collapsible-card">
+      <div class="card-header" data-target="environment-content">
+        <h2>Environment</h2>
+        <span class="collapse-icon">−</span>
+      </div>
+      <div class="card-content" id="environment-content">
+
+      <label>
+        <span>Resource Density</span>
+        <span class="val" id="vResources">50</span>
+      </label>
+      <input id="resources" type="range" min="0" max="200" step="1" value="50"/>
+
+      <label>
+        <span>Temperature</span>
+        <span class="val" id="vTemp">50</span>
+      </label>
+      <input id="temp" type="range" min="0" max="100" step="1" value="50"/>
+
+      <div class="tempBarWrap">
+        <div class="tempBar">
+          <div class="tempZone"></div>
+          <div class="tempMarker" id="tempMarker"></div>
+        </div>
+        <div class="tiny" style="margin-top:8px">
+          Gradient shows cold→hot. Green zone is optimal (~35–65). Cells take damage if their resistance doesn’t match current temperature.
+        </div>
+      </div>
+
+      <label>
+        <span>Stability</span>
+        <span class="val" id="vStability">60</span>
+      </label>
+      <input id="stability" type="range" min="0" max="100" step="1" value="60"/>
+
+      <label>
+        <span>Radiation Level</span>
+        <span class="val" id="vRad">2</span>
+      </label>
+      <input id="rad" type="range" min="0" max="15" step="1" value="2"/>
+
+        <div id="legend" class="tiny">
+          <div class="legendLine"><span>Radiation 0</span><span>rare mutations</span></div>
+          <div class="legendLine"><span>Radiation 8-11</span><span class="warn">high mutation rate</span></div>
+          <div class="legendLine"><span>Radiation 12+</span><span class="danger">instant death / chaos</span></div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card collapsible-card" style="margin-top:12px">
+      <div class="card-header" data-target="genome-content">
+        <h2>Initial Seed (Genome 0–15)</h2>
+        <span class="collapse-icon">−</span>
+      </div>
+      <div class="card-content" id="genome-content">
+
+      <h3>Fertility (shape)</h3>
+      <label><span>Fertility</span><span class="val" id="vFert">3</span></label>
+      <input id="seedFert" type="range" min="0" max="15" step="1" value="3"/>
+
+      <h3>Temperature Resistance (color)</h3>
+      <label><span>Resistance</span><span class="val" id="vRes">3</span></label>
+      <input id="seedRes" type="range" min="0" max="15" step="1" value="3"/>
+
+      <h3>Energy Efficiency (size)</h3>
+      <label><span>Efficiency</span><span class="val" id="vEff">4</span></label>
+      <input id="seedEff" type="range" min="0" max="15" step="1" value="4"/>
+
+      <h3>Aggressivity (brightness)</h3>
+      <label><span>Aggressivity</span><span class="val" id="vAgg">2</span></label>
+      <input id="seedAgg" type="range" min="0" max="15" step="1" value="2"/>
+
+      <h3>Infectivity (plague)</h3>
+      <label><span>Infectivity</span><span class="val" id="vInf">0</span></label>
+      <input id="seedInf" type="range" min="0" max="15" step="1" value="0"/>
+
+      <div style="margin-top:12px">
+        <button class="btn" id="inject">Inject Cell / Restart World</button>
+      </div>
+
+        <div class="tiny" style="margin-top:10px">
+          Visual mapping: Fertility→shape (0-15), Resistance→color (blue→red, 0-15), Efficiency→size (0-15), Aggressivity→glow (0-15), Infectivity→infect radius + death timer if &gt;5.
+        </div>
+      </div>
+    </div>
+
+    <div class="tiny" style="margin-top:12px">
+      Rules summary:
+      <ul style="margin:8px 0 0 18px;padding:0;color:var(--muted)">
+        <li>Food spawns with Available Resources.</li>
+        <li>Energy drains over time (lower drain with high Efficiency).</li>
+        <li>Temperature mismatch drains health.</li>
+        <li>Radiation mutates traits (or kills at level 8).</li>
+        <li>Reproduction splits when energy is high; offspring inherits ± mutation.</li>
+        <li>Aggressive cells prey on smaller ones on contact; predator gains energy.</li>
+        <li>Infectivity &gt;5 starts a timer and spreads on proximity; dense populations trigger plague faster.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main id="worldWrap">
+    <!-- HUD -->
+    <div id="hud">
+      <div class="pill"><b>Cells</b> <span id="hudCells">0</span></div>
+      <div class="pill"><b>Food</b> <span id="hudFood">0</span></div>
+      <div class="pill"><b>Avg Mut</b> <span id="hudMut">0</span></div>
+      <div class="pill"><b>Plague</b> <span id="hudPlague">off</span></div>
+    </div>
+    
+    <!-- Map Controls Overlay -->
+    <div id="mapControls" class="map-overlay">
+      <div class="control-group">
+        <button id="zoomIn" class="control-btn" title="Zoom In">+</button>
+        <button id="zoomOut" class="control-btn" title="Zoom Out">−</button>
+        <button id="resetZoom" class="control-btn" title="Reset View">⌂</button>
+      </div>
+      <div class="zoom-display">
+        <span id="vZoom">1.0x</span>
+      </div>
+    </div>
+    
+    <!-- Parameter Scattering Controls -->
+    <div id="scatterControls" class="scatter-overlay">
+      <div class="scatter-header">
+        <span>Map Zones</span>
+        <button id="toggleScatter" class="toggle-scatter">⚙</button>
+      </div>
+      <div class="scatter-panel" id="scatterPanel" style="display:none;">
+        <div class="scatter-control">
+          <label>Divisions: <span id="vScatter">1</span></label>
+          <input id="scatter" type="range" min="1" max="100" step="1" value="1"/>
+        </div>
+        <div class="scatter-control" id="varianceControl" style="display:none;">
+          <label>Variance: ±<span id="vVariance">20</span>%</label>
+          <input id="variance" type="range" min="5" max="50" step="5" value="20"/>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Minimap -->
+    <div id="minimap" class="minimap">
+      <canvas id="minimapCanvas" width="120" height="80"></canvas>
+      <div id="viewportIndicator" class="viewport-indicator"></div>
+    </div>
+    
+    <!-- Main Canvas -->
+    <canvas id="c"></canvas>
+  </main>
+</div>
+</main>
+
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "EvoSimGame",
+  "description": "Interactive evolutionary cell simulation game",
+  "url": "https://protolab.tech/EvoSimGame/",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web Browser",
+  "author": {
+    "@type": "Organization",
+    "name": "Protolab",
+    "url": "https://protolab.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  }
+}
+</script>
+
+<script src="/assets/js/monitoring.js" defer></script>
+<script>
+(() => {
+  // ---------- Utilities ----------
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const rand = (a=0, b=1) => a + Math.random()*(b-a);
+  const irand = (a, b) => (a + Math.floor(Math.random()*(b-a+1)));
+  const hypot2 = (dx, dy) => dx*dx + dy*dy;
+
+  function hsl(h, s, l, a=1){
+    return `hsla(${h},${s}%,${l}%,${a})`;
+  }
+
+  function mixRGB(c1, c2, t){
+    // c1/c2: [r,g,b]
+    return [
+      Math.round(lerp(c1[0], c2[0], t)),
+      Math.round(lerp(c1[1], c2[1], t)),
+      Math.round(lerp(c1[2], c2[2], t))
+    ];
+  }
+
+  // Blue(0) -> Red(7)
+  const COLD = [37, 99, 235];   // ~#2563eb
+  const HOT  = [239, 68, 68];   // ~#ef4444
+  function resistanceColor(level, brightness01=0.7){
+    const t = clamp(level/15, 0, 1); // Updated for 0-15 range
+    const [r,g,b] = mixRGB(COLD, HOT, t);
+    // brightness01 modulates luminance; keep saturation-ish
+    const br = lerp(0.35, 1.05, brightness01);
+    return `rgba(${Math.round(r*br)},${Math.round(g*br)},${Math.round(b*br)},1)`;
+  }
+
+  // ---------- DOM ----------
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  
+  // ---------- ZOOM AND VIEWPORT ----------
+  let zoomLevel = 1.0;
+  let viewportX = 0;
+  let viewportY = 0;
+  let isDragging = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
+  const el = {
+    resources: document.getElementById('resources'),
+    temp: document.getElementById('temp'),
+    stability: document.getElementById('stability'),
+    rad: document.getElementById('rad'),
+    seedFert: document.getElementById('seedFert'),
+    seedRes: document.getElementById('seedRes'),
+    seedEff: document.getElementById('seedEff'),
+    seedAgg: document.getElementById('seedAgg'),
+    seedInf: document.getElementById('seedInf'),
+    inject: document.getElementById('inject'),
+
+    vResources: document.getElementById('vResources'),
+    vTemp: document.getElementById('vTemp'),
+    vStability: document.getElementById('vStability'),
+    vRad: document.getElementById('vRad'),
+
+    vFert: document.getElementById('vFert'),
+    vRes: document.getElementById('vRes'),
+    vEff: document.getElementById('vEff'),
+    vAgg: document.getElementById('vAgg'),
+    vInf: document.getElementById('vInf'),
+
+    tempMarker: document.getElementById('tempMarker'),
+
+    hudCells: document.getElementById('hudCells'),
+    hudFood: document.getElementById('hudFood'),
+    hudMut: document.getElementById('hudMut'),
+    hudPlague: document.getElementById('hudPlague'),
+
+    // New controls
+    vZoom: document.getElementById('vZoom'),
+    zoomIn: document.getElementById('zoomIn'),
+    zoomOut: document.getElementById('zoomOut'),
+    resetZoom: document.getElementById('resetZoom'),
+    scatter: document.getElementById('scatter'),
+    vScatter: document.getElementById('vScatter'),
+    variance: document.getElementById('variance'),
+    vVariance: document.getElementById('vVariance'),
+    toggleScatter: document.getElementById('toggleScatter'),
+    scatterPanel: document.getElementById('scatterPanel'),
+    varianceControl: document.getElementById('varianceControl'),
+    minimapCanvas: document.getElementById('minimapCanvas'),
+    viewportIndicator: document.getElementById('viewportIndicator'),
+  };
+
+  function syncLabels(){
+    el.vResources.textContent = el.resources.value;
+    el.vTemp.textContent = el.temp.value;
+    el.vStability.textContent = el.stability.value;
+    el.vRad.textContent = el.rad.value;
+
+    el.vFert.textContent = el.seedFert.value;
+    el.vRes.textContent  = el.seedRes.value;
+    el.vEff.textContent  = el.seedEff.value;
+    el.vAgg.textContent  = el.seedAgg.value;
+    el.vInf.textContent  = el.seedInf.value;
+
+    el.vZoom.textContent = zoomLevel.toFixed(1) + 'x';
+    el.vScatter.textContent = el.scatter.value;
+    el.vVariance.textContent = el.variance.value;
+
+    const t = Number(el.temp.value);
+    el.tempMarker.style.left = `calc(${t}% - 1px)`;
+
+    // Show/hide scatter variance control
+    const scatterValue = Number(el.scatter.value);
+    el.varianceControl.style.display = scatterValue > 1 ? 'block' : 'none';
+  }
+  ['input','change'].forEach(ev=>{
+    el.resources.addEventListener(ev, syncLabels);
+    el.temp.addEventListener(ev, syncLabels);
+    el.stability.addEventListener(ev, syncLabels);
+    el.rad.addEventListener(ev, syncLabels);
+    el.seedFert.addEventListener(ev, syncLabels);
+    el.seedRes.addEventListener(ev, syncLabels);
+    el.seedEff.addEventListener(ev, syncLabels);
+    el.seedAgg.addEventListener(ev, syncLabels);
+    el.seedInf.addEventListener(ev, syncLabels);
+    el.scatter.addEventListener(ev, syncLabels);
+    el.variance.addEventListener(ev, syncLabels);
+  });
+  syncLabels();
+
+  // ---------- ZOOM CONTROLS ----------
+  el.zoomIn.addEventListener('click', function() {
+    zoomLevel = Math.min(5.0, zoomLevel + 0.2);
+    syncLabels();
+  });
+
+  el.zoomOut.addEventListener('click', function() {
+    zoomLevel = Math.max(0.5, zoomLevel - 0.2);
+    syncLabels();
+  });
+
+  el.resetZoom.addEventListener('click', function() {
+    zoomLevel = 1.0;
+    viewportX = 0;
+    viewportY = 0;
+    syncLabels();
+  });
+
+  // ---------- CANVAS INTERACTION ----------
+  canvas.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    canvas.style.cursor = 'grabbing';
+  });
+
+  canvas.addEventListener('mousemove', function(e) {
+    if (isDragging) {
+      const deltaX = e.clientX - lastMouseX;
+      const deltaY = e.clientY - lastMouseY;
+      viewportX += deltaX / zoomLevel;
+      viewportY += deltaY / zoomLevel;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    }
+  });
+
+  canvas.addEventListener('mouseup', function() {
+    isDragging = false;
+    canvas.style.cursor = 'grab';
+  });
+
+  canvas.addEventListener('mouseleave', function() {
+    isDragging = false;
+    canvas.style.cursor = 'default';
+  });
+
+  canvas.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+    zoomLevel = Math.max(0.5, Math.min(5.0, zoomLevel * zoomFactor));
+    syncLabels();
+  });
+
+  canvas.style.cursor = 'grab';
+
+  // ---------- PARAMETER SCATTERING SYSTEM ----------
+  let parameterMap = null;
+  
+  function generateParameterMap() {
+    const divisions = Number(el.scatter.value);
+    const variance = Number(el.variance.value) / 100;
+    
+    if (divisions === 1) {
+      parameterMap = null;
+      return;
+    }
+    
+    // Create a grid of parameter zones
+    const gridSize = Math.ceil(Math.sqrt(divisions));
+    parameterMap = {
+      gridSize: gridSize,
+      zones: []
+    };
+    
+    const baseParams = {
+      resources: Number(el.resources.value),
+      temp: Number(el.temp.value),
+      stability: Number(el.stability.value),
+      rad: Number(el.rad.value)
+    };
+    
+    // Generate zones with fractal-like variation
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        const zone = {};
+        
+        // Add variation to each parameter
+        for (const [key, baseValue] of Object.entries(baseParams)) {
+          const variation = (Math.random() - 0.5) * 2 * variance;
+          zone[key] = Math.max(0, Math.min(
+            key === 'resources' ? 200 : 
+            key === 'rad' ? 15 : 100,
+            baseValue * (1 + variation)
+          ));
+        }
+        
+        parameterMap.zones.push(zone);
+      }
+    }
+    
+    // Smooth neighboring zones to limit differences
+    smoothParameterMap();
+  }
+  
+  function smoothParameterMap() {
+    if (!parameterMap) return;
+    
+    const { gridSize, zones } = parameterMap;
+    const maxDifference = 0.3; // Max 30% difference between neighbors
+    
+    // Multiple smoothing passes
+    for (let pass = 0; pass < 3; pass++) {
+      for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+          const idx = y * gridSize + x;
+          const zone = zones[idx];
+          
+          // Get neighbors
+          const neighbors = [];
+          for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+              const nx = x + dx;
+              const ny = y + dy;
+              if (nx >= 0 && nx < gridSize && ny >= 0 && ny < gridSize && !(dx === 0 && dy === 0)) {
+                neighbors.push(zones[ny * gridSize + nx]);
+              }
+            }
+          }
+          
+          // Smooth each parameter
+          for (const param of ['resources', 'temp', 'stability', 'rad']) {
+            if (neighbors.length > 0) {
+              const avgNeighbor = neighbors.reduce((sum, n) => sum + n[param], 0) / neighbors.length;
+              const difference = Math.abs(zone[param] - avgNeighbor) / avgNeighbor;
+              
+              if (difference > maxDifference) {
+                // Move towards neighbor average
+                zone[param] = zone[param] * 0.7 + avgNeighbor * 0.3;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  function getParametersAtPosition(x, y) {
+    if (!parameterMap) {
+      return {
+        resources: Number(el.resources.value),
+        temp: Number(el.temp.value),
+        stability: Number(el.stability.value),
+        rad: Number(el.rad.value)
+      };
+    }
+    
+    const { gridSize, zones } = parameterMap;
+    const zoneX = Math.floor((x / W) * gridSize);
+    const zoneY = Math.floor((y / H) * gridSize);
+    const zoneIdx = Math.max(0, Math.min(zones.length - 1, zoneY * gridSize + zoneX));
+    
+    return zones[zoneIdx];
+  }
+  
+  // Regenerate parameter map when scatter settings change
+  el.scatter.addEventListener('change', generateParameterMap);
+  el.variance.addEventListener('change', generateParameterMap);
+
+  // ---------- SIDEBAR FUNCTIONALITY ----------
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  
+  // Sidebar toggle
+  sidebarToggle.addEventListener('click', function() {
+    sidebar.classList.toggle('collapsed');
+  });
+  
+  // Collapsible cards
+  document.querySelectorAll('.card-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-target');
+      const content = document.getElementById(targetId);
+      const icon = this.querySelector('.collapse-icon');
+      
+      if (content && icon) {
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('collapsed');
+        icon.textContent = icon.classList.contains('collapsed') ? '+' : '−';
+      }
+    });
+  });
+
+  // Scatter controls toggle
+  el.toggleScatter.addEventListener('click', function() {
+    const panel = el.scatterPanel;
+    const isVisible = panel.style.display !== 'none';
+    panel.style.display = isVisible ? 'none' : 'block';
+  });
+
+  // ---------- MINIMAP ----------
+  const minimapCtx = el.minimapCanvas.getContext('2d');
+  const minimapWidth = 120;
+  const minimapHeight = 80;
+  
+  function updateMinimap() {
+    minimapCtx.clearRect(0, 0, minimapWidth, minimapHeight);
+    
+    // Draw minimap background
+    minimapCtx.fillStyle = '#0b0f14';
+    minimapCtx.fillRect(0, 0, minimapWidth, minimapHeight);
+    
+    // Draw cells as dots
+    minimapCtx.fillStyle = 'rgba(94, 234, 212, 0.8)';
+    for (const cell of cells) {
+      const x = (cell.x / W) * minimapWidth;
+      const y = (cell.y / H) * minimapHeight;
+      minimapCtx.fillRect(x - 1, y - 1, 2, 2);
+    }
+    
+    // Draw food as smaller dots
+    minimapCtx.fillStyle = 'rgba(94, 234, 212, 0.4)';
+    for (const f of food) {
+      const x = (f.x / W) * minimapWidth;
+      const y = (f.y / H) * minimapHeight;
+      minimapCtx.fillRect(x, y, 1, 1);
+    }
+    
+    // Update viewport indicator
+    updateViewportIndicator();
+  }
+  
+  function updateViewportIndicator() {
+    const viewWidth = minimapWidth / zoomLevel;
+    const viewHeight = minimapHeight / zoomLevel;
+    const viewX = (minimapWidth - viewWidth) / 2 - (viewportX / W) * minimapWidth / zoomLevel;
+    const viewY = (minimapHeight - viewHeight) / 2 - (viewportY / H) * minimapHeight / zoomLevel;
+    
+    el.viewportIndicator.style.left = Math.max(0, Math.min(minimapWidth - viewWidth, viewX)) + 'px';
+    el.viewportIndicator.style.top = Math.max(0, Math.min(minimapHeight - viewHeight, viewY)) + 'px';
+    el.viewportIndicator.style.width = Math.min(minimapWidth, viewWidth) + 'px';
+    el.viewportIndicator.style.height = Math.min(minimapHeight, viewHeight) + 'px';
+  }
+
+  // ---------- World / Simulation ----------
+  let W = 1, H = 1, DPR = 1;
+
+  function resize(){
+    const rect = canvas.getBoundingClientRect();
+    DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1)); // cap for performance
+    W = Math.floor(rect.width * DPR);
+    H = Math.floor(rect.height * DPR);
+    canvas.width = W;
+    canvas.height = H;
+    ctx.setTransform(1,0,0,1,0,0);
+  }
+  window.addEventListener('resize', resize);
+
+  // Ensure canvas fills remaining area
+  function fitCanvasHeight(){
+    // worldWrap is flex column; canvas can just fill via CSS.
+    resize();
+  }
+  fitCanvasHeight();
+
+  // Spatial hash grid for interactions (cells & food)
+  class Grid {
+    constructor(cellSize){
+      this.s = cellSize;
+      this.map = new Map();
+    }
+    key(ix, iy){ return (ix<<16) ^ (iy & 0xffff); }
+    clear(){ this.map.clear(); }
+    insert(x, y, item){
+      const ix = (x / this.s) | 0;
+      const iy = (y / this.s) | 0;
+      const k = this.key(ix, iy);
+      let arr = this.map.get(k);
+      if(!arr){ arr = []; this.map.set(k, arr); }
+      arr.push(item);
+    }
+    queryRadius(x, y, r){
+      const s = this.s;
+      const ix0 = ((x - r) / s) | 0;
+      const iy0 = ((y - r) / s) | 0;
+      const ix1 = ((x + r) / s) | 0;
+      const iy1 = ((y + r) / s) | 0;
+      const out = [];
+      for(let iy=iy0; iy<=iy1; iy++){
+        for(let ix=ix0; ix<=ix1; ix++){
+          const k = this.key(ix, iy);
+          const arr = this.map.get(k);
+          if(arr) out.push(...arr);
+        }
+      }
+      return out;
+    }
+    queryCellNeighborhood(x, y){
+      // fixed 3x3 neighborhood
+      const s = this.s;
+      const ix = (x / s) | 0;
+      const iy = (y / s) | 0;
+      const out = [];
+      for(let dy=-1; dy<=1; dy++){
+        for(let dx=-1; dx<=1; dx++){
+          const arr = this.map.get(this.key(ix+dx, iy+dy));
+          if(arr) out.push(...arr);
+        }
+      }
+      return out;
+    }
+  }
+
+  // Entities
+  let cells = [];
+  let food = [];
+
+  // World toggles / counters
+  let avgMutationsPerBirth = 0;
+  let births = 0;
+
+  // Tunables (kept pragmatic for 100+ entities)
+  const FOOD_ENERGY = 18;
+  const BASE_DRAIN = 0.9; // per second
+  const HEALTH_DRAIN_TEMP = 6.0; // per second at max mismatch
+  const REPRO_THRESHOLD = 60; // energy
+  const REPRO_COST = 35; // energy cost to split
+  const MAX_CELLS_SOFT = 700; // avoid runaway
+  const FOOD_CAP = 1500;
+
+  // Plague tuning
+  const PLAGUE_DENSITY_TRIGGER = 0.00016; // cells per px^2 (scaled by DPR)
+  const PLAGUE_TIMER_BASE = 4.0; // seconds
+  const PLAGUE_TIMER_MIN = 1.2;
+  const PLAGUE_SPREAD_BASE = 10; // px
+  const PLAGUE_SPREAD_PER = 6; // px per infectivity level
+
+  // Radiation -> mutation strength
+  function mutationDelta(radiation){
+    // radiation 0 => mostly 0; radiation 15 => -3..+3 often
+    if(radiation <= 0) return 0;
+    const p = clamp(radiation / 15, 0, 1); // Updated for 0-15 range
+    // biased toward small deltas
+    const roll = Math.random();
+    if(roll < (0.45 - 0.25*p)) return 0;
+    if(roll < (0.70 - 0.15*p)) return (Math.random()<0.5 ? -1 : 1);
+    if(roll < (0.90 - 0.10*p)) return (Math.random()<0.5 ? -2 : 2);
+    return (Math.random()<0.5 ? -3 : 3); // Stronger mutations possible
+  }
+
+  function maybeMutateGenome(gen, rad){
+    // mutate 0..3 traits depending on rad (expanded range)
+    if(rad <= 0) return gen;
+    const out = gen.slice();
+    const changes = (Math.random() < rad/12) ? (Math.random() < 0.3 ? 3 : 2) : 1; // More changes possible
+    for(let i=0;i<changes;i++){
+      const idx = irand(0,4);
+      out[idx] = clamp(out[idx] + mutationDelta(rad), 0, 15); // Updated range to 0-15
+    }
+    return out;
+  }
+
+  function tempToIdealLevel(temp0_100){
+    // map world temp to 0..15 (expanded range)
+    return clamp(Math.round((temp0_100/100)*15), 0, 15);
+  }
+
+  function efficiencyToRadius(eff){
+    // 0 small, 15 big (expanded range)
+    return lerp(3.5, 15, eff/15);
+  }
+
+  function fertilityToSides(f){
+    // 0 circle, 1 triangle ... expanded range
+    if(f <= 0) return 0; // circle
+    return clamp(2 + f, 3, 20); // 1->3,2->4,...15->17 (cap 20)
+  }
+
+  class Cell {
+    constructor(x,y, genome){
+      this.x = x; this.y = y;
+      this.vx = rand(-18, 18);
+      this.vy = rand(-18, 18);
+      this.genome = genome.slice(); // [fert,res,eff,agg,inf]
+      this.energy = rand(35, 55);
+      this.health = 100;
+      this.age = 0;
+
+      this.infected = false;
+      this.plagueT = 0;
+
+      this._r = efficiencyToRadius(this.genome[2]);
+      this._glow = this.genome[3]/7;
+    }
+
+    get r(){ return this._r; }
+    updateDerived(){
+      this._r = efficiencyToRadius(this.genome[2]);
+      this._glow = this.genome[3]/7;
+    }
+
+    infect(level){
+      // overwrite infectivity to the propagating level (mechanic requested)
+      this.genome[4] = clamp(level, 0, 7);
+      this.updateDerived();
+      if(this.genome[4] > 3){
+        this.infected = true;
+        // timer shorter with higher infectivity
+        const t = lerp(PLAGUE_TIMER_BASE, PLAGUE_TIMER_MIN, (this.genome[4]-4)/3);
+        this.plagueT = t;
+      } else {
+        this.infected = false;
+        this.plagueT = 0;
+      }
+    }
+  }
+
+  function resetWorld(seedGenome){
+    cells.length = 0;
+    food.length = 0;
+    births = 0;
+    avgMutationsPerBirth = 0;
+
+    // Spawn initial cell in center of world
+    const cx = W * 0.5;
+    const cy = H * 0.5;
+    cells.push(new Cell(cx, cy, seedGenome));
+  }
+
+  function seedGenomeFromUI(){
+    return [
+      Number(el.seedFert.value),
+      Number(el.seedRes.value),
+      Number(el.seedEff.value),
+      Number(el.seedAgg.value),
+      Number(el.seedInf.value),
+    ];
+  }
+
+  el.inject.addEventListener('click', () => {
+    console.log('Injecting new cell and restarting world...');
+    resetWorld(seedGenomeFromUI());
+    generateParameterMap();
+  });
+
+  // Initialize canvas size
+  resize();
+  
+  // Initialize with UI seed
+  resetWorld(seedGenomeFromUI());
+  
+  // Initialize parameter map
+  generateParameterMap();
+  
+  // Start the simulation
+  console.log('Starting EvoSimGame simulation...');
+
+  // Food spawning with parameter zones
+  function spawnFood(n){
+    if(n <= 0) return;
+    const max = Math.max(0, FOOD_CAP - food.length);
+    n = Math.min(n, max);
+    
+    for(let i=0;i<n;i++){
+      const x = rand(10, W-10);
+      const y = rand(10, H-10);
+      
+      // Get local parameters for this position
+      const localParams = getParametersAtPosition(x, y);
+      const localDensity = localParams.resources / 100;
+      
+      // Only spawn food if local density allows it
+      if(Math.random() < localDensity) {
+        food.push({
+          x: x,
+          y: y,
+          e: FOOD_ENERGY * (0.8 + 0.4 * localDensity), // Vary energy based on local density
+          // slight variation for visuals
+          a: rand(0.65, 1.0),
+        });
+      }
+    }
+  }
+
+  // ---------- Main Loop ----------
+  const gridCellSize = 26 * 1; // world px (already DPR-scaled canvas)
+  const cellGrid = new Grid(gridCellSize);
+  const foodGrid = new Grid(gridCellSize);
+
+  let last = performance.now();
+
+  function step(now){
+    const dt = Math.min(0.033, (now - last)/1000); // cap for stability
+    last = now;
+
+    const resources = Number(el.resources.value);
+    const temp = Number(el.temp.value);
+    const stability = Number(el.stability.value);
+    const rad = Number(el.rad.value);
+
+    // Radiation level 12+: immediate death (clear world quickly)
+    if(rad >= 12){
+      // draw quick flash and kill all cells
+      cells.length = 0;
+      // food still spawns but irrelevant
+      spawnFood(Math.floor((resources/100) * 6));
+      draw(temp, stability, rad, dt);
+      requestAnimationFrame(step);
+      return;
+    }
+
+    // Spawn food: density-based system with area scaling
+    const area = W * H;
+    const baseArea = 800 * 600; // Reference area
+    const areaScale = area / baseArea;
+    
+    // Use density instead of absolute numbers
+    const resourceDensity = resources / 100; // 0-2.0 density
+    const spawnBase = resourceDensity * 8 * areaScale; // Scale with screen area
+    const instability = 1 - (stability/100);
+    const spawnFactor = lerp(0.8, 1.25, instability) * (0.85 + 0.3*Math.random());
+    const spawnN = Math.floor(spawnBase * spawnFactor * dt * 60);
+    spawnFood(spawnN);
+
+    // Build grids
+    cellGrid.clear();
+    foodGrid.clear();
+    for(const f of food) foodGrid.insert(f.x, f.y, f);
+    for(const c of cells) cellGrid.insert(c.x, c.y, c);
+
+    // Density-based plague signal (used to auto-trigger in dense populations)
+    const area = W * H;
+    const density = cells.length / Math.max(1, area);
+    const plaguePressure = clamp((density - PLAGUE_DENSITY_TRIGGER) / (PLAGUE_DENSITY_TRIGGER*1.8), 0, 1);
+
+    // Update cells
+    const idealRes = tempToIdealLevel(temp);
+
+    // Avoid runaway by scaling reproduction when crowded
+    const crowd = clamp(cells.length / MAX_CELLS_SOFT, 0, 2);
+    const reproThrottle = 1 / (1 + crowd*1.2);
+
+    // Slight movement noise depends on stability
+    const jitter = lerp(32, 8, stability/100); // px/s^2
+    const wander = lerp(18, 6, stability/100); // px/s
+    const friction = lerp(0.90, 0.965, stability/100); // per tick
+
+    // Process in reverse so splices are safe
+    const newborns = [];
+
+    for(let i=cells.length-1; i>=0; i--){
+      const c = cells[i];
+      c.age += dt;
+
+      // Radiation: random live mutation chance (small but noticeable)
+      if(rad > 0 && Math.random() < (rad/12) * 0.03){ // Increased mutation rate
+        const before = c.genome.slice();
+        c.genome = maybeMutateGenome(c.genome, rad);
+        // if infectivity crosses threshold, apply timer
+        if(before[4] !== c.genome[4]) c.infect(c.genome[4]);
+        else c.updateDerived();
+      }
+
+      // Brownian wandering
+      c.vx += rand(-jitter, jitter) * dt;
+      c.vy += rand(-jitter, jitter) * dt;
+
+      // Bias wandering a bit so they don't freeze
+      const sp = Math.hypot(c.vx, c.vy) + 1e-6;
+      if(sp < wander){
+        c.vx += (rand(-1,1) * wander) * dt;
+        c.vy += (rand(-1,1) * wander) * dt;
+      }
+
+      c.vx *= friction;
+      c.vy *= friction;
+
+      c.x += c.vx * dt * 30; // scale up to feel alive
+      c.y += c.vy * dt * 30;
+
+      // Bounce bounds (use world coordinates, not screen coordinates)
+      const worldW = W;
+      const worldH = H;
+      if(c.x < c.r){ c.x = c.r; c.vx *= -0.8; }
+      if(c.y < c.r){ c.y = c.r; c.vy *= -0.8; }
+      if(c.x > worldW-c.r){ c.x = worldW-c.r; c.vx *= -0.8; }
+      if(c.y > worldH-c.r){ c.y = worldH-c.r; c.vy *= -0.8; }
+
+      // Energy drain: higher efficiency => lower drain (requested)
+      const eff = c.genome[2];
+      const drain = BASE_DRAIN * lerp(1.35, 0.35, eff/15); // Better efficiency scaling
+      c.energy -= drain * dt * 10;
+
+      // Temperature mismatch health drain
+      const res = c.genome[1];
+      const mismatch = Math.abs(res - idealRes) / 15; // Updated for 0-15 range
+      const tempDamage = HEALTH_DRAIN_TEMP * mismatch * dt * 10;
+      c.health -= tempDamage;
+
+      // Low energy also hurts
+      if(c.energy < 0){
+        c.health += c.energy * 0.6; // energy negative reduces health
+        c.energy = 0;
+      }
+
+      // Eat nearby food
+      const eatR = c.r + 6;
+      const candidates = foodGrid.queryRadius(c.x, c.y, eatR);
+      for(let k=candidates.length-1; k>=0; k--){
+        const f = candidates[k];
+        if(!f) continue;
+        const dx = f.x - c.x, dy = f.y - c.y;
+        if(dx*dx + dy*dy <= eatR*eatR){
+          c.energy += f.e;
+          // remove food (swap-pop)
+          const idx = food.indexOf(f);
+          if(idx !== -1){
+            food[idx] = food[food.length-1];
+            food.pop();
+          }
+        }
+      }
+
+      // Plague mechanics
+      const inf = c.genome[4];
+
+      // Overpopulation + Infectivity > 3 triggers plague more readily
+      if(inf > 3){
+        // If not already infected, density can "ignite" the timer
+        if(!c.infected){
+          const igniteChance = (0.02 + 0.18*plaguePressure) * dt * 10;
+          if(Math.random() < igniteChance){
+            c.infect(inf);
+          }
+        }
+      } else {
+        // if infectivity dropped, clear infection
+        if(c.infected) c.infect(inf);
+      }
+
+      // Spread infection by proximity (touching OR in radius)
+      if(inf > 0){
+        const spreadR = PLAGUE_SPREAD_BASE + inf*PLAGUE_SPREAD_PER;
+        const neigh = cellGrid.queryRadius(c.x, c.y, spreadR);
+        for(const other of neigh){
+          if(other === c) continue;
+          const dx = other.x - c.x, dy = other.y - c.y;
+          if(dx*dx + dy*dy <= spreadR*spreadR){
+            // Infectivity transmission: touching or entering radius infects target with same level
+            if(other.genome[4] !== inf){
+              // Make it harder for low infectivity to overwrite higher
+              if(inf >= other.genome[4] || Math.random() < 0.2 + 0.1*inf){
+                other.infect(inf);
+              }
+            }
+          }
+        }
+      }
+
+      // If infected (infectivity > 3), countdown to death
+      if(c.infected){
+        // more pressure in dense pops -> faster death spiral
+        c.plagueT -= dt * (1 + 1.2*plaguePressure);
+        c.health -= dt * (6 + 10*plaguePressure);
+        if(c.plagueT <= 0){
+          // die
+          cells[i] = cells[cells.length-1];
+          cells.pop();
+          continue;
+        }
+      }
+
+      // Predation (Aggressivity): attack smaller on contact; gain energy
+      const agg = c.genome[3];
+      if(agg >= 5 && cells.length > 1){ // Higher threshold for hunting
+        const huntR = c.r + lerp(4, 18, agg/15); // Expanded hunt range
+        const neigh = cellGrid.queryCellNeighborhood(c.x, c.y);
+        for(const other of neigh){
+          if(other === c) continue;
+          // Rule: attack bigger cells? The spec says "Attack bigger cells." but then "Result: Target dies, Predator gains energy."
+          // Practical interpretation (otherwise predator dies constantly): aggressive cells attack SMALLER cells only.
+          // This matches typical predator behavior and keeps the sim stable.
+          if(other.r >= c.r) continue;
+
+          const dx = other.x - c.x, dy = other.y - c.y;
+          const rr = huntR + other.r;
+          if(dx*dx + dy*dy <= rr*rr){
+            // kill target and gain energy
+            const gain = 25 + other.energy*0.35;
+            c.energy += gain;
+            other.health = -999; // mark for removal
+          }
+        }
+      }
+
+      // Cull any marked prey
+      if(cells[i] && cells[i].health <= 0){
+        // death spawns a little food (recycles)
+        if(Math.random() < 0.35) food.push({ x:c.x, y:c.y, e: FOOD_ENERGY*0.6, a: rand(0.45,0.9) });
+        cells[i] = cells[cells.length-1];
+        cells.pop();
+        continue;
+      }
+
+      // Reproduction: based on fertility & energy, modulated by throttle and stability
+      const fert = c.genome[0];
+      if(cells.length < MAX_CELLS_SOFT*1.6){
+        const reproRate = lerp(0.08, 1.2, fert/15) * reproThrottle * lerp(1.0, 0.85, instability); // Expanded fertility range // lower stability slightly hurts reliable reproduction
+        if(c.energy > REPRO_THRESHOLD && Math.random() < reproRate * dt){
+          // split
+          c.energy -= REPRO_COST;
+          const childGenome = c.genome.slice();
+
+          // mutate during reproduction based on radiation
+          const before = childGenome.slice();
+          const mutated = maybeMutateGenome(childGenome, rad);
+          let mutCount = 0;
+          for(let g=0; g<5; g++) if(mutated[g] !== before[g]) mutCount++;
+          births++;
+          avgMutationsPerBirth = lerp(avgMutationsPerBirth, mutCount, 0.06);
+
+          const child = new Cell(
+            clamp(c.x + rand(-c.r*2, c.r*2), 0, W),
+            clamp(c.y + rand(-c.r*2, c.r*2), 0, H),
+            mutated
+          );
+          // inherit some energy/health
+          child.energy = c.energy * 0.45 + rand(-5, 5);
+          child.health = clamp(c.health + rand(-6, 3), 50, 100);
+
+          // Infectivity threshold triggers timer
+          if(child.genome[4] > 3) child.infect(child.genome[4]);
+
+          newborns.push(child);
+        }
+      }
+    }
+
+    // Remove dead prey marked by predators (second pass is cheap)
+    for(let i=cells.length-1; i>=0; i--){
+      if(cells[i].health <= 0){
+        const c = cells[i];
+        if(Math.random() < 0.25) food.push({ x:c.x, y:c.y, e: FOOD_ENERGY*0.6, a: rand(0.45,0.9) });
+        cells[i] = cells[cells.length-1];
+        cells.pop();
+      }
+    }
+
+    // Add newborns
+    if(newborns.length){
+      // cap hard
+      const room = Math.max(0, Math.floor(MAX_CELLS_SOFT*1.8 - cells.length));
+      for(let i=0; i<Math.min(room, newborns.length); i++) cells.push(newborns[i]);
+    }
+
+    // Keep food under cap
+    if(food.length > FOOD_CAP){
+      food.length = FOOD_CAP;
+    }
+
+    // HUD
+    el.hudCells.textContent = String(cells.length);
+    el.hudFood.textContent = String(food.length);
+    el.hudMut.textContent = String(avgMutationsPerBirth.toFixed(2));
+    const anyPlague = cells.some(c => c.infected);
+    el.hudPlague.textContent = anyPlague ? "on" : "off";
+
+    draw(temp, stability, rad, dt);
+    requestAnimationFrame(step);
+  }
+
+  function draw(temp, stability, rad, dt){
+    // Clear canvas first
+    ctx.clearRect(0, 0, W, H);
+    
+    // Save context and apply zoom/viewport transform
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    ctx.scale(zoomLevel, zoomLevel);
+    ctx.translate(-W/2 + viewportX, -H/2 + viewportY);
+    
+    // Background: temperature tint + subtle noise
+    const t = temp / 100;
+    const bgHue = lerp(220, 12, t);
+    ctx.fillStyle = hsl(bgHue, 40, 7, 1);
+    ctx.fillRect(0,0,W,H);
+    
+    // Draw parameter zones if scattering is enabled
+    if (parameterMap && parameterMap.zones.length > 1) {
+      drawParameterZones();
+    }
+
+    // Subtle vignette
+    const grd = ctx.createRadialGradient(W*0.5,H*0.5, Math.min(W,H)*0.1, W*0.5,H*0.5, Math.max(W,H)*0.65);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0,0,W,H);
+
+    // Food
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for(const f of food){
+      ctx.fillStyle = `rgba(94,234,212,${0.35*f.a})`;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, 1.6*DPR, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Cells
+    // Draw aggressive/glowy last for nicer visuals
+    const normal = [];
+    const glowy = [];
+    for(const c of cells){
+      if(c.genome[3] >= 5) glowy.push(c);
+      else normal.push(c);
+    }
+    for(const group of [normal, glowy]){
+      for(const c of group){
+        const fert = c.genome[0];
+        const res  = c.genome[1];
+        const eff  = c.genome[2];
+        const agg  = c.genome[3];
+        const inf  = c.genome[4];
+
+        const r = c.r;
+        const sides = fertilityToSides(fert);
+
+        // Brightness from aggressivity
+        const bright = lerp(0.45, 1.2, agg/15); // Expanded brightness range
+        const fill = resistanceColor(res, bright);
+
+        // Glow for aggressivity
+        const glow = agg/15;
+        if(glow > 0.3){ // Lower threshold for glow effect
+          ctx.save();
+          ctx.shadowColor = fill;
+          ctx.shadowBlur = lerp(0, 18*DPR, glow);
+        }
+
+        // Body
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+        ctx.lineWidth = 1*DPR;
+
+        drawShape(ctx, c.x, c.y, r, sides);
+        ctx.fill();
+        ctx.stroke();
+
+        // Infectivity indicator: ring radius
+        if(inf > 0){
+          const spreadR = PLAGUE_SPREAD_BASE + inf*PLAGUE_SPREAD_PER;
+          ctx.save();
+          ctx.globalAlpha = 0.10 + 0.06*(inf/15); // Updated infectivity scaling
+          ctx.strokeStyle = inf > 3 ? 'rgba(251,113,133,0.9)' : 'rgba(251,191,36,0.8)';
+          ctx.lineWidth = 1*DPR;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, spreadR, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Health bar (tiny) + plague timer
+        const hp = clamp(c.health/100, 0, 1);
+        const barW = (r*2.0);
+        const barH = 2.2*DPR;
+        const bx = c.x - barW/2, by = c.y + r + 4*DPR;
+        ctx.save();
+        ctx.globalAlpha = 0.85;
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fillRect(bx, by, barW, barH);
+        ctx.fillStyle = hp > 0.5 ? 'rgba(94,234,212,0.85)' : 'rgba(251,113,133,0.9)';
+        ctx.fillRect(bx, by, barW*hp, barH);
+
+        if(c.infected){
+          const p = clamp(c.plagueT / PLAGUE_TIMER_BASE, 0, 1);
+          ctx.fillStyle = 'rgba(251,113,133,0.9)';
+          ctx.fillRect(bx, by + barH + 2*DPR, barW * p, 1.8*DPR);
+        }
+        ctx.restore();
+
+        if(glow > 0.45) ctx.restore();
+      }
+    }
+
+    // Radiation overlay (subtle)
+      if(rad > 0){
+        ctx.save();
+        ctx.globalAlpha = 0.04 + 0.06*(rad/15); // Updated radiation scaling
+      ctx.fillStyle = 'rgba(251,191,36,1)';
+      for(let i=0;i<12;i++){
+        const x = rand(0,W), y = rand(0,H);
+        ctx.fillRect(x,y,1*DPR,1*DPR);
+      }
+      ctx.restore();
+    }
+
+    // Temperature "green zone" hint in world (very subtle)
+    // This is visual-only; the actual matching is temp->idealRes.
+    ctx.save();
+    const gz = (temp >= 35 && temp <= 65);
+    ctx.globalAlpha = gz ? 0.06 : 0.03;
+    ctx.strokeStyle = gz ? 'rgba(34,197,94,1)' : 'rgba(148,163,184,1)';
+    ctx.lineWidth = 2*DPR;
+    ctx.strokeRect(8*DPR, 8*DPR, W-16*DPR, H-16*DPR);
+    ctx.restore();
+    
+    // Restore context (remove zoom transform)
+    ctx.restore();
+    
+    // Update minimap
+    updateMinimap();
+  }
+  
+  function drawParameterZones() {
+    if (!parameterMap) return;
+    
+    const { gridSize, zones } = parameterMap;
+    const zoneWidth = W / gridSize;
+    const zoneHeight = H / gridSize;
+    
+    ctx.save();
+    ctx.globalAlpha = 0.1;
+    
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        const idx = y * gridSize + x;
+        const zone = zones[idx];
+        
+        // Color based on resource density
+        const resourceIntensity = zone.resources / 200;
+        const tempIntensity = zone.temp / 100;
+        
+        ctx.fillStyle = `rgba(${Math.floor(255 * tempIntensity)}, ${Math.floor(255 * resourceIntensity)}, 100, 0.3)`;
+        ctx.fillRect(x * zoneWidth, y * zoneHeight, zoneWidth, zoneHeight);
+        
+        // Draw zone borders
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x * zoneWidth, y * zoneHeight, zoneWidth, zoneHeight);
+      }
+    }
+    
+    ctx.restore();
+  }
+
+  function drawShape(ctx, x, y, r, sides){
+    ctx.beginPath();
+    if(sides === 0){
+      ctx.arc(x, y, r, 0, Math.PI*2);
+      return;
+    }
+    // Regular polygon
+    const rot = -Math.PI/2;
+    for(let i=0;i<sides;i++){
+      const a = rot + (i/sides)*Math.PI*2;
+      const px = x + Math.cos(a)*r;
+      const py = y + Math.sin(a)*r;
+      if(i===0) ctx.moveTo(px,py);
+      else ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+  }
+
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
