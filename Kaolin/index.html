@@ -320,7 +320,7 @@
   <!-- Performance optimized JavaScript -->
   <script defer>
     // Smooth scrolling
-    document.querySelectorAll('.k-menu a, .k-btn[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('.k-menu a, .k-btn[href^="#"], .k-brand[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href');
@@ -338,7 +338,7 @@
     if (menuToggle && mainMenu) {
       menuToggle.addEventListener('click', () => {
         const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-        menuToggle.setAttribute('aria-expanded', !expanded);
+        menuToggle.setAttribute('aria-expanded', (!expanded).toString());
         mainMenu.classList.toggle('show');
       });
     }

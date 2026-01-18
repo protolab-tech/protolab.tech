@@ -1,0 +1,115 @@
+/* Ecosystem Stats Panel - positioned relative to minimap */
+.ecosystem-stats {
+  position: fixed;
+  bottom: 45px;   /* user's preferred position */
+  right: 180px;   /* positioned to the left of minimap (minimap is at right: 160px + 150px width + 70px gap) */
+  z-index: 10000; /* higher than footer (9998) to ensure visibility */
+  background: rgba(15, 22, 32, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  min-width: 180px;
+  font-size: 12px;
+  transition: all var(--transition-speed) ease;
+}
+
+.stats-header {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.stat-value {
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 11px;
+}
+
+/* Panel Header for both minimap and stats */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-title {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.panel-toggle {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all var(--transition-speed) ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.panel-toggle:hover {
+  background: rgba(94, 234, 212, 0.1);
+  color: var(--accent);
+}
+
+.panel-content {
+  transition: all var(--transition-speed) ease;
+  overflow: hidden;
+}
+
+.panel-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Adjust minimap styling for new structure */
+.minimap .panel-content {
+  padding: 0;
+}
+
+.minimap.collapsed {
+  min-height: 0;
+}
+
+/* Adjust stats panel styling */
+.ecosystem-stats .panel-content {
+  padding: 0;
+}
+
+.ecosystem-stats.collapsed {
+  min-width: auto;
+}

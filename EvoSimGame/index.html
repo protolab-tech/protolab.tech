@@ -31,9 +31,14 @@
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/enhanced-select.css">
+  <link rel="stylesheet" href="assets/css/stats-panel.css">
   
   <!-- Configuration -->
   <script src="assets/js/config.js"></script>
+  
+  <!-- SQL.js for evolution database -->
+  <script src="https://sql.js.org/dist/sql-wasm.js"></script>
   
   <!-- Security headers -->
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -49,11 +54,6 @@
         <span class="evosim-subtitle">Interactive Evolution Simulation</span>
       </div>
       <a href="/" class="evosim-header-logo">
-        <img 
-          src="/assets/images/logo.svg" 
-          alt="protolab.tech" 
-          loading="eager" 
-        />
         <span class="evosim-header-brand">protolab.tech</span>
       </a>
     </div>
@@ -77,23 +77,23 @@
 
       <label>
         <span>Resource Density</span>
-        <span class="val" id="vResources">50</span>
+        <span class="val" id="vResources">600</span>
       </label>
-      <input id="resources" type="range" min="0" max="200" step="1" value="50"/>
+      <input id="resources" type="range" min="0" max="1000" step="20" value="600" aria-label="Resource Density"/>
 
       <label>
         <span>Temperature</span>
         <span class="val" id="vTemp">50</span>
       </label>
-      <input id="temp" type="range" min="0" max="100" step="1" value="50"/>
+      <input id="temp" type="range" min="0" max="100" step="1" value="50" aria-label="Temperature"/>
 
       <div class="tempBarWrap">
         <div class="tempBar">
           <div class="tempZone"></div>
           <div class="tempMarker" id="tempMarker"></div>
         </div>
-        <div class="tiny" style="margin-top:8px">
-          Gradient shows cold→hot. Green zone is optimal (~35–65). Cells take damage if their resistance doesn’t match current temperature.
+        <div class="tiny temp-bar-description">
+          Gradient shows cold→hot. Green zone is optimal (~35–65). Cells take damage if their resistance doesn't match current temperature.
         </div>
       </div>
 
@@ -101,82 +101,129 @@
         <span>Stability</span>
         <span class="val" id="vStability">60</span>
       </label>
-      <input id="stability" type="range" min="0" max="100" step="1" value="60"/>
+      <input id="stability" type="range" min="0" max="100" step="1" value="60" aria-label="Stability"/>
 
       <label>
         <span>Radiation Level</span>
         <span class="val" id="vRad">2</span>
       </label>
-      <input id="rad" type="range" min="0" max="15" step="1" value="2"/>
+      <input id="rad" type="range" min="0" max="8" step="1" value="2" aria-label="Radiation Level"/>
 
         <div id="legend" class="tiny">
           <div class="legendLine"><span>Radiation 0</span><span>rare mutations</span></div>
-          <div class="legendLine"><span>Radiation 8-11</span><span class="warn">high mutation rate</span></div>
-          <div class="legendLine"><span>Radiation 12+</span><span class="danger">instant death / chaos</span></div>
+          <div class="legendLine"><span>Radiation 6-7</span><span class="warn">high mutation rate</span></div>
+          <div class="legendLine"><span>Radiation 8</span><span class="danger">instant death / chaos</span></div>
         </div>
       </div>
     </div>
 
 
-    <div class="card collapsible-card" style="margin-top:12px">
+    <div class="card collapsible-card genome-card">
       <div class="card-header" data-target="genome-content">
-        <h2>Initial Seed (Genome 0–15)</h2>
+        <h2>Initial Seed (Genome 0–7)</h2>
         <span class="collapse-icon">−</span>
       </div>
       <div class="card-content" id="genome-content">
 
       <h3>Fertility (shape)</h3>
       <label><span>Fertility</span><span class="val" id="vFert">3</span></label>
-      <input id="seedFert" type="range" min="0" max="15" step="1" value="3"/>
+      <input id="seedFert" type="range" min="0" max="7" step="1" value="3" aria-label="Fertility"/>
 
       <h3>Temperature Resistance (color)</h3>
       <label><span>Resistance</span><span class="val" id="vRes">3</span></label>
-      <input id="seedRes" type="range" min="0" max="15" step="1" value="3"/>
+      <input id="seedRes" type="range" min="0" max="7" step="1" value="3" aria-label="Temperature Resistance"/>
 
       <h3>Energy Efficiency (size)</h3>
       <label><span>Efficiency</span><span class="val" id="vEff">4</span></label>
-      <input id="seedEff" type="range" min="0" max="15" step="1" value="4"/>
+      <input id="seedEff" type="range" min="0" max="7" step="1" value="4" aria-label="Energy Efficiency"/>
 
       <h3>Aggressivity (brightness)</h3>
       <label><span>Aggressivity</span><span class="val" id="vAgg">2</span></label>
-      <input id="seedAgg" type="range" min="0" max="15" step="1" value="2"/>
+      <input id="seedAgg" type="range" min="0" max="7" step="1" value="2" aria-label="Aggressivity"/>
 
       <h3>Infectivity (plague)</h3>
       <label><span>Infectivity</span><span class="val" id="vInf">0</span></label>
-      <input id="seedInf" type="range" min="0" max="15" step="1" value="0"/>
+      <input id="seedInf" type="range" min="0" max="7" step="1" value="0" aria-label="Infectivity"/>
 
-      <div style="margin-top:12px">
+      <div class="inject-button-container">
         <button class="btn" id="inject">Inject Cell / Restart World</button>
       </div>
 
-        <div class="tiny" style="margin-top:10px">
+        <div class="tiny visual-mapping-description">
           Visual mapping: Fertility→shape (0-15), Resistance→color (blue→red, 0-15), Efficiency→size (0-15), Aggressivity→glow (0-15), Infectivity→infect radius + death timer if &gt;5.
         </div>
       </div>
     </div>
 
-    <div class="tiny" style="margin-top:12px">
-      Rules summary:
-      <ul style="margin:8px 0 0 18px;padding:0;color:var(--muted)">
-        <li>Food spawns with Available Resources.</li>
-        <li>Energy drains over time (lower drain with high Efficiency).</li>
-        <li>Temperature mismatch drains health.</li>
-        <li>Radiation mutates traits (or kills at level 8).</li>
-        <li>Reproduction splits when energy is high; offspring inherits ± mutation.</li>
-        <li>Aggressive cells prey on smaller ones on contact; predator gains energy.</li>
-        <li>Infectivity &gt;5 starts a timer and spreads on proximity; dense populations trigger plague faster.</li>
-      </ul>
+    <div class="card collapsible-card map-zones-card">
+      <div class="card-header" data-target="map-zones-content">
+        <h2>Map Zones</h2>
+        <span class="collapse-icon">−</span>
+      </div>
+      <div class="card-content" id="map-zones-content">
+        <div class="scatter-control">
+          <label>
+            <span>Grid Size</span>
+            <span class="val" id="vScatter">1x1</span>
+          </label>
+          <select id="scatter" aria-label="Grid Size">
+            <option value="1">1x1 (No divisions)</option>
+            <option value="2">2x2 (4 zones)</option>
+            <option value="3">3x3 (9 zones)</option>
+            <option value="4">4x4 (16 zones)</option>
+            <option value="5">5x5 (25 zones)</option>
+            <option value="6">6x6 (36 zones)</option>
+            <option value="7">7x7 (49 zones)</option>
+            <option value="8">8x8 (64 zones)</option>
+            <option value="9">9x9 (81 zones)</option>
+            <option value="10">10x10 (100 zones)</option>
+          </select>
+        </div>
+        <div class="scatter-control variance-control" id="varianceControl">
+          <label>
+            <span>Variance Delta (%)</span>
+            <span class="val" id="vVariance">20</span>
+          </label>
+          <input id="variance" type="range" min="5" max="50" step="5" value="20" aria-label="Variance Percentage"/>
+        </div>
+        <div class="tiny zone-description">
+          Divisions create fractal zones with varying parameters. Variance limits max difference between zones.
+        </div>
+      </div>
+    </div>
+
+    <div class="card collapsible-card rules-card">
+      <div class="card-header" data-target="rules-content">
+        <h2>Rules Summary</h2>
+        <span class="collapse-icon collapsed">+</span>
+      </div>
+      <div class="card-content collapsed" id="rules-content">
+        <ul class="rules-list">
+          <li>Food spawns with Available Resources.</li>
+          <li>Energy drains over time (lower drain with high Efficiency).</li>
+          <li>Temperature mismatch drains health.</li>
+          <li>Radiation mutates traits (or kills at level 8).</li>
+          <li>Reproduction splits when energy is high; offspring inherits ± mutation.</li>
+          <li>Aggressive cells prey on smaller ones on contact; predator gains energy.</li>
+          <li>Infectivity &gt;5 starts a timer and spreads on proximity; dense populations trigger plague faster.</li>
+        </ul>
+      </div>
     </div>
   </aside>
 
   <main id="worldWrap">
-    <!-- HUD -->
+    <!-- Enhanced HUD -->
     <div id="hud">
       <div class="pill"><b>Cells</b> <span id="hudCells">0</span></div>
       <div class="pill"><b>Food</b> <span id="hudFood">0</span></div>
-      <div class="pill"><b>Avg Mut</b> <span id="hudMut">0</span></div>
+      <div class="pill"><b>Gen</b> <span id="hudGeneration">0</span></div>
+      <div class="pill"><b>Species</b> <span id="hudSpecies">0</span></div>
+      <div class="pill"><b>Fitness</b> <span id="hudFitness">0</span></div>
       <div class="pill"><b>Plague</b> <span id="hudPlague">off</span></div>
     </div>
+    
+    <!-- Evolution Events -->
+    <div id="evolutionEvents" class="evolution-events"></div>
     
     <!-- Map Controls Overlay -->
     <div id="mapControls" class="map-overlay">
@@ -190,34 +237,84 @@
       </div>
     </div>
     
-    <!-- Parameter Scattering Controls -->
-    <div id="scatterControls" class="scatter-overlay">
-      <div class="scatter-header">
-        <span>Map Zones</span>
-        <button id="toggleScatter" class="toggle-scatter">⚙</button>
-      </div>
-      <div class="scatter-panel" id="scatterPanel" style="display:none;">
-        <div class="scatter-control">
-          <label>Divisions: <span id="vScatter">1</span></label>
-          <input id="scatter" type="range" min="1" max="100" step="1" value="1"/>
-        </div>
-        <div class="scatter-control" id="varianceControl" style="display:none;">
-          <label>Variance: ±<span id="vVariance">20</span>%</label>
-          <input id="variance" type="range" min="5" max="50" step="5" value="20"/>
-        </div>
-      </div>
-    </div>
     
     <!-- Minimap -->
     <div id="minimap" class="minimap">
-      <canvas id="minimapCanvas" width="120" height="80"></canvas>
-      <div id="viewportIndicator" class="viewport-indicator"></div>
+      <div class="panel-header">
+        <span class="panel-title">Map</span>
+        <button class="panel-toggle" id="minimapToggle" title="Toggle Minimap">−</button>
+      </div>
+      <div class="panel-content" id="minimapContent">
+        <canvas id="minimapCanvas" width="150" height="150"></canvas>
+        <div id="viewportIndicator" class="viewport-indicator"></div>
+      </div>
+    </div>
+    
+    <!-- Ecosystem Stats Panel -->
+    <div id="ecosystemStats" class="ecosystem-stats">
+      <div class="panel-header">
+        <span class="panel-title">Ecosystem Stats</span>
+        <button class="panel-toggle" id="statsToggle" title="Toggle Stats">−</button>
+      </div>
+      <div class="panel-content" id="statsContent">
+        <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Active Cells</span>
+          <span class="stat-value" id="statActiveCells">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Available Food</span>
+          <span class="stat-value" id="statAvailableFood">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Infected Cells</span>
+          <span class="stat-value" id="statInfectedCells">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Born</span>
+          <span class="stat-value" id="statTotalBorn">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Max Generation</span>
+          <span class="stat-value" id="statMaxGeneration">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Avg Lifespan</span>
+          <span class="stat-value" id="statAvgLifespan">0.0s</span>
+        </div>
+        </div>
+      </div>
     </div>
     
     <!-- Main Canvas -->
     <canvas id="c"></canvas>
   </main>
 </div>
+
+<footer role="contentinfo" class="evosim-footer">
+  <div class="evosim-footer-container">
+    <div class="evosim-footer-logo">
+      <a href="/">
+        <img src="/assets/images/logo.svg" alt="protolab.tech" width="80" height="24" loading="lazy" />
+      </a>
+    </div>
+    <div class="evosim-contact-info">
+      <a href="mailto:info@protolab.tech">info@protolab.tech</a>
+    </div>
+    <div class="evosim-social-links">
+      <a href="https://instagram.com/protolab.tech" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+      <a href="https://tiktok.com/@protolab.tech" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
 </main>
 
 
@@ -271,7 +368,9 @@
   const COLD = [37, 99, 235];   // ~#2563eb
   const HOT  = [239, 68, 68];   // ~#ef4444
   function resistanceColor(level, brightness01=0.7){
-    const t = clamp(level/15, 0, 1); // Updated for 0-15 range
+    // Use config scaling: 0-7 genome * 2.0 = 0-14 effective range
+    const effectiveLevel = level * EvoSimConfig.genetics.resistanceColorScale;
+    const t = clamp(effectiveLevel/14, 0, 1);
     const [r,g,b] = mixRGB(COLD, HOT, t);
     // brightness01 modulates luminance; keep saturation-ish
     const br = lerp(0.35, 1.05, brightness01);
@@ -283,7 +382,9 @@
   const ctx = canvas.getContext('2d', { alpha: false });
   
   // ---------- ZOOM AND VIEWPORT ----------
-  let zoomLevel = 1.0;
+  let zoomLevel = 1.0; // Default starting zoom at 1x
+  let minZoom = 0.1; // Will be calculated based on viewport size
+  let maxZoom = 5.0;
   let viewportX = 0;
   let viewportY = 0;
   let isDragging = false;
@@ -319,6 +420,18 @@
     hudFood: document.getElementById('hudFood'),
     hudMut: document.getElementById('hudMut'),
     hudPlague: document.getElementById('hudPlague'),
+    hudGeneration: document.getElementById('hudGeneration'),
+    hudSpecies: document.getElementById('hudSpecies'),
+    hudFitness: document.getElementById('hudFitness'),
+    evolutionEvents: document.getElementById('evolutionEvents'),
+
+    // Ecosystem Stats Panel
+    statActiveCells: document.getElementById('statActiveCells'),
+    statAvailableFood: document.getElementById('statAvailableFood'),
+    statInfectedCells: document.getElementById('statInfectedCells'),
+    statTotalBorn: document.getElementById('statTotalBorn'),
+    statMaxGeneration: document.getElementById('statMaxGeneration'),
+    statAvgLifespan: document.getElementById('statAvgLifespan'),
 
     // New controls
     vZoom: document.getElementById('vZoom'),
@@ -329,11 +442,15 @@
     vScatter: document.getElementById('vScatter'),
     variance: document.getElementById('variance'),
     vVariance: document.getElementById('vVariance'),
-    toggleScatter: document.getElementById('toggleScatter'),
-    scatterPanel: document.getElementById('scatterPanel'),
     varianceControl: document.getElementById('varianceControl'),
     minimapCanvas: document.getElementById('minimapCanvas'),
     viewportIndicator: document.getElementById('viewportIndicator'),
+    
+    // Panel toggles
+    minimapToggle: document.getElementById('minimapToggle'),
+    statsToggle: document.getElementById('statsToggle'),
+    minimapContent: document.getElementById('minimapContent'),
+    statsContent: document.getElementById('statsContent'),
   };
 
   function syncLabels(){
@@ -349,15 +466,24 @@
     el.vInf.textContent  = el.seedInf.value;
 
     el.vZoom.textContent = zoomLevel.toFixed(1) + 'x';
-    el.vScatter.textContent = el.scatter.value;
+    
+    // Update scatter display with grid size
+    const scatterValue = Number(el.scatter.value);
+    el.vScatter.textContent = `${scatterValue}x${scatterValue}`;
+    
     el.vVariance.textContent = el.variance.value;
 
     const t = Number(el.temp.value);
     el.tempMarker.style.left = `calc(${t}% - 1px)`;
 
-    // Show/hide scatter variance control
-    const scatterValue = Number(el.scatter.value);
-    el.varianceControl.style.display = scatterValue > 1 ? 'block' : 'none';
+    // Show/hide scatter variance control (reuse scatterValue)
+    if (scatterValue > 1) {
+      el.varianceControl.style.display = 'block';
+      el.varianceControl.classList.remove('variance-control');
+    } else {
+      el.varianceControl.style.display = 'none';
+      el.varianceControl.classList.add('variance-control');
+    }
   }
   ['input','change'].forEach(ev=>{
     el.resources.addEventListener(ev, syncLabels);
@@ -369,24 +495,214 @@
     el.seedEff.addEventListener(ev, syncLabels);
     el.seedAgg.addEventListener(ev, syncLabels);
     el.seedInf.addEventListener(ev, syncLabels);
-    el.scatter.addEventListener(ev, syncLabels);
     el.variance.addEventListener(ev, syncLabels);
   });
+  
+  // Scatter uses 'change' event for select dropdown
+  el.scatter.addEventListener('change', () => {
+    syncLabels();
+    // Regenerate parameter map when scatter changes
+    generateParameterMap();
+  });
+  
+  // Initialize UI controls with config.js defaults
+  // Settings cache using localStorage
+  function saveSettingsToCache() {
+    const settings = {
+      // Environment settings
+      resources: el.resources.value,
+      temperature: el.temp.value,
+      stability: el.stability.value,
+      radiation: el.rad.value,
+      
+      // Genome settings
+      fertility: el.seedFert.value,
+      resistance: el.seedRes.value,
+      efficiency: el.seedEff.value,
+      aggressivity: el.seedAgg.value,
+      infectivity: el.seedInf.value,
+      
+      // Map settings
+      scatter: el.scatter.value,
+      variance: el.variance.value,
+      
+      // Sidebar state
+      sidebarCollapsed: sidebar.classList.contains('collapsed'),
+      
+      // Card states
+      environmentCollapsed: document.getElementById('environment-content').classList.contains('collapsed'),
+      genomeCollapsed: document.getElementById('genome-content').classList.contains('collapsed'),
+      mapZonesCollapsed: document.getElementById('map-zones-content').classList.contains('collapsed'),
+      rulesCollapsed: document.getElementById('rules-content').classList.contains('collapsed'),
+      
+      // Panel states
+      minimapCollapsed: el.minimapContent.classList.contains('collapsed'),
+      statsCollapsed: el.statsContent.classList.contains('collapsed')
+    };
+    
+    try {
+      localStorage.setItem('evosim-settings', JSON.stringify(settings));
+      console.log('Settings saved to cache');
+    } catch (error) {
+      console.warn('Failed to save settings to cache:', error);
+    }
+  }
+  
+  function loadSettingsFromCache() {
+    try {
+      const cached = localStorage.getItem('evosim-settings');
+      if (!cached) return false;
+      
+      const settings = JSON.parse(cached);
+      console.log('Loading cached settings:', settings);
+      
+      // Apply environment settings
+      if (settings.resources !== undefined) el.resources.value = settings.resources;
+      if (settings.temperature !== undefined) el.temp.value = settings.temperature;
+      if (settings.stability !== undefined) el.stability.value = settings.stability;
+      if (settings.radiation !== undefined) el.rad.value = settings.radiation;
+      
+      // Apply genome settings
+      if (settings.fertility !== undefined) el.seedFert.value = settings.fertility;
+      if (settings.resistance !== undefined) el.seedRes.value = settings.resistance;
+      if (settings.efficiency !== undefined) el.seedEff.value = settings.efficiency;
+      if (settings.aggressivity !== undefined) el.seedAgg.value = settings.aggressivity;
+      if (settings.infectivity !== undefined) el.seedInf.value = settings.infectivity;
+      
+      // Apply map settings
+      if (settings.scatter !== undefined) el.scatter.value = settings.scatter;
+      if (settings.variance !== undefined) el.variance.value = settings.variance;
+      
+      // Apply UI states
+      if (settings.sidebarCollapsed) sidebar.classList.add('collapsed');
+      
+      // Apply card states
+      const cardStates = [
+        { id: 'environment-content', collapsed: settings.environmentCollapsed },
+        { id: 'genome-content', collapsed: settings.genomeCollapsed },
+        { id: 'map-zones-content', collapsed: settings.mapZonesCollapsed },
+        { id: 'rules-content', collapsed: settings.rulesCollapsed }
+      ];
+      
+      cardStates.forEach(({ id, collapsed }) => {
+        const content = document.getElementById(id);
+        const header = content?.previousElementSibling;
+        const icon = header?.querySelector('.collapse-icon');
+        
+        if (content && collapsed) {
+          content.classList.add('collapsed');
+          if (icon) {
+            icon.classList.add('collapsed');
+            icon.textContent = '+';
+          }
+        }
+      });
+      
+      // Apply panel states
+      if (settings.minimapCollapsed) {
+        el.minimapContent.classList.add('collapsed');
+        el.minimapToggle.textContent = '+';
+      }
+      
+      if (settings.statsCollapsed) {
+        el.statsContent.classList.add('collapsed');
+        el.statsToggle.textContent = '+';
+      }
+      
+      // Update all labels to reflect loaded values
+      syncLabels();
+      
+      return true;
+    } catch (error) {
+      console.warn('Failed to load settings from cache:', error);
+      return false;
+    }
+  }
+
+  function initializeUIFromConfig() {
+    const { controls } = EvoSimConfig;
+    
+    // Environment controls
+    el.resources.min = controls.resources.min;
+    el.resources.max = controls.resources.max;
+    el.resources.step = controls.resources.step;
+    el.resources.value = controls.resources.default;
+    
+    el.temp.min = controls.temperature.min;
+    el.temp.max = controls.temperature.max;
+    el.temp.step = controls.temperature.step;
+    el.temp.value = controls.temperature.default;
+    
+    el.stability.min = controls.stability.min;
+    el.stability.max = controls.stability.max;
+    el.stability.step = controls.stability.step;
+    el.stability.value = controls.stability.default;
+    
+    el.rad.min = controls.radiation.min;
+    el.rad.max = controls.radiation.max;
+    el.rad.step = controls.radiation.step;
+    el.rad.value = controls.radiation.default;
+    
+    // Genome controls
+    el.seedFert.min = controls.fertility.min;
+    el.seedFert.max = controls.fertility.max;
+    el.seedFert.step = controls.fertility.step;
+    el.seedFert.value = controls.fertility.default;
+    
+    el.seedRes.min = controls.resistance.min;
+    el.seedRes.max = controls.resistance.max;
+    el.seedRes.step = controls.resistance.step;
+    el.seedRes.value = controls.resistance.default;
+    
+    el.seedEff.min = controls.efficiency.min;
+    el.seedEff.max = controls.efficiency.max;
+    el.seedEff.step = controls.efficiency.step;
+    el.seedEff.value = controls.efficiency.default;
+    
+    el.seedAgg.min = controls.aggressivity.min;
+    el.seedAgg.max = controls.aggressivity.max;
+    el.seedAgg.step = controls.aggressivity.step;
+    el.seedAgg.value = controls.aggressivity.default;
+    
+    el.seedInf.min = controls.infectivity.min;
+    el.seedInf.max = controls.infectivity.max;
+    el.seedInf.step = controls.infectivity.step;
+    el.seedInf.value = controls.infectivity.default;
+    
+    // Scatter control (select dropdown)
+    el.scatter.value = controls.scatter.default;
+    
+    // Variance control
+    el.variance.min = controls.variance.min;
+    el.variance.max = controls.variance.max;
+    el.variance.step = controls.variance.step;
+    el.variance.value = controls.variance.default;
+    
+    console.log('UI initialized with config.js defaults:', {
+      resources: controls.resources.default,
+      temperature: controls.temperature.default,
+      stability: controls.stability.default,
+      radiation: controls.radiation.default
+    });
+  }
+  
+  // Initialize UI from config, then sync labels
+  initializeUIFromConfig();
   syncLabels();
 
   // ---------- ZOOM CONTROLS ----------
   el.zoomIn.addEventListener('click', function() {
-    zoomLevel = Math.min(5.0, zoomLevel + 0.2);
+    zoomLevel = Math.min(maxZoom, zoomLevel + 0.2);
     syncLabels();
   });
 
   el.zoomOut.addEventListener('click', function() {
-    zoomLevel = Math.max(0.5, zoomLevel - 0.2);
+    zoomLevel = Math.max(minZoom, zoomLevel - 0.2);
     syncLabels();
   });
 
   el.resetZoom.addEventListener('click', function() {
-    zoomLevel = 1.0;
+    zoomLevel = minZoom; // Reset to show full world
     viewportX = 0;
     viewportY = 0;
     syncLabels();
@@ -424,7 +740,7 @@
   canvas.addEventListener('wheel', function(e) {
     e.preventDefault();
     const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-    zoomLevel = Math.max(0.5, Math.min(5.0, zoomLevel * zoomFactor));
+    zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel * zoomFactor));
     syncLabels();
   });
 
@@ -442,8 +758,8 @@
       return;
     }
     
-    // Create a grid of parameter zones
-    const gridSize = Math.ceil(Math.sqrt(divisions));
+    // Create a grid of parameter zones - divisions is already the grid size (1x1, 2x2, etc.)
+    const gridSize = divisions;
     parameterMap = {
       gridSize: gridSize,
       zones: []
@@ -461,12 +777,18 @@
       for (let x = 0; x < gridSize; x++) {
         const zone = {};
         
-        // Add variation to each parameter
+        // Add variation to each parameter with enhanced temperature variance
         for (const [key, baseValue] of Object.entries(baseParams)) {
-          const variation = (Math.random() - 0.5) * 2 * variance;
+          let variation = (Math.random() - 0.5) * 2 * variance;
+          
+          // Increase temperature variance for more dramatic visual differences
+          if (key === 'temp') {
+            variation *= 1.5; // 50% more temperature variation
+          }
+          
           zone[key] = Math.max(0, Math.min(
-            key === 'resources' ? 200 : 
-            key === 'rad' ? 15 : 100,
+            key === 'resources' ? 1000 : // Updated max for resources
+            key === 'rad' ? 8 : 100, // Updated max for radiation
             baseValue * (1 + variation)
           ));
         }
@@ -508,7 +830,11 @@
           for (const param of ['resources', 'temp', 'stability', 'rad']) {
             if (neighbors.length > 0) {
               const avgNeighbor = neighbors.reduce((sum, n) => sum + n[param], 0) / neighbors.length;
-              const difference = Math.abs(zone[param] - avgNeighbor) / avgNeighbor;
+              // Avoid division by zero when avgNeighbor is 0
+              // When avgNeighbor is 0, use relative difference based on zone value to maintain scale compatibility
+              const difference = avgNeighbor === 0 ? 
+                (zone[param] === 0 ? 0 : 1) : // If both are 0, no difference; if zone has value but neighbors are 0, max difference
+                Math.abs(zone[param] - avgNeighbor) / avgNeighbor;
               
               if (difference > maxDifference) {
                 // Move towards neighbor average
@@ -532,8 +858,8 @@
     }
     
     const { gridSize, zones } = parameterMap;
-    const zoneX = Math.floor((x / W) * gridSize);
-    const zoneY = Math.floor((y / H) * gridSize);
+    const zoneX = Math.floor((x / WORLD_W) * gridSize);
+    const zoneY = Math.floor((y / WORLD_H) * gridSize);
     const zoneIdx = Math.max(0, Math.min(zones.length - 1, zoneY * gridSize + zoneX));
     
     return zones[zoneIdx];
@@ -550,6 +876,7 @@
   // Sidebar toggle
   sidebarToggle.addEventListener('click', function() {
     sidebar.classList.toggle('collapsed');
+    console.log('Sidebar toggled, collapsed:', sidebar.classList.contains('collapsed'));
   });
   
   // Collapsible cards
@@ -567,18 +894,50 @@
     });
   });
 
-  // Scatter controls toggle
-  el.toggleScatter.addEventListener('click', function() {
-    const panel = el.scatterPanel;
-    const isVisible = panel.style.display !== 'none';
-    panel.style.display = isVisible ? 'none' : 'block';
-  });
+  // Panel toggles for minimap and stats
+  function setupPanelToggle(toggleButton, content) {
+    if (toggleButton && content) {
+      toggleButton.addEventListener('click', function() {
+        content.classList.toggle('collapsed');
+        toggleButton.textContent = content.classList.contains('collapsed') ? '+' : '−';
+        
+        // Save panel state to cache
+        saveSettingsToCache();
+      });
+    }
+  }
+
+  // Panel toggles will be set up after DOM is ready
+
 
   // ---------- MINIMAP ----------
   const minimapCtx = el.minimapCanvas.getContext('2d');
-  const minimapWidth = 120;
-  const minimapHeight = 80;
+  const minimapWidth = 150;
+  const minimapHeight = 150;
   
+  // Update ecosystem stats panel
+  function updateEcosystemStats() {
+    // Active cells
+    el.statActiveCells.textContent = cells.length;
+    
+    // Available food
+    el.statAvailableFood.textContent = food.length;
+    
+    // Infected cells
+    const infectedCount = cells.filter(c => c.infected).length;
+    el.statInfectedCells.textContent = infectedCount;
+    
+    // Total born
+    el.statTotalBorn.textContent = totalBorn;
+    
+    // Max generation
+    el.statMaxGeneration.textContent = maxGeneration;
+    
+    // Average lifespan
+    const avgLifespan = totalDeaths > 0 ? (totalLifespan / totalDeaths) : 0;
+    el.statAvgLifespan.textContent = avgLifespan.toFixed(1) + 's';
+  }
+
   function updateMinimap() {
     minimapCtx.clearRect(0, 0, minimapWidth, minimapHeight);
     
@@ -589,16 +948,16 @@
     // Draw cells as dots
     minimapCtx.fillStyle = 'rgba(94, 234, 212, 0.8)';
     for (const cell of cells) {
-      const x = (cell.x / W) * minimapWidth;
-      const y = (cell.y / H) * minimapHeight;
+      const x = (cell.x / WORLD_W) * minimapWidth;
+      const y = (cell.y / WORLD_H) * minimapHeight;
       minimapCtx.fillRect(x - 1, y - 1, 2, 2);
     }
     
     // Draw food as smaller dots
     minimapCtx.fillStyle = 'rgba(94, 234, 212, 0.4)';
     for (const f of food) {
-      const x = (f.x / W) * minimapWidth;
-      const y = (f.y / H) * minimapHeight;
+      const x = (f.x / WORLD_W) * minimapWidth;
+      const y = (f.y / WORLD_H) * minimapHeight;
       minimapCtx.fillRect(x, y, 1, 1);
     }
     
@@ -607,19 +966,51 @@
   }
   
   function updateViewportIndicator() {
-    const viewWidth = minimapWidth / zoomLevel;
-    const viewHeight = minimapHeight / zoomLevel;
-    const viewX = (minimapWidth - viewWidth) / 2 - (viewportX / W) * minimapWidth / zoomLevel;
-    const viewY = (minimapHeight - viewHeight) / 2 - (viewportY / H) * minimapHeight / zoomLevel;
+    if (!el.viewportIndicator) return;
     
-    el.viewportIndicator.style.left = Math.max(0, Math.min(minimapWidth - viewWidth, viewX)) + 'px';
-    el.viewportIndicator.style.top = Math.max(0, Math.min(minimapHeight - viewHeight, viewY)) + 'px';
-    el.viewportIndicator.style.width = Math.min(minimapWidth, viewWidth) + 'px';
-    el.viewportIndicator.style.height = Math.min(minimapHeight, viewHeight) + 'px';
+    // Since world is square but viewport might not be, we need to maintain aspect ratio
+    const worldAspect = WORLD_W / WORLD_H; // Should be 1.0 for square world
+    const viewportAspect = W / H;
+    
+    // Calculate the actual visible world area based on viewport aspect ratio
+    let visibleWorldW, visibleWorldH;
+    if (viewportAspect > worldAspect) {
+      // Viewport is wider than world aspect - world height constrains
+      visibleWorldH = WORLD_H;
+      visibleWorldW = WORLD_H * viewportAspect;
+    } else {
+      // Viewport is taller than world aspect - world width constrains  
+      visibleWorldW = WORLD_W;
+      visibleWorldH = WORLD_W / viewportAspect;
+    }
+    
+    // Calculate viewport size on minimap using the visible world dimensions
+    const viewWidth = (visibleWorldW / WORLD_W) * minimapWidth / zoomLevel;
+    const viewHeight = (visibleWorldH / WORLD_H) * minimapHeight / zoomLevel;
+    
+    // Calculate viewport position on minimap
+    const centerX = minimapWidth / 2;
+    const centerY = minimapHeight / 2;
+    const viewX = centerX - viewWidth / 2 - (viewportX / WORLD_W) * minimapWidth;
+    const viewY = centerY - viewHeight / 2 - (viewportY / WORLD_H) * minimapHeight;
+    
+    // Clamp to minimap bounds
+    const clampedX = Math.max(0, Math.min(minimapWidth - viewWidth, viewX));
+    const clampedY = Math.max(0, Math.min(minimapHeight - viewHeight, viewY));
+    const clampedWidth = Math.min(minimapWidth - clampedX, Math.max(1, viewWidth));
+    const clampedHeight = Math.min(minimapHeight - clampedY, Math.max(1, viewHeight));
+    
+    el.viewportIndicator.style.left = clampedX + 'px';
+    el.viewportIndicator.style.top = clampedY + 'px';
+    el.viewportIndicator.style.width = clampedWidth + 'px';
+    el.viewportIndicator.style.height = clampedHeight + 'px';
+    el.viewportIndicator.style.display = 'block';
   }
 
   // ---------- World / Simulation ----------
-  let W = 1, H = 1, DPR = 1;
+  // Fixed world dimensions (4x bigger than viewport)
+  let WORLD_W = 4000, WORLD_H = 4000;
+  let W = 1, H = 1, DPR = 1; // Canvas dimensions
 
   function resize(){
     const rect = canvas.getBoundingClientRect();
@@ -629,6 +1020,17 @@
     canvas.width = W;
     canvas.height = H;
     ctx.setTransform(1,0,0,1,0,0);
+    
+    // Update minimum zoom to fit world in viewport
+    const minZoomX = W / WORLD_W;
+    const minZoomY = H / WORLD_H;
+    minZoom = Math.max(minZoomX, minZoomY);
+    
+    // Ensure current zoom doesn't go below minimum
+    if (zoomLevel < minZoom) {
+      zoomLevel = minZoom;
+      syncLabels();
+    }
   }
   window.addEventListener('resize', resize);
 
@@ -694,28 +1096,101 @@
   // World toggles / counters
   let avgMutationsPerBirth = 0;
   let births = 0;
+  let generation = 0;
+  let speciesCount = 0;
+  
+  // Ecosystem statistics tracking
+  let totalBorn = 0;
+  let totalDeaths = 0;
+  let totalLifespan = 0;
+  let maxGeneration = 0;
+  
+  // Evolution Database
+  let evolutionDB = null;
+  let dbReady = false;
+  
+  // Initialize SQL.js database
+  async function initEvolutionDB() {
+    try {
+      const SQL = await initSqlJs({
+        locateFile: file => `https://sql.js.org/dist/${file}`
+      });
+      
+      evolutionDB = new SQL.Database();
+      
+      // Create tables for evolution tracking
+      evolutionDB.run(`
+        CREATE TABLE generations (
+          id INTEGER PRIMARY KEY,
+          generation INTEGER,
+          population INTEGER,
+          avg_fitness REAL,
+          avg_fertility REAL,
+          avg_resistance REAL,
+          avg_efficiency REAL,
+          avg_aggressivity REAL,
+          avg_infectivity REAL,
+          species_count INTEGER,
+          timestamp INTEGER
+        )
+      `);
+      
+      evolutionDB.run(`
+        CREATE TABLE species (
+          id INTEGER PRIMARY KEY,
+          genome_signature TEXT UNIQUE,
+          fertility INTEGER,
+          resistance INTEGER,
+          efficiency INTEGER,
+          aggressivity INTEGER,
+          infectivity INTEGER,
+          population INTEGER,
+          first_seen INTEGER,
+          last_seen INTEGER,
+          fitness_score REAL
+        )
+      `);
+      
+      evolutionDB.run(`
+        CREATE TABLE events (
+          id INTEGER PRIMARY KEY,
+          generation INTEGER,
+          event_type TEXT,
+          description TEXT,
+          impact_level INTEGER,
+          timestamp INTEGER
+        )
+      `);
+      
+      dbReady = true;
+      console.log('Evolution database initialized successfully!');
+      
+    } catch (error) {
+      console.error('Failed to initialize evolution database:', error);
+    }
+  }
 
-  // Tunables (kept pragmatic for 100+ entities)
-  const FOOD_ENERGY = 18;
-  const BASE_DRAIN = 0.9; // per second
-  const HEALTH_DRAIN_TEMP = 6.0; // per second at max mismatch
-  const REPRO_THRESHOLD = 60; // energy
-  const REPRO_COST = 35; // energy cost to split
-  const MAX_CELLS_SOFT = 700; // avoid runaway
-  const FOOD_CAP = 1500;
+  // Load configuration values (now using config.js)
+  const FOOD_ENERGY = EvoSimConfig.simulation.foodEnergy;
+  const BASE_DRAIN = EvoSimConfig.simulation.baseDrain;
+  const HEALTH_DRAIN_TEMP = EvoSimConfig.simulation.healthDrainTemp;
+  const REPRO_THRESHOLD = EvoSimConfig.simulation.reproductionThreshold;
+  const REPRO_COST = EvoSimConfig.simulation.reproductionCost;
+  const MAX_CELLS_SOFT = EvoSimConfig.simulation.maxCellsSoft;
+  const FOOD_CAP = EvoSimConfig.simulation.maxFood;
 
-  // Plague tuning
-  const PLAGUE_DENSITY_TRIGGER = 0.00016; // cells per px^2 (scaled by DPR)
-  const PLAGUE_TIMER_BASE = 4.0; // seconds
-  const PLAGUE_TIMER_MIN = 1.2;
-  const PLAGUE_SPREAD_BASE = 10; // px
-  const PLAGUE_SPREAD_PER = 6; // px per infectivity level
+  // Plague configuration (now using config.js)
+  const PLAGUE_DENSITY_TRIGGER = EvoSimConfig.plague.densityTrigger;
+  const PLAGUE_TIMER_BASE = EvoSimConfig.plague.timerBase;
+  const PLAGUE_TIMER_MIN = EvoSimConfig.plague.timerMin;
+  const PLAGUE_SPREAD_BASE = EvoSimConfig.plague.spreadBase;
+  const PLAGUE_SPREAD_PER = EvoSimConfig.plague.spreadPerLevel;
 
   // Radiation -> mutation strength
   function mutationDelta(radiation){
-    // radiation 0 => mostly 0; radiation 15 => -3..+3 often
+    // radiation 0 => mostly 0; radiation 8 => -3..+3 often (PRD spec)
     if(radiation <= 0) return 0;
-    const p = clamp(radiation / 15, 0, 1); // Updated for 0-15 range
+    const p = clamp(radiation / 8, 0, 1);
     // biased toward small deltas
     const roll = Math.random();
     if(roll < (0.45 - 0.25*p)) return 0;
@@ -731,29 +1206,32 @@
     const changes = (Math.random() < rad/12) ? (Math.random() < 0.3 ? 3 : 2) : 1; // More changes possible
     for(let i=0;i<changes;i++){
       const idx = irand(0,4);
-      out[idx] = clamp(out[idx] + mutationDelta(rad), 0, 15); // Updated range to 0-15
+      out[idx] = clamp(out[idx] + mutationDelta(rad), 0, 7); // 3-bit genome range
     }
     return out;
   }
 
   function tempToIdealLevel(temp0_100){
-    // map world temp to 0..15 (expanded range)
-    return clamp(Math.round((temp0_100/100)*15), 0, 15);
+    // map world temp to 0..7 (3-bit genome range)
+    return clamp(Math.round((temp0_100/100)*7), 0, 7);
   }
 
   function efficiencyToRadius(eff){
-    // 0 small, 15 big (expanded range)
-    return lerp(3.5, 15, eff/15);
+    // 3-bit genome (0-7) with config scaling
+    const { efficiencyRadiusRange } = EvoSimConfig.genetics;
+    return lerp(efficiencyRadiusRange.min, efficiencyRadiusRange.max, eff/7);
   }
 
   function fertilityToSides(f){
-    // 0 circle, 1 triangle ... expanded range
+    // 3-bit genome (0-7) with config scaling
     if(f <= 0) return 0; // circle
-    return clamp(2 + f, 3, 20); // 1->3,2->4,...15->17 (cap 20)
+    const { fertilityShapeRange } = EvoSimConfig.genetics;
+    const sides = Math.round(lerp(fertilityShapeRange.min, fertilityShapeRange.max, f/7));
+    return clamp(sides, 3, 20);
   }
 
   class Cell {
-    constructor(x,y, genome){
+    constructor(x, y, genome, generation = 0){
       this.x = x; this.y = y;
       this.vx = rand(-18, 18);
       this.vy = rand(-18, 18);
@@ -761,9 +1239,11 @@
       this.energy = rand(35, 55);
       this.health = 100;
       this.age = 0;
+      this.generation = generation; // Track how many times this lineage has divided
 
       this.infected = false;
       this.plagueT = 0;
+      this.currentInfectivity = this.genome[4]; // Track current infection level separately
 
       this._r = efficiencyToRadius(this.genome[2]);
       this._glow = this.genome[3]/7;
@@ -772,17 +1252,16 @@
     get r(){ return this._r; }
     updateDerived(){
       this._r = efficiencyToRadius(this.genome[2]);
-      this._glow = this.genome[3]/7;
+      this._glow = (this.genome[3] * EvoSimConfig.genetics.aggressivityGlowScale) / 17.5;
     }
 
     infect(level){
-      // overwrite infectivity to the propagating level (mechanic requested)
-      this.genome[4] = clamp(level, 0, 7);
-      this.updateDerived();
-      if(this.genome[4] > 3){
+      // Set current infection level without modifying genome (genome is immutable)
+      this.currentInfectivity = clamp(level, 0, 7);
+      if(this.currentInfectivity > 3){ // PRD spec threshold
         this.infected = true;
         // timer shorter with higher infectivity
-        const t = lerp(PLAGUE_TIMER_BASE, PLAGUE_TIMER_MIN, (this.genome[4]-4)/3);
+        const t = lerp(PLAGUE_TIMER_BASE, PLAGUE_TIMER_MIN, (this.currentInfectivity-3)/4);
         this.plagueT = t;
       } else {
         this.infected = false;
@@ -796,11 +1275,205 @@
     food.length = 0;
     births = 0;
     avgMutationsPerBirth = 0;
+    generation = 0;
+    speciesCount = 0;
 
-    // Spawn initial cell in center of world
-    const cx = W * 0.5;
-    const cy = H * 0.5;
-    cells.push(new Cell(cx, cy, seedGenome));
+    // Clear any existing spawn timeout
+    if (window.spawnTimeout) {
+      clearTimeout(window.spawnTimeout);
+    }
+
+    console.log('World reset. Cell will spawn in 3 seconds near resources...');
+    
+    // Show countdown notification
+    showEventNotification('World Reset', 'New cell will spawn in 3 seconds near closest resources...');
+    
+    // Delayed spawn after 3 seconds
+    window.spawnTimeout = setTimeout(() => {
+      spawnInitialCellNearResources(seedGenome);
+    }, 3000);
+  }
+  
+  // Natural resource recycling - resources appear where the organism died
+  function recycleDeadCell(cell) {
+    console.log(`💀 Cell died at (${cell.x.toFixed(0)}, ${cell.y.toFixed(0)}) - Age: ${cell.age.toFixed(1)}s, Energy: ${cell.energy.toFixed(1)}, Health: ${cell.health.toFixed(1)}`);
+    
+    // Track ecosystem statistics
+    totalDeaths++;
+    totalLifespan += cell.age;
+    maxGeneration = Math.max(maxGeneration, cell.generation);
+    
+    // Ensure we don't exceed food cap before recycling
+    const foodSpaceBefore = FOOD_CAP - food.length;
+    console.log(`🍖 Food space available: ${foodSpaceBefore}/${FOOD_CAP}`);
+    // Calculate total resources to recycle based on cell's accumulated energy and biomass
+    const baseRecycling = FOOD_ENERGY * 0.8; // Base biomass return
+    const energyRecycling = Math.max(0, cell.energy * 0.7); // 70% of remaining energy
+    const ageBonus = Math.min(cell.age * 2, FOOD_ENERGY * 0.5); // Age adds biomass
+    
+    const totalEnergy = baseRecycling + energyRecycling + ageBonus;
+    
+    // Determine number of food particles based on cell size and energy
+    const cellSize = cell.r;
+    const sizeMultiplier = cellSize / 6; // Larger cells = more particles
+    const energyMultiplier = Math.max(1, cell.energy / 40); // High energy cells = more particles
+    const foodCount = Math.ceil(sizeMultiplier * energyMultiplier * (0.8 + Math.random() * 0.4)); // 1-4 particles typically
+    
+    // Distribute energy across multiple food particles
+    const energyPerFood = totalEnergy / Math.max(1, foodCount);
+    
+    // Guarantee resource recycling - always create at least one food particle
+    let particlesCreated = 0;
+    
+    // Spawn food particles in immediate proximity - very close to death site
+    for (let i = 0; i < foodCount; i++) {
+      // Create a tight cluster around the death site
+      const angle = (Math.PI * 2 * i) / foodCount + Math.random() * 0.3; // Less randomness for tighter clustering
+      const distance = Math.random() * cell.r * 0.8 + cell.r * 0.2; // Very close: 0.2x to 1x cell radius
+      
+      // Position food particles right at the death site
+      const foodX = clamp(cell.x + Math.cos(angle) * distance, cell.r, WORLD_W - cell.r);
+      const foodY = clamp(cell.y + Math.sin(angle) * distance, cell.r, WORLD_H - cell.r);
+      
+      // Force creation of recycled food even if near cap (remove oldest food if needed)
+      if (food.length >= FOOD_CAP && particlesCreated === 0) {
+        // Remove oldest environmental food to make room for recycled resources
+        for (let j = 0; j < food.length; j++) {
+          if (!food[j].recycled) {
+            food.splice(j, 1);
+            break;
+          }
+        }
+      }
+      
+      if (food.length < FOOD_CAP) {
+        food.push({
+          x: foodX,
+          y: foodY,
+          e: energyPerFood,
+          a: 1.0, // Maximum visibility for recycled resources
+          recycled: true,
+          deathTime: performance.now() // Track when this resource was created
+        });
+        particlesCreated++;
+      }
+    }
+    
+    // Immediate feeding opportunity - create a "feeding frenzy" zone
+    // Always spawn fresh carrion regardless of energy level (guaranteed resource recycling)
+    if (food.length >= FOOD_CAP) {
+      // Remove oldest environmental food to make room for fresh carrion
+      for (let j = 0; j < food.length; j++) {
+        if (!food[j].recycled && !food[j].fresh) {
+          food.splice(j, 1);
+          break;
+        }
+      }
+    }
+    
+    if (food.length < FOOD_CAP) {
+      food.push({
+        x: clamp(cell.x + rand(-cell.r * 0.2, cell.r * 0.2), cell.r, WORLD_W - cell.r), // Very close to death site, clamped to world bounds
+        y: clamp(cell.y + rand(-cell.r * 0.2, cell.r * 0.2), cell.r, WORLD_H - cell.r),
+        e: Math.max(energyPerFood * 1.5, FOOD_ENERGY), // Guaranteed substantial energy
+        a: 1.0, // Fully visible
+        recycled: true,
+        fresh: true, // Mark as fresh carrion for immediate consumption
+        deathTime: performance.now(),
+        persistent: true // Mark as high-priority resource
+      });
+      particlesCreated++;
+    }
+    
+    // Environmental feedback and recycling confirmation
+    const totalParticles = particlesCreated;
+    console.log(`🍖 Recycling complete: ${cell.age.toFixed(1)}s old cell → ${totalParticles} food particles at (${cell.x.toFixed(0)}, ${cell.y.toFixed(0)}) | Total energy recycled: ${(totalParticles * energyPerFood).toFixed(1)}`);
+    
+    // Ensure at least one particle was created
+    if (totalParticles === 0) {
+      console.error('⚠️ RECYCLING FAILED: No food particles created!');
+      // Emergency fallback - force create one particle
+      if (food.length > 0) {
+        food.pop(); // Remove one existing food
+      }
+      food.push({
+        x: cell.x,
+        y: cell.y,
+        e: FOOD_ENERGY,
+        a: 1.0,
+        recycled: true,
+        fresh: true,
+        emergency: true
+      });
+      console.log('🚨 Emergency food particle created');
+    }
+  }
+
+  function spawnInitialCellNearResources(seedGenome) {
+    // Define center and spawn radius (1/6th of map size)
+    const centerX = WORLD_W * 0.5;
+    const centerY = WORLD_H * 0.5;
+    const spawnRadius = Math.min(WORLD_W, WORLD_H) / 6; // 1/6th of smaller dimension
+    
+    // First, spawn some initial food to find resources
+    const initialFoodCount = Math.floor(FOOD_CAP * 0.1); // 10% of food cap
+    spawnFood(initialFoodCount);
+    
+    // Filter food to only those within spawn radius from center
+    const centralFood = food.filter(f => {
+      const dx = f.x - centerX;
+      const dy = f.y - centerY;
+      const distanceFromCenter = Math.sqrt(dx * dx + dy * dy);
+      return distanceFromCenter <= spawnRadius;
+    });
+    
+    if (centralFood.length < 2) {
+      // Fallback: spawn randomly within the central radius
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.random() * spawnRadius * 0.5; // Within inner half of radius
+      const spawnX = centerX + Math.cos(angle) * distance;
+      const spawnY = centerY + Math.sin(angle) * distance;
+      
+      cells.push(new Cell(spawnX, spawnY, seedGenome));
+      console.log(`Cell spawned at (${spawnX.toFixed(0)}, ${spawnY.toFixed(0)}) in central area (limited resources)`);
+      showEventNotification('Cell Spawned', `New cell born in central area!`);
+      return;
+    }
+    
+    // Find the two closest food items to each other within central area
+    let minDistance = Infinity;
+    let closestPair = [centralFood[0], centralFood[1]];
+    
+    for (let i = 0; i < centralFood.length - 1; i++) {
+      for (let j = i + 1; j < centralFood.length; j++) {
+        const dx = centralFood[i].x - centralFood[j].x;
+        const dy = centralFood[i].y - centralFood[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPair = [centralFood[i], centralFood[j]];
+        }
+      }
+    }
+    
+    // Calculate spawn position between closest resources
+    let spawnX = (closestPair[0].x + closestPair[1].x) / 2;
+    let spawnY = (closestPair[0].y + closestPair[1].y) / 2;
+    
+    // Ensure spawn position is within the central radius (safety check)
+    const spawnDistanceFromCenter = Math.sqrt((spawnX - centerX) ** 2 + (spawnY - centerY) ** 2);
+    if (spawnDistanceFromCenter > spawnRadius) {
+      // Pull spawn position back to edge of allowed radius
+      const ratio = spawnRadius / spawnDistanceFromCenter;
+      spawnX = centerX + (spawnX - centerX) * ratio;
+      spawnY = centerY + (spawnY - centerY) * ratio;
+    }
+    
+    cells.push(new Cell(spawnX, spawnY, seedGenome, 0)); // Start with generation 0
+    
+    console.log(`Cell spawned at (${spawnX.toFixed(0)}, ${spawnY.toFixed(0)}) within central radius (${spawnRadius.toFixed(0)}px)`);
+    showEventNotification('Cell Spawned', `New cell born in central area between resources!`);
   }
 
   function seedGenomeFromUI(){
@@ -812,21 +1485,289 @@
       Number(el.seedInf.value),
     ];
   }
+  
+  // Species classification system
+  function getGenomeSignature(genome) {
+    // Create a signature for species identification
+    return genome.map(g => Math.floor(g / 2) * 2).join('-');
+  }
+  
+  function calculateFitness(cell) {
+    // Fitness based on survival time, reproduction success, and adaptability
+    const survivalScore = Math.min(cell.age / 10, 10); // Max 10 points for survival
+    const energyScore = Math.min(cell.energy / 20, 5); // Max 5 points for energy
+    const healthScore = Math.min(cell.health / 20, 5); // Max 5 points for health
+    return survivalScore + energyScore + healthScore;
+  }
+  
+  function updateSpeciesDatabase() {
+    if (!dbReady) return;
+    
+    try {
+      const speciesMap = new Map();
+      const currentTime = Date.now();
+      
+      // Analyze current population
+      for (const cell of cells) {
+        const signature = getGenomeSignature(cell.genome);
+        const fitness = calculateFitness(cell);
+        
+        if (!speciesMap.has(signature)) {
+          speciesMap.set(signature, {
+            genome: cell.genome.slice(),
+            population: 0,
+            totalFitness: 0
+          });
+        }
+        
+        const species = speciesMap.get(signature);
+        species.population++;
+        species.totalFitness += fitness;
+      }
+      
+      // Update database
+      speciesMap.forEach((data, signature) => {
+        const avgFitness = data.totalFitness / data.population;
+        const [fert, res, eff, agg, inf] = data.genome;
+        
+        evolutionDB.run(`
+          INSERT OR REPLACE INTO species (
+            genome_signature, fertility, resistance, efficiency, 
+            aggressivity, infectivity, population, last_seen, fitness_score
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [signature, fert, res, eff, agg, inf, data.population, currentTime, avgFitness]);
+      });
+      
+      speciesCount = speciesMap.size;
+      
+    } catch (error) {
+      console.error('Species database update failed:', error);
+    }
+  }
+  
+  function updateGenerationData() {
+    if (!dbReady || cells.length === 0) return;
+    
+    try {
+      // Calculate population statistics
+      const totalCells = cells.length;
+      let totalFitness = 0;
+      let avgGenome = [0, 0, 0, 0, 0];
+      
+      for (const cell of cells) {
+        totalFitness += calculateFitness(cell);
+        for (let i = 0; i < 5; i++) {
+          avgGenome[i] += cell.genome[i];
+        }
+      }
+      
+      const avgFitness = totalFitness / totalCells;
+      avgGenome = avgGenome.map(sum => sum / totalCells);
+      
+      // Store generation data
+      evolutionDB.run(`
+        INSERT INTO generations (
+          generation, population, avg_fitness, avg_fertility, avg_resistance,
+          avg_efficiency, avg_aggressivity, avg_infectivity, species_count, timestamp
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        generation, totalCells, avgFitness, avgGenome[0], avgGenome[1],
+        avgGenome[2], avgGenome[3], avgGenome[4], speciesCount, Date.now()
+      ]);
+      
+      console.log(`Generation ${generation}: ${totalCells} cells, ${speciesCount} species, fitness: ${avgFitness.toFixed(2)}`);
+      
+    } catch (error) {
+      console.error('Generation data update failed:', error);
+    }
+  }
+  
+  // Ecosystem Events System
+  function triggerEcosystemEvent() {
+    const events = [
+      {
+        name: "Meteor Impact",
+        description: "A meteor strikes! High radiation and cell death.",
+        effect: () => {
+          // Kill random cells and increase radiation temporarily
+          const killCount = Math.floor(cells.length * 0.3);
+          for (let i = 0; i < killCount; i++) {
+            const idx = Math.floor(Math.random() * cells.length);
+            cells.splice(idx, 1);
+          }
+          // Temporarily increase radiation
+          el.rad.value = Math.min(15, Number(el.rad.value) + 5);
+          syncLabels();
+          setTimeout(() => {
+            el.rad.value = Math.max(0, Number(el.rad.value) - 5);
+            syncLabels();
+          }, 10000);
+        }
+      },
+      {
+        name: "Food Abundance",
+        description: "Rich nutrients discovered! Food spawning increased.",
+        effect: () => {
+          // Spawn extra food
+          spawnFood(Math.floor(FOOD_CAP * 0.5));
+          // Temporarily increase resource density
+          el.resources.value = Math.min(200, Number(el.resources.value) + 30);
+          syncLabels();
+          setTimeout(() => {
+            el.resources.value = Math.max(0, Number(el.resources.value) - 30);
+            syncLabels();
+          }, 15000);
+        }
+      },
+      {
+        name: "Climate Shift",
+        description: "Temperature fluctuation challenges adaptation.",
+        effect: () => {
+          // Random temperature change
+          const tempChange = (Math.random() - 0.5) * 40;
+          el.temp.value = Math.max(0, Math.min(100, Number(el.temp.value) + tempChange));
+          syncLabels();
+        }
+      },
+      {
+        name: "Solar Flare",
+        description: "Intense radiation damages cellular health.",
+        effect: () => {
+          // Damage living cells instead of mutating them (genomes are immutable)
+          for (const cell of cells) {
+            if (Math.random() < 0.4) {
+              cell.health -= Math.random() * 30 + 10; // 10-40 damage
+            }
+          }
+        }
+      }
+    ];
+    
+    const event = events[Math.floor(Math.random() * events.length)];
+    event.effect();
+    
+    // Log to database
+    if (dbReady) {
+      evolutionDB.run(`
+        INSERT INTO events (generation, event_type, description, impact_level, timestamp)
+        VALUES (?, ?, ?, ?, ?)
+      `, [generation, event.name, event.description, 3, Date.now()]);
+    }
+    
+    // Show event notification
+    showEventNotification(event.name, event.description);
+    
+    console.log(`🌟 Ecosystem Event: ${event.name} - ${event.description}`);
+  }
+  
+  function showEventNotification(title, description) {
+    const notification = document.createElement('div');
+    notification.className = 'event-notification';
+    notification.innerHTML = `
+      <div class="event-title">${title}</div>
+      <div class="event-description">${description}</div>
+    `;
+    
+    el.evolutionEvents.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 5000);
+  }
 
   el.inject.addEventListener('click', () => {
     console.log('Injecting new cell and restarting world...');
+    
+    // Disable button temporarily to prevent multiple clicks
+    el.inject.disabled = true;
+    el.inject.textContent = 'Preparing world...';
+    
     resetWorld(seedGenomeFromUI());
     generateParameterMap();
+    
+    // Re-enable button after spawn delay
+    setTimeout(() => {
+      el.inject.disabled = false;
+      el.inject.textContent = 'Inject Cell / Restart World';
+    }, 3500);
   });
 
+  // Initialize evolution database
+  initEvolutionDB();
+  
   // Initialize canvas size
   resize();
+  
+  // Load cached settings first, then initialize with defaults if no cache
+  const settingsLoaded = loadSettingsFromCache();
+  if (!settingsLoaded) {
+    initializeUIFromConfig();
+  }
+  
+  // Add event listeners to save settings when they change
+  const settingsInputs = [
+    el.resources, el.temp, el.stability, el.rad,
+    el.seedFert, el.seedRes, el.seedEff, el.seedAgg, el.seedInf,
+    el.scatter, el.variance
+  ];
+  
+  settingsInputs.forEach(input => {
+    input.addEventListener('change', saveSettingsToCache);
+    input.addEventListener('input', saveSettingsToCache);
+  });
+  
+  // Save settings when sidebar or cards are toggled
+  sidebarToggle.addEventListener('click', () => {
+    setTimeout(saveSettingsToCache, 100); // Delay to ensure class is applied
+  });
+  
+  document.querySelectorAll('.card-header').forEach(header => {
+    header.addEventListener('click', () => {
+      setTimeout(saveSettingsToCache, 100); // Delay to ensure class is applied
+    });
+  });
   
   // Initialize with UI seed
   resetWorld(seedGenomeFromUI());
   
   // Initialize parameter map
   generateParameterMap();
+  
+  // Initialize minimap
+  if (el.minimapCanvas && minimapCtx) {
+    console.log('Minimap initialized successfully');
+    updateMinimap();
+    
+    // Add click navigation to minimap
+    el.minimapCanvas.addEventListener('click', function(e) {
+      const rect = el.minimapCanvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      
+      // Convert minimap coordinates to world coordinates
+      const worldX = (clickX / minimapWidth) * WORLD_W;
+      const worldY = (clickY / minimapHeight) * WORLD_H;
+      
+      // Center viewport on clicked location
+      viewportX = (WORLD_W / 2) - worldX;
+      viewportY = (WORLD_H / 2) - worldY;
+      
+      updateMinimap();
+    });
+    
+    el.minimapCanvas.style.cursor = 'pointer';
+  } else {
+    console.error('Minimap initialization failed');
+  }
+  
+  // Setup panel toggles independently of minimap initialization
+  console.log('Setting up panel toggles...');
+  setupPanelToggle(el.minimapToggle, el.minimapContent);
+  setupPanelToggle(el.statsToggle, el.statsContent);
+  console.log('Panel toggles initialized');
   
   // Start the simulation
   console.log('Starting EvoSimGame simulation...');
@@ -838,12 +1779,12 @@
     n = Math.min(n, max);
     
     for(let i=0;i<n;i++){
-      const x = rand(10, W-10);
-      const y = rand(10, H-10);
+      const x = rand(10, WORLD_W-10);
+      const y = rand(10, WORLD_H-10);
       
       // Get local parameters for this position
       const localParams = getParametersAtPosition(x, y);
-      const localDensity = localParams.resources / 100;
+      const localDensity = localParams.resources / 1000; // Updated for new max range
       
       // Only spawn food if local density allows it
       if(Math.random() < localDensity) {
@@ -853,29 +1794,37 @@
           e: FOOD_ENERGY * (0.8 + 0.4 * localDensity), // Vary energy based on local density
           // slight variation for visuals
           a: rand(0.65, 1.0),
+          // Mark as environmental food (no deathTime = environmental)
+          type: 'environmental'
         });
       }
     }
   }
 
   // ---------- Main Loop ----------
-  const gridCellSize = 26 * 1; // world px (already DPR-scaled canvas)
+  const gridCellSize = EvoSimConfig.simulation.gridCellSize;
   const cellGrid = new Grid(gridCellSize);
   const foodGrid = new Grid(gridCellSize);
 
   let last = performance.now();
 
   function step(now){
-    const dt = Math.min(0.033, (now - last)/1000); // cap for stability
-    last = now;
+    try {
+      const dt = Math.min(0.033, (now - last)/1000); // cap for stability
+      last = now;
+      
+      // Performance monitoring
+      if (cells.length > MAX_CELLS_SOFT * 1.5) {
+        console.warn('Cell population exceeding safe limits:', cells.length);
+      }
 
     const resources = Number(el.resources.value);
     const temp = Number(el.temp.value);
     const stability = Number(el.stability.value);
     const rad = Number(el.rad.value);
 
-    // Radiation level 12+: immediate death (clear world quickly)
-    if(rad >= 12){
+    // Radiation level 8: immediate death (PRD spec)
+    if(rad >= 8){
       // draw quick flash and kill all cells
       cells.length = 0;
       // food still spawns but irrelevant
@@ -886,15 +1835,17 @@
     }
 
     // Spawn food: density-based system with area scaling
-    const area = W * H;
+    const worldArea = WORLD_W * WORLD_H;
     const baseArea = 800 * 600; // Reference area
-    const areaScale = area / baseArea;
+    const areaScale = Math.min(worldArea / baseArea, 4); // Cap scaling at 4x
     
-    // Use density instead of absolute numbers
-    const resourceDensity = resources / 100; // 0-2.0 density
-    const spawnBase = resourceDensity * 8 * areaScale; // Scale with screen area
+    // Food spawning (now using config.js)
+    const resourceDensity = resources / 1000; // Updated for new max range
+    const spawnBase = resourceDensity * EvoSimConfig.simulation.foodSpawnBase * areaScale;
     const instability = 1 - (stability/100);
-    const spawnFactor = lerp(0.8, 1.25, instability) * (0.85 + 0.3*Math.random());
+    const { stabilityFoodFactor, foodSpawnVariability } = EvoSimConfig.simulation;
+    const spawnFactor = lerp(stabilityFoodFactor.min, stabilityFoodFactor.max, instability) * 
+                       (1 - foodSpawnVariability + foodSpawnVariability * 2 * Math.random());
     const spawnN = Math.floor(spawnBase * spawnFactor * dt * 60);
     spawnFood(spawnN);
 
@@ -905,8 +1856,8 @@
     for(const c of cells) cellGrid.insert(c.x, c.y, c);
 
     // Density-based plague signal (used to auto-trigger in dense populations)
-    const area = W * H;
-    const density = cells.length / Math.max(1, area);
+    const plagueArea = WORLD_W * WORLD_H;
+    const density = cells.length / Math.max(1, plagueArea);
     const plaguePressure = clamp((density - PLAGUE_DENSITY_TRIGGER) / (PLAGUE_DENSITY_TRIGGER*1.8), 0, 1);
 
     // Update cells
@@ -916,10 +1867,11 @@
     const crowd = clamp(cells.length / MAX_CELLS_SOFT, 0, 2);
     const reproThrottle = 1 / (1 + crowd*1.2);
 
-    // Slight movement noise depends on stability
-    const jitter = lerp(32, 8, stability/100); // px/s^2
-    const wander = lerp(18, 6, stability/100); // px/s
-    const friction = lerp(0.90, 0.965, stability/100); // per tick
+    // Movement physics (now using config.js)
+    const { baseJitter, baseWander, baseFriction } = EvoSimConfig.simulation;
+    const jitter = lerp(baseJitter.max, baseJitter.min, stability/100); // px/s^2
+    const wander = lerp(baseWander.max, baseWander.min, stability/100); // px/s
+    const friction = lerp(baseFriction.min, baseFriction.max, stability/100); // per tick
 
     // Process in reverse so splices are safe
     const newborns = [];
@@ -928,13 +1880,11 @@
       const c = cells[i];
       c.age += dt;
 
-      // Radiation: random live mutation chance (small but noticeable)
-      if(rad > 0 && Math.random() < (rad/12) * 0.03){ // Increased mutation rate
-        const before = c.genome.slice();
-        c.genome = maybeMutateGenome(c.genome, rad);
-        // if infectivity crosses threshold, apply timer
-        if(before[4] !== c.genome[4]) c.infect(c.genome[4]);
-        else c.updateDerived();
+      // Radiation: only affects health/death, not genome (genome is immutable after birth)
+      if(rad > 0){
+        // High radiation damages health instead of mutating genome
+        const radiationDamage = (rad / 8) * EvoSimConfig.genetics.radiationHealthDamage * dt;
+        c.health -= radiationDamage;
       }
 
       // Brownian wandering
@@ -955,21 +1905,19 @@
       c.y += c.vy * dt * 30;
 
       // Bounce bounds (use world coordinates, not screen coordinates)
-      const worldW = W;
-      const worldH = H;
       if(c.x < c.r){ c.x = c.r; c.vx *= -0.8; }
       if(c.y < c.r){ c.y = c.r; c.vy *= -0.8; }
-      if(c.x > worldW-c.r){ c.x = worldW-c.r; c.vx *= -0.8; }
-      if(c.y > worldH-c.r){ c.y = worldH-c.r; c.vy *= -0.8; }
+      if(c.x > WORLD_W-c.r){ c.x = WORLD_W-c.r; c.vx *= -0.8; }
+      if(c.y > WORLD_H-c.r){ c.y = WORLD_H-c.r; c.vy *= -0.8; }
 
-      // Energy drain: higher efficiency => lower drain (requested)
+      // Energy drain: higher efficiency => lower drain (using 3-bit genome)
       const eff = c.genome[2];
-      const drain = BASE_DRAIN * lerp(1.35, 0.35, eff/15); // Better efficiency scaling
+      const drain = BASE_DRAIN * lerp(1.35, 0.35, eff/7); // 3-bit genome scaling
       c.energy -= drain * dt * 10;
 
       // Temperature mismatch health drain
       const res = c.genome[1];
-      const mismatch = Math.abs(res - idealRes) / 15; // Updated for 0-15 range
+      const mismatch = Math.abs(res - idealRes) / 7; // 3-bit genome range
       const tempDamage = HEALTH_DRAIN_TEMP * mismatch * dt * 10;
       c.health -= tempDamage;
 
@@ -998,9 +1946,9 @@
       }
 
       // Plague mechanics
-      const inf = c.genome[4];
+      const inf = c.currentInfectivity;
 
-      // Overpopulation + Infectivity > 3 triggers plague more readily
+      // Overpopulation + Infectivity > 3 triggers plague more readily (PRD spec)
       if(inf > 3){
         // If not already infected, density can "ignite" the timer
         if(!c.infected){
@@ -1023,9 +1971,9 @@
           const dx = other.x - c.x, dy = other.y - c.y;
           if(dx*dx + dy*dy <= spreadR*spreadR){
             // Infectivity transmission: touching or entering radius infects target with same level
-            if(other.genome[4] !== inf){
+            if(other.currentInfectivity !== inf){
               // Make it harder for low infectivity to overwrite higher
-              if(inf >= other.genome[4] || Math.random() < 0.2 + 0.1*inf){
+              if(inf >= other.currentInfectivity || Math.random() < 0.2 + 0.1*inf){
                 other.infect(inf);
               }
             }
@@ -1039,7 +1987,8 @@
         c.plagueT -= dt * (1 + 1.2*plaguePressure);
         c.health -= dt * (6 + 10*plaguePressure);
         if(c.plagueT <= 0){
-          // die
+          // Enhanced resource recycling for plague deaths
+          recycleDeadCell(c);
           cells[i] = cells[cells.length-1];
           cells.pop();
           continue;
@@ -1048,21 +1997,21 @@
 
       // Predation (Aggressivity): attack smaller on contact; gain energy
       const agg = c.genome[3];
-      if(agg >= 5 && cells.length > 1){ // Higher threshold for hunting
-        const huntR = c.r + lerp(4, 18, agg/15); // Expanded hunt range
+      if(agg >= 3 && cells.length > 1){ // PRD threshold for hunting
+        const { aggressivityHuntRange } = EvoSimConfig.genetics;
+        const huntR = c.r + lerp(aggressivityHuntRange.min, aggressivityHuntRange.max, agg/7);
         const neigh = cellGrid.queryCellNeighborhood(c.x, c.y);
         for(const other of neigh){
           if(other === c) continue;
-          // Rule: attack bigger cells? The spec says "Attack bigger cells." but then "Result: Target dies, Predator gains energy."
-          // Practical interpretation (otherwise predator dies constantly): aggressive cells attack SMALLER cells only.
-          // This matches typical predator behavior and keeps the sim stable.
-          if(other.r >= c.r) continue;
+          // Attack smaller cells (predator-prey mechanics)
+          if(other.r >= c.r) continue; // Only attack smaller cells
 
           const dx = other.x - c.x, dy = other.y - c.y;
           const rr = huntR + other.r;
           if(dx*dx + dy*dy <= rr*rr){
-            // kill target and gain energy
-            const gain = 25 + other.energy*0.35;
+            // kill target and gain energy (using config values)
+            const gain = EvoSimConfig.predation.baseEnergyGain + 
+                        other.energy * EvoSimConfig.predation.energyGainFactor;
             c.energy += gain;
             other.health = -999; // mark for removal
           }
@@ -1071,8 +2020,8 @@
 
       // Cull any marked prey
       if(cells[i] && cells[i].health <= 0){
-        // death spawns a little food (recycles)
-        if(Math.random() < 0.35) food.push({ x:c.x, y:c.y, e: FOOD_ENERGY*0.6, a: rand(0.45,0.9) });
+        // Enhanced resource recycling - return cell's energy to ecosystem
+        recycleDeadCell(c);
         cells[i] = cells[cells.length-1];
         cells.pop();
         continue;
@@ -1080,8 +2029,11 @@
 
       // Reproduction: based on fertility & energy, modulated by throttle and stability
       const fert = c.genome[0];
-      if(cells.length < MAX_CELLS_SOFT*1.6){
-        const reproRate = lerp(0.08, 1.2, fert/15) * reproThrottle * lerp(1.0, 0.85, instability); // Expanded fertility range // lower stability slightly hurts reliable reproduction
+      if(cells.length < EvoSimConfig.simulation.maxCellsHard){
+        const baseReproRate = lerp(EvoSimConfig.reproduction.baseRate.min, 
+                                  EvoSimConfig.reproduction.baseRate.max, fert/7); // 3-bit genome
+        const stabilityPenalty = lerp(1.0, 1.0 - EvoSimConfig.reproduction.stabilityPenalty, instability);
+        const reproRate = baseReproRate * reproThrottle * stabilityPenalty;
         if(c.energy > REPRO_THRESHOLD && Math.random() < reproRate * dt){
           // split
           c.energy -= REPRO_COST;
@@ -1093,18 +2045,23 @@
           let mutCount = 0;
           for(let g=0; g<5; g++) if(mutated[g] !== before[g]) mutCount++;
           births++;
+          totalBorn++;
           avgMutationsPerBirth = lerp(avgMutationsPerBirth, mutCount, 0.06);
 
+          const spawnDistance = c.r * EvoSimConfig.reproduction.spawnRadius;
           const child = new Cell(
-            clamp(c.x + rand(-c.r*2, c.r*2), 0, W),
-            clamp(c.y + rand(-c.r*2, c.r*2), 0, H),
-            mutated
+            clamp(c.x + rand(-spawnDistance, spawnDistance), 0, WORLD_W),
+            clamp(c.y + rand(-spawnDistance, spawnDistance), 0, WORLD_H),
+            mutated,
+            c.generation + 1 // Increment generation counter for child
           );
-          // inherit some energy/health
-          child.energy = c.energy * 0.45 + rand(-5, 5);
-          child.health = clamp(c.health + rand(-6, 3), 50, 100);
+          // inherit energy/health using config values
+          const { energyInheritance, healthInheritance, healthInheritanceBase } = EvoSimConfig.reproduction;
+          child.energy = c.energy * energyInheritance;
+          child.health = clamp(c.health + rand(healthInheritance.min, healthInheritance.max), 
+                              healthInheritanceBase.min, healthInheritanceBase.max);
 
-          // Infectivity threshold triggers timer
+          // Infectivity threshold triggers timer (PRD spec: >3)
           if(child.genome[4] > 3) child.infect(child.genome[4]);
 
           newborns.push(child);
@@ -1116,7 +2073,8 @@
     for(let i=cells.length-1; i>=0; i--){
       if(cells[i].health <= 0){
         const c = cells[i];
-        if(Math.random() < 0.25) food.push({ x:c.x, y:c.y, e: FOOD_ENERGY*0.6, a: rand(0.45,0.9) });
+        // Enhanced resource recycling for predation victims
+        recycleDeadCell(c);
         cells[i] = cells[cells.length-1];
         cells.pop();
       }
@@ -1129,20 +2087,80 @@
       for(let i=0; i<Math.min(room, newborns.length); i++) cells.push(newborns[i]);
     }
 
-    // Keep food under cap
+    // Keep food under cap - prioritize keeping recycled resources
     if(food.length > FOOD_CAP){
-      food.length = FOOD_CAP;
+      // Remove environmental food first, keep recycled food
+      const toRemove = food.length - FOOD_CAP;
+      let removed = 0;
+      
+      // First pass: remove non-recycled food
+      for (let i = food.length - 1; i >= 0 && removed < toRemove; i--) {
+        if (!food[i].recycled && !food[i].persistent) {
+          food.splice(i, 1);
+          removed++;
+        }
+      }
+      
+      // Second pass: if still over cap, remove oldest environmental food first (preserve recycled)
+      if (food.length > FOOD_CAP) {
+        const stillToRemove = food.length - FOOD_CAP;
+        // Sort environmental food (no deathTime) first, then recycled food by age
+        food.sort((a, b) => {
+          const aIsEnv = !a.deathTime;
+          const bIsEnv = !b.deathTime;
+          if (aIsEnv && !bIsEnv) return -1; // Environmental food comes first
+          if (!aIsEnv && bIsEnv) return 1;  // Recycled food comes second
+          return (a.deathTime || 0) - (b.deathTime || 0); // Among same type, sort by age
+        });
+        food.splice(0, stillToRemove); // Remove oldest (environmental first)
+      }
     }
 
-    // HUD
+    // Update generation every 1000 births
+    if (births > 0 && births % 100 === 0) {
+      generation++;
+      updateGenerationData();
+      updateSpeciesDatabase();
+    }
+    
+    // Update species database every 30 frames for real-time tracking
+    if (performance.now() % 500 < 16) { // Roughly every 500ms
+      updateSpeciesDatabase();
+    }
+    
+    // Enhanced HUD
     el.hudCells.textContent = String(cells.length);
     el.hudFood.textContent = String(food.length);
-    el.hudMut.textContent = String(avgMutationsPerBirth.toFixed(2));
+    el.hudGeneration.textContent = String(generation);
+    el.hudSpecies.textContent = String(speciesCount);
+    
+    // Calculate current average fitness
+    let currentFitness = 0;
+    if (cells.length > 0) {
+      currentFitness = cells.reduce((sum, cell) => sum + calculateFitness(cell), 0) / cells.length;
+    }
+    el.hudFitness.textContent = currentFitness.toFixed(1);
+    
     const anyPlague = cells.some(c => c.infected);
     el.hudPlague.textContent = anyPlague ? "on" : "off";
+    
+    // Update ecosystem stats panel
+    updateEcosystemStats();
+    
+    // Random ecosystem events
+    if (Math.random() < 0.0001 && cells.length > 50) { // Very rare events
+      triggerEcosystemEvent();
+    }
 
     draw(temp, stability, rad, dt);
     requestAnimationFrame(step);
+    
+    } catch (error) {
+      console.error('Simulation error:', error);
+      console.log('Cells:', cells.length, 'Food:', food.length);
+      // Try to continue simulation after error
+      setTimeout(() => requestAnimationFrame(step), 100);
+    }
   }
 
   function draw(temp, stability, rad, dt){
@@ -1153,13 +2171,13 @@
     ctx.save();
     ctx.translate(W/2, H/2);
     ctx.scale(zoomLevel, zoomLevel);
-    ctx.translate(-W/2 + viewportX, -H/2 + viewportY);
+    ctx.translate(-WORLD_W/2 + viewportX, -WORLD_H/2 + viewportY);
     
     // Background: temperature tint + subtle noise
     const t = temp / 100;
     const bgHue = lerp(220, 12, t);
     ctx.fillStyle = hsl(bgHue, 40, 7, 1);
-    ctx.fillRect(0,0,W,H);
+    ctx.fillRect(0,0,WORLD_W,WORLD_H);
     
     // Draw parameter zones if scattering is enabled
     if (parameterMap && parameterMap.zones.length > 1) {
@@ -1167,20 +2185,55 @@
     }
 
     // Subtle vignette
-    const grd = ctx.createRadialGradient(W*0.5,H*0.5, Math.min(W,H)*0.1, W*0.5,H*0.5, Math.max(W,H)*0.65);
+    const grd = ctx.createRadialGradient(WORLD_W*0.5,WORLD_H*0.5, Math.min(WORLD_W,WORLD_H)*0.1, WORLD_W*0.5,WORLD_H*0.5, Math.max(WORLD_W,WORLD_H)*0.65);
     grd.addColorStop(0, 'rgba(0,0,0,0)');
     grd.addColorStop(1, 'rgba(0,0,0,0.55)');
     ctx.fillStyle = grd;
-    ctx.fillRect(0,0,W,H);
+    ctx.fillRect(0,0,WORLD_W,WORLD_H);
 
-    // Food
+    // Food with enhanced visuals for recycled resources
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     for(const f of food){
-      ctx.fillStyle = `rgba(94,234,212,${0.35*f.a})`;
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, 1.6*DPR, 0, Math.PI*2);
-      ctx.fill();
+      // Enhanced visuals for recycled food (death site resources)
+      if(f.recycled){
+        // Fresh carrion gets a distinctive orange-red glow
+        if(f.fresh){
+          ctx.save();
+          ctx.shadowColor = 'rgba(251, 146, 60, 1.0)'; // Bright orange glow
+          ctx.shadowBlur = 12*DPR; // Larger glow
+          ctx.fillStyle = `rgba(251,146,60,${0.9*f.a})`; // Brighter orange color
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, 3.6*DPR, 0, Math.PI*2); // Much larger (+28%)
+          ctx.fill();
+          
+          // Add pulsing effect for fresh carrion
+          const pulseTime = (performance.now() - (f.deathTime || 0)) / 1000;
+          const pulse = 0.8 + 0.2 * Math.sin(pulseTime * 4); // Pulse every 0.25 seconds
+          ctx.globalAlpha = pulse;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, 4.0*DPR, 0, Math.PI*2); // White highlight (+25%)
+          ctx.fill();
+          ctx.restore();
+        } else {
+          // Regular recycled food gets enhanced yellow visibility
+          ctx.save();
+          ctx.shadowColor = 'rgba(234, 179, 8, 0.8)'; // Brighter yellow glow
+          ctx.shadowBlur = 6*DPR; // Larger glow
+          ctx.fillStyle = `rgba(234,179,8,${0.8*f.a})`; // Brighter yellow-green color
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, 3.0*DPR, 0, Math.PI*2); // Larger (+36%)
+          ctx.fill();
+          ctx.restore();
+        }
+      } else {
+        // Regular environmental food (standard cyan) - INCREASED SIZE
+        ctx.fillStyle = `rgba(94,234,212,${0.35*f.a})`;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, 2.4*DPR, 0, Math.PI*2); // Increased from 1.6 to 2.4 (+50%)
+        ctx.fill();
+      }
     }
     ctx.restore();
 
@@ -1189,7 +2242,8 @@
     const normal = [];
     const glowy = [];
     for(const c of cells){
-      if(c.genome[3] >= 5) glowy.push(c);
+      const effectiveAgg = c.genome[3] * EvoSimConfig.genetics.aggressivityGlowScale;
+      if(effectiveAgg >= 8.75) glowy.push(c); // Half of max scaled range (17.5/2)
       else normal.push(c);
     }
     for(const group of [normal, glowy]){
@@ -1203,12 +2257,13 @@
         const r = c.r;
         const sides = fertilityToSides(fert);
 
-        // Brightness from aggressivity
-        const bright = lerp(0.45, 1.2, agg/15); // Expanded brightness range
+        // Brightness from aggressivity (3-bit with config scaling)
+        const effectiveAgg = agg * EvoSimConfig.genetics.aggressivityGlowScale;
+        const bright = lerp(0.45, 1.2, effectiveAgg/17.5);
         const fill = resistanceColor(res, bright);
 
-        // Glow for aggressivity
-        const glow = agg/15;
+        // Glow for aggressivity (3-bit with config scaling)
+        const glow = effectiveAgg/17.5;
         if(glow > 0.3){ // Lower threshold for glow effect
           ctx.save();
           ctx.shadowColor = fill;
@@ -1228,7 +2283,7 @@
         if(inf > 0){
           const spreadR = PLAGUE_SPREAD_BASE + inf*PLAGUE_SPREAD_PER;
           ctx.save();
-          ctx.globalAlpha = 0.10 + 0.06*(inf/15); // Updated infectivity scaling
+          ctx.globalAlpha = 0.10 + 0.06*(inf/7); // 3-bit infectivity scaling
           ctx.strokeStyle = inf > 3 ? 'rgba(251,113,133,0.9)' : 'rgba(251,191,36,0.8)';
           ctx.lineWidth = 1*DPR;
           ctx.beginPath();
@@ -1254,6 +2309,17 @@
           ctx.fillStyle = 'rgba(251,113,133,0.9)';
           ctx.fillRect(bx, by + barH + 2*DPR, barW * p, 1.8*DPR);
         }
+        
+        // Generation counter - display at the end of the cell
+        if(c.generation > 0) {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.font = `${Math.max(8, r * 0.4)}px monospace`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const genY = c.infected ? by + barH + 6*DPR + 8*DPR : by + barH + 8*DPR;
+          ctx.fillText(`G${c.generation}`, c.x, genY);
+        }
+        
         ctx.restore();
 
         if(glow > 0.45) ctx.restore();
@@ -1266,7 +2332,7 @@
         ctx.globalAlpha = 0.04 + 0.06*(rad/15); // Updated radiation scaling
       ctx.fillStyle = 'rgba(251,191,36,1)';
       for(let i=0;i<12;i++){
-        const x = rand(0,W), y = rand(0,H);
+        const x = rand(0,WORLD_W), y = rand(0,WORLD_H);
         ctx.fillRect(x,y,1*DPR,1*DPR);
       }
       ctx.restore();
@@ -1279,7 +2345,7 @@
     ctx.globalAlpha = gz ? 0.06 : 0.03;
     ctx.strokeStyle = gz ? 'rgba(34,197,94,1)' : 'rgba(148,163,184,1)';
     ctx.lineWidth = 2*DPR;
-    ctx.strokeRect(8*DPR, 8*DPR, W-16*DPR, H-16*DPR);
+    ctx.strokeRect(8*DPR, 8*DPR, WORLD_W-16*DPR, WORLD_H-16*DPR);
     ctx.restore();
     
     // Restore context (remove zoom transform)
@@ -1293,28 +2359,92 @@
     if (!parameterMap) return;
     
     const { gridSize, zones } = parameterMap;
-    const zoneWidth = W / gridSize;
-    const zoneHeight = H / gridSize;
+    const zoneWidth = WORLD_W / gridSize;
+    const zoneHeight = WORLD_H / gridSize;
     
     ctx.save();
-    ctx.globalAlpha = 0.1;
+    ctx.globalAlpha = 0.25; // Increased opacity for better visibility
     
+    // Create gradient overlay for each zone
     for (let y = 0; y < gridSize; y++) {
       for (let x = 0; x < gridSize; x++) {
         const idx = y * gridSize + x;
         const zone = zones[idx];
         
-        // Color based on resource density
-        const resourceIntensity = zone.resources / 200;
+        const zoneX = x * zoneWidth;
+        const zoneY = y * zoneHeight;
+        
+        // Create radial gradient for each zone
+        const centerX = zoneX + zoneWidth / 2;
+        const centerY = zoneY + zoneHeight / 2;
+        const radius = Math.min(zoneWidth, zoneHeight) * 0.7;
+        
+        const gradient = ctx.createRadialGradient(
+          centerX, centerY, 0,
+          centerX, centerY, radius
+        );
+        
+        // Enhanced temperature-focused zone coloring
         const tempIntensity = zone.temp / 100;
+        const resourceIntensity = zone.resources / 1000; // Updated for new max range
+        const stabilityIntensity = zone.stability / 100;
+        const radIntensity = zone.rad / 8;
         
-        ctx.fillStyle = `rgba(${Math.floor(255 * tempIntensity)}, ${Math.floor(255 * resourceIntensity)}, 100, 0.3)`;
-        ctx.fillRect(x * zoneWidth, y * zoneHeight, zoneWidth, zoneHeight);
+        // Temperature-dominant color scheme: Blue (cold) → Green (moderate) → Red (hot)
+        let r, g, b;
+        if (tempIntensity < 0.5) {
+          // Cold zones: Blue to Green (0-50°C)
+          const coldFactor = tempIntensity * 2; // 0-1 range
+          r = Math.floor(20 + 60 * resourceIntensity); // Subtle resource influence
+          g = Math.floor(100 + 155 * coldFactor); // Blue to green transition
+          b = Math.floor(255 - 100 * coldFactor); // Strong blue fading to moderate
+        } else {
+          // Hot zones: Green to Red (50-100°C)
+          const hotFactor = (tempIntensity - 0.5) * 2; // 0-1 range
+          r = Math.floor(100 + 155 * hotFactor); // Green to red transition
+          g = Math.floor(255 - 100 * hotFactor); // Strong green fading
+          b = Math.floor(20 + 60 * stabilityIntensity); // Subtle stability influence
+        }
         
-        // Draw zone borders
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(x * zoneWidth, y * zoneHeight, zoneWidth, zoneHeight);
+        // Add radiation overlay (yellow tint for high radiation)
+        if (radIntensity > 0.3) {
+          r = Math.min(255, r + Math.floor(80 * radIntensity));
+          g = Math.min(255, g + Math.floor(60 * radIntensity));
+        }
+        
+        // Create stronger gradient for better visibility
+        gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.6)`); // Increased opacity
+        gradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, 0.4)`); // More visible mid-range
+        gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0.1)`); // Softer edges
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(zoneX, zoneY, zoneWidth, zoneHeight);
+        
+        // Add temperature-based borders for better zone distinction
+        if (gridSize > 1) {
+          ctx.save();
+          
+          // Border color based on temperature
+          if (tempIntensity < 0.3) {
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)'; // Blue for cold zones
+          } else if (tempIntensity > 0.7) {
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; // Red for hot zones
+          } else {
+            ctx.strokeStyle = 'rgba(34, 197, 94, 0.4)'; // Green for moderate zones
+          }
+          
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(zoneX, zoneY, zoneWidth, zoneHeight);
+          
+          // Add temperature indicator in zone center
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.font = `${Math.max(12, Math.min(zoneWidth, zoneHeight) * 0.15)}px monospace`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`${Math.round(zone.temp)}°`, centerX, centerY);
+          
+          ctx.restore();
+        }
       }
     }
     

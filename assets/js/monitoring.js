@@ -213,7 +213,9 @@
     document.getElementById('analytics-toggle').checked = analyticsConsent === 'true';
 
     document.getElementById('modal-cancel').addEventListener('click', function() {
-      document.body.removeChild(modal);
+      if (modal.parentNode) {
+        modal.parentNode.removeChild(modal);
+      }
     });
 
     document.getElementById('modal-save').addEventListener('click', function() {
@@ -226,22 +228,24 @@
         loadAnalytics();
       }
       
-      document.body.removeChild(modal);
+      if (modal.parentNode) {
+        modal.parentNode.removeChild(modal);
+      }
       hideBanner();
     });
 
     // Close modal on backdrop click
     modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        document.body.removeChild(modal);
+      if (e.target === modal && modal.parentNode) {
+        modal.parentNode.removeChild(modal);
       }
     });
   }
 
   function hideBanner() {
     var banner = document.getElementById('cookie-consent-banner');
-    if (banner) {
-      document.body.removeChild(banner);
+    if (banner && banner.parentNode) {
+      banner.parentNode.removeChild(banner);
     }
   }
 
@@ -267,6 +271,11 @@
 
   // Add cookie preference management button (for returning users)
   function addCookiePreferencesButton() {
+    // Disable only for EvoSimGame for better UX
+    if (window.location.pathname.includes('/EvoSimGame/')) {
+      return;
+    }
+    
     // Only add if consent has been given before
     if (cookieUtils.get('protolab_cookie_consent')) {
       var button = document.createElement('button');
