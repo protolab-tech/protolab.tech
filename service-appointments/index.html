@@ -1,222 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="Book service appointments with Protolab. Schedule your 3D printing, laser cutting, or CNC engraving consultation in Italy." />
-  <meta name="keywords" content="appointment booking, 3D printing consultation, laser cutting service, CNC engraving appointment, prototyping consultation" />
-  <meta name="author" content="Protolab" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://protolab.tech/service-appointments/" />
-    
-    <!-- Preconnect to critical domains -->
+    <meta name="description"
+        content="Book service appointments with Protolab. Schedule your 3D printing, laser cutting, or CNC engraving consultation in Italy." />
+    <meta name="keywords"
+        content="appointment booking, 3D printing consultation, laser cutting service, CNC engraving appointment, prototyping consultation" />
+    <meta name="author" content="Protolab" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://protolab.tech/service-appointments/" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://calendar.google.com">
-    
-    <!-- Open Graph / Facebook -->
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Service Appointments - Protolab" />
-    <meta property="og:description" content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
-    <meta property="og:image" content="/assets/images/hero.jpg" />
+    <meta property="og:description"
+        content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
     <meta property="og:url" content="https://protolab.tech/service-appointments/" />
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Service Appointments - Protolab" />
-    <meta name="twitter:description" content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
-    <meta name="twitter:image" content="/assets/images/hero.jpg" />
-    
+    <meta name="twitter:description"
+        content="Schedule your 3D printing, laser cutting, or CNC engraving consultation with Protolab." />
+
     <title>Service Appointments - Protolab</title>
-    <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
-        /* Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        /* Custom Properties */
+        /* CSS Custom Properties */
         :root {
-            --primary-color: #f39c12;
-            --secondary-color: #f39c12;
-            --text-color: #ffffff;
-            --background-dark: #121212;
-            --border-color: #333;
-            --shadow-color: rgba(0,0,0,0.3);
-            --transition-speed: 0.3s;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #161616;
+            --accent-blue: #3b82f6;
+            --accent-blue-light: #60a5fa;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-primary: #fafafa;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        /* Base Styles */
+
+        /* Reset */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: var(--text-color);
-            background: var(--background-dark);
-            padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
         }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(1.05);
+            }
+        }
+
         /* Header */
-        header { background: rgba(0, 0, 0, 0.8); color: white; padding: 15px 0; margin-bottom: 30px; }
-        .header-container { width: 90%; max-width: 1200px; margin: 0 auto; text-align: center; display: flex; justify-content: space-between; align-items: center; }
-        .header-container h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 2rem); }
+        header {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            transform: translateX(-2px);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
         /* Main Content */
-        .container { width: 90%; max-width: 800px; margin: 0 auto; flex-grow: 1; }
-        section { margin-bottom: 40px; }
-        h2 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 20px; }
-        p { margin-bottom: 20px; }
-        /* Calendar */
-        .calendar-container { position: relative; width: 100%; height: 0; padding-bottom: 75%; margin-bottom: 30px; }
-        iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid var(--border-color); border-radius: 8px; }
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 48px;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .section-desc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .section-desc a:hover {
+            color: var(--accent-blue-light);
+        }
+
+        /* Calendar Container */
+        .calendar-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 65%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .calendar-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: invert(0.9) hue-rotate(180deg);
+        }
+
         /* Form Styling */
-        form { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px var(--shadow-color); }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 500; color: var(--text-color); }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 1rem; background: rgba(255, 255, 255, 0.1); color: var(--text-color); }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2); }
-        /* Details/Summary Styling */
-        details { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 4px; padding: 10px; background: rgba(255, 255, 255, 0.05); }
-        summary { cursor: pointer; padding: 5px; font-weight: 500; color: var(--text-color); }
-        summary::-webkit-details-marker { display: none; }
-        summary::before { content: '▸'; margin-right: 8px; transition: transform var(--transition-speed); }
-        details[open] summary::before { transform: rotate(90deg); }
-        .dropdown-content { margin-top: 10px; padding: 10px; border-top: 1px solid var(--border-color); }
-        /* Button Styling */
-        button { background: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background-color var(--transition-speed); }
-        button:hover, button:focus { background: #d35400; }
-        /* Links */
-        a { color: var(--primary-color); text-decoration: none; transition: color var(--transition-speed); }
-        a:hover, a:focus { color: #d35400; text-decoration: underline; }
-        /* Responsive Design */
-        @media (max-width: 768px) { body { padding: 10px; } .container { width: 95%; } .calendar-container { padding-bottom: 100%; } button { width: 100%; } }
-        /* Print Styles */
-        @media print { body { background: white; padding: 20px; } .calendar-container { page-break-inside: avoid; } button { display: none; } }
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), #8b5cf6, var(--accent-blue));
+            background-size: 200% 100%;
+            animation: gradient-slide 3s linear infinite;
+        }
+
+        @keyframes gradient-slide {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            100% {
+                background-position: 200% 0%;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px var(--accent-glow), 0 0 20px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Details/Accordion */
+        details {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        summary {
+            padding: 14px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s ease;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::before {
+            content: '›';
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        details[open] summary {
+            color: var(--text-primary);
+        }
+
+        .dropdown-content {
+            padding: 16px;
+            border-top: 1px solid var(--border-subtle);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        /* Submit Button */
+        button[type="submit"] {
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--accent-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px var(--accent-glow), 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        /* Footer notice */
+        .footer-notice {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-notice a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-notice a:hover {
+            color: var(--accent-blue-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 16px;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            main {
+                padding: 24px 16px 40px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .form-card {
+                padding: 24px;
+            }
+
+            .calendar-container {
+                padding-bottom: 80%;
+            }
+
+            .dropdown-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Focus styles */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .animated-bg,
+            header,
+            .calendar-container {
+                display: none;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <!-- Skip navigation for accessibility -->
-    <a href="#main-content" class="sr-only sr-only-focusable" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">Skip to main content</a>
-    
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <!-- Skip navigation -->
+    <a href="#main-content" class="sr-only" style="position: absolute; left: -10000px;">Skip to main content</a>
+
+    <!-- Header -->
     <header>
         <div class="header-container">
-            <h1>Service Appointments</h1>
-            <a href="/" aria-label="Return to homepage">
-                <img src="/assets/images/logo.svg" alt="Protolab Logo" width="100" height="30">
+            <h1 class="page-title">Service Appointments</h1>
+            <a href="/" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back to Home
             </a>
         </div>
     </header>
-    
-    <main id="main-content" class="container">
+
+    <!-- Main Content -->
+    <main id="main-content">
         <section aria-labelledby="schedule-title">
             <h2 id="schedule-title">My Schedule</h2>
+            <p class="section-desc">Check my availability before requesting an appointment.</p>
             <div class="calendar-container">
-                <iframe 
-                    title="Availability Calendar"
+                <iframe title="Availability Calendar"
                     src="https://calendar.google.com/calendar/embed?src=alban.zalli@outlook.com&amp;ctz=Europe/Rome"
-                    frameborder="0"
-                ></iframe>
+                    loading="lazy"></iframe>
             </div>
         </section>
-        
+
         <section aria-labelledby="appointment-title">
             <h2 id="appointment-title">Request an Appointment</h2>
-            <p>
-                Clicking "Submit Appointment Request" will open your default email application with a pre-filled message ready for you to review and send to <a href="mailto:info@protolab.tech" class="mailto-link">info@protolab.tech</a>.
+            <p class="section-desc">
+                Clicking "Submit Request" will open your email app with a pre-filled message to <a
+                    href="mailto:info@protolab.tech">info@protolab.tech</a>.
             </p>
-            
-            <form 
-                action="mailto:info@protolab.tech" 
-                method="post" 
-                enctype="text/plain"
-                class="appointment-form"
-                novalidate
-            >
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input 
-                        type="text" 
-                        id="name" 
-                        name="Name" 
-                        required 
-                        aria-required="true"
-                        autocomplete="name"
-                    >
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="Email" 
-                        required 
-                        aria-required="true"
-                        autocomplete="email"
-                    >
-                </div>
-                
-                <div class="form-group">
-                    <label for="date">Preferred Date:</label>
-                    <input 
-                        type="date" 
-                        id="date" 
-                        name="Preferred Date" 
-                        required 
-                        aria-required="true"
-                    >
-                </div>
-                
-                <details>
-                    <summary>Specify End Date and Time</summary>
-                    <div class="dropdown-content">
-                        <div class="form-group">
-                            <label for="end-date">End Date (Optional):</label>
-                            <input 
-                                type="date" 
-                                id="end-date" 
-                                name="End Date"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="start-time">Start Time (Optional):</label>
-                            <input 
-                                type="time" 
-                                id="start-time" 
-                                name="Start Time"
-                            >
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="end-time">End Time (Optional):</label>
-                            <input 
-                                type="time" 
-                                id="end-time" 
-                                name="End Time"
-                            >
-                        </div>
+
+            <div class="form-card">
+                <form action="mailto:info@protolab.tech" method="post" enctype="text/plain" novalidate>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="Name" required autocomplete="name"
+                            placeholder="Your full name">
                     </div>
-                </details>
-                
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea 
-                        id="message" 
-                        name="Message" 
-                        rows="4" 
-                        required 
-                        aria-required="true"
-                        placeholder="Please describe the service you're interested in..."
-                    ></textarea>
-                </div>
-                
-                <button type="submit">Submit Appointment Request</button>
-            </form>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="Email" required autocomplete="email"
+                            placeholder="your.email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Preferred Date</label>
+                        <input type="date" id="date" name="Preferred Date" required>
+                    </div>
+
+                    <details>
+                        <summary>Additional Options</summary>
+                        <div class="dropdown-content">
+                            <div class="form-group">
+                                <label for="end-date">End Date</label>
+                                <input type="date" id="end-date" name="End Date">
+                            </div>
+                            <div class="form-group">
+                                <label for="start-time">Start Time</label>
+                                <input type="time" id="start-time" name="Start Time">
+                            </div>
+                            <div class="form-group">
+                                <label for="end-time">End Time</label>
+                                <input type="time" id="end-time" name="End Time">
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="Message" required
+                            placeholder="Describe the service you're interested in (3D printing, laser cutting, CNC engraving)..."></textarea>
+                    </div>
+
+                    <button type="submit">Submit Request</button>
+                </form>
+            </div>
         </section>
     </main>
-    <script src="../assets/js/monitoring.js" defer></script>
+
+    <div class="footer-notice">
+        <p>&copy; 2026 <a href="/">protolab.tech</a>. All rights reserved.</p>
+    </div>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -230,55 +638,47 @@
                 "url": "https://protolab.tech"
             },
             "serviceType": ["3D Printing", "Laser Cutting", "CNC Engraving"],
-            "areaServed": "Italy",
-            "availableChannel": {
-                "@type": "ServiceChannel",
-                "serviceUrl": "https://protolab.tech/service-appointments/",
-                "servicePhone": "",
-                "serviceLocation": {
-                    "@type": "Place",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "addressCountry": "IT"
-                    }
-                }
-            }
+            "areaServed": "Italy"
         }
     </script>
-    
-    <!-- Performance optimized JavaScript -->
-    <script defer>
-        // Form validation and enhancement
-        const form = document.querySelector('form');
-        const dateInput = document.getElementById('date');
-        const endDateInput = document.getElementById('end-date');
+
+    <script>
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-        if (endDateInput) endDateInput.min = today;
-        form.addEventListener('submit', function(e) {
-            const requiredFields = form.querySelectorAll('[required]');
-            let isValid = true;
-            requiredFields.forEach(field => {
+        document.getElementById('date').min = today;
+        document.getElementById('end-date').min = today;
+
+        // Form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            const required = form.querySelectorAll('[required]');
+            let valid = true;
+
+            required.forEach(field => {
                 if (!field.value.trim()) {
-                    isValid = false;
-                    field.classList.add('error');
+                    valid = false;
+                    field.style.borderColor = '#ef4444';
+                    field.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.3)';
                 } else {
-                    field.classList.remove('error');
+                    field.style.borderColor = '';
+                    field.style.boxShadow = '';
                 }
             });
-            if (!isValid) {
+
+            if (!valid) {
                 e.preventDefault();
                 alert('Please fill in all required fields.');
             }
         });
-        form.addEventListener('input', function(e) {
-            if (e.target.classList.contains('error')) {
-                e.target.classList.remove('error');
+
+        // Clear error styling on input
+        form.addEventListener('input', function (e) {
+            if (e.target.style.borderColor === 'rgb(239, 68, 68)') {
+                e.target.style.borderColor = '';
+                e.target.style.boxShadow = '';
             }
         });
     </script>
 </body>
+
 </html>
-
-
