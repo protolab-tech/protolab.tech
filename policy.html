@@ -1,62 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Protolab policies: privacy, cookies, shipping, returns, and terms of service." />
+  <meta name="theme-color" content="#0a0a0a" />
   <title>Policies - protolab.tech</title>
   <link rel="canonical" href="https://protolab.tech/policy.html" />
-  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <style>
-    :root { --primary:#f39c12; --text:#333; --bg:#fff; --muted:#666; }
-    *{box-sizing:border-box}
-    body{font-family:Roboto,system-ui,-apple-system,Segoe UI,Arial,sans-serif;margin:0;color:var(--text);background:var(--bg);}
-    header{background:#222;color:#fff;padding:12px 0}
-    .wrap{width:90%;max-width:900px;margin:0 auto}
-    header .brand{display:flex;align-items:center;gap:12px}
-    header img{vertical-align:middle}
-    main{padding:32px 0}
-    h1{margin:0 0 16px}
-    h2{margin:28px 0 12px}
-    p,li{line-height:1.7;color:var(--muted)}
-    section{padding:20px;border:1px solid #eee;border-radius:8px;margin-bottom:18px}
-    a{color:var(--primary);text-decoration:none}
-    a:hover{text-decoration:underline}
-    footer{background:#222;color:#fff;padding:18px 0;margin-top:32px}
-    footer a{color:var(--primary)}
-  </style>
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Policies - protolab.tech" />
   <meta property="og:description" content="Privacy, cookies, shipping, returns, and terms of service." />
   <meta property="og:url" content="https://protolab.tech/policy.html" />
   <meta property="og:image" content="https://protolab.tech/assets/images/hero.jpg" />
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-card: #161616;
+      --accent-blue: #3b82f6;
+      --accent-blue-light: #60a5fa;
+      --accent-glow: rgba(59, 130, 246, 0.4);
+      --text-primary: #fafafa;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+
+    .wrap {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      transition: opacity 0.3s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.8;
+    }
+
+    .logo span {
+      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      padding: 48px 0;
+    }
+
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .page-intro {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: border-color 0.3s ease;
+    }
+
+    section:hover {
+      border-color: var(--border-hover);
+    }
+
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 10px;
+      color: var(--accent-blue-light);
+    }
+
+    p,
+    li {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      padding-left: 22px;
+      margin-bottom: 10px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    li strong,
+    p strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--accent-blue-light);
+    }
+
+    .updated {
+      display: inline-block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+      padding: 28px 0;
+    }
+
+    .footer-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-container p {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      section {
+        padding: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header>
-    <div class="wrap brand">
-      <a href="/" aria-label="Home"><img src="/assets/images/logo.svg" alt="protolab.tech" width="100" height="30"></a>
-      <strong>Policies</strong>
+    <div class="header-container">
+      <a href="/" class="logo">protolab<span>.tech</span></a>
+      <a href="/" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back to Home
+      </a>
     </div>
   </header>
+
   <main>
     <div class="wrap">
+      <h1 class="page-title">Policies</h1>
+      <p class="page-intro">Privacy, cookies, shipping, returns, and terms of service for protolab.tech.</p>
+
       <section aria-labelledby="privacy-title">
         <h2 id="privacy-title">Privacy Policy</h2>
-        <p><strong>Last updated:</strong> January 2025</p>
-        
+        <span class="updated">Last updated: January 2025</span>
+
         <h3>Data Controller</h3>
         <p>Protolab.tech operates as the data controller for personal information collected through our websites.</p>
-        
+
         <h3>What Personal Data We Collect</h3>
         <ul>
           <li><strong>Contact Information:</strong> Name, email address when you contact us or book appointments</li>
           <li><strong>Usage Data:</strong> IP address, browser type, pages visited (only with consent for analytics)</li>
           <li><strong>Communication Data:</strong> Content of messages you send to us</li>
         </ul>
-        
+
         <h3>How We Use Your Data</h3>
         <p>We process personal data based on the following legal grounds:</p>
         <ul>
@@ -64,7 +338,7 @@
           <li><strong>Legitimate Interest:</strong> To respond to inquiries and improve our services</li>
           <li><strong>Contract Performance:</strong> To fulfill service requests and appointments</li>
         </ul>
-        
+
         <h3>Data Retention</h3>
         <p>We retain personal data only as long as necessary for the purposes collected or as required by law. Typically:</p>
         <ul>
@@ -72,7 +346,7 @@
           <li>Service appointments: 3 years for business records</li>
           <li>Analytics data: 26 months (Google Analytics default)</li>
         </ul>
-        
+
         <h3>Your Rights (GDPR/CCPA)</h3>
         <p>You have the right to:</p>
         <ul>
@@ -84,7 +358,7 @@
           <li>Data portability</li>
           <li>Withdraw consent at any time</li>
         </ul>
-        
+
         <h3>Data Sharing</h3>
         <p>We do not sell personal data. We may share data with:</p>
         <ul>
@@ -92,23 +366,23 @@
           <li>Google Analytics (Ireland) for website analytics (with consent)</li>
           <li>Legal authorities when required by law</li>
         </ul>
-        
+
         <p>To exercise your rights, contact: <a href="mailto:info@protolab.tech">info@protolab.tech</a></p>
       </section>
 
       <section aria-labelledby="cookies-title">
         <h2 id="cookies-title">Cookie Policy</h2>
-        <p><strong>Last updated:</strong> January 2025</p>
-        
+        <span class="updated">Last updated: January 2025</span>
+
         <h3>What Are Cookies</h3>
         <p>Cookies are small text files stored on your device that help websites function properly and provide analytics information.</p>
-        
+
         <h3>Types of Cookies We Use</h3>
         <ul>
           <li><strong>Essential Cookies:</strong> Required for basic website functionality (always active)</li>
           <li><strong>Analytics Cookies:</strong> Google Analytics to understand website usage (requires consent)</li>
         </ul>
-        
+
         <h3>Cookie Consent</h3>
         <p>We use an opt-in consent system. You can:</p>
         <ul>
@@ -117,7 +391,7 @@
           <li>Customize your preferences</li>
           <li>Change preferences anytime using the "Cookie Preferences" button</li>
         </ul>
-        
+
         <h3>Google Analytics</h3>
         <p>When you consent to analytics cookies, we use Google Analytics with:</p>
         <ul>
@@ -125,9 +399,9 @@
           <li>Secure cookie settings</li>
           <li>26-month data retention</li>
         </ul>
-        <p>Provider: Google Ireland Limited. Data may be transferred internationally. 
-        See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a> for details.</p>
-        
+        <p>Provider: Google Ireland Limited. Data may be transferred internationally.
+          See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a> for details.</p>
+
         <h3>Managing Cookies</h3>
         <p>You can withdraw consent at any time by:</p>
         <ul>
@@ -143,7 +417,7 @@
       </section>
 
       <section aria-labelledby="returns-title">
-        <h2 id="returns-title">Returns & Exchanges</h2>
+        <h2 id="returns-title">Returns &amp; Exchanges</h2>
         <p>Returns are accepted within 14 days from delivery for unused items in original condition and packaging. To start a return, email <a href="mailto:info@protolab.tech">info@protolab.tech</a> with your order details. Refunds are processed to the original payment method after inspection.</p>
       </section>
 
@@ -154,20 +428,20 @@
       </section>
 
       <section aria-labelledby="contact-title">
-        <h2 id="contact-title">Controller & Contact</h2>
+        <h2 id="contact-title">Controller &amp; Contact</h2>
         <p>Controller: protolab.tech<br>Contact: <a href="mailto:info@protolab.tech">info@protolab.tech</a></p>
       </section>
     </div>
   </main>
+
   <footer>
-    <div class="wrap">
-      <span> <span id="year"></span> protolab.tech</span>
-      <span> · </span>
-      <a href="/">Home</a>
+    <div class="footer-container">
+      <p>&copy; <span id="year"></span> protolab.tech. All rights reserved.</p>
+      <p><a href="/">Home</a></p>
     </div>
   </footer>
+
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
+
 </html>
-
-
