@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://protolab.tech/</loc>
-    <lastmod>2025-01-11</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,35 +13,39 @@
     </image:image>
   </url>
   <url>
-    <loc>https://protolab.tech/Chosko/</loc>
-    <lastmod>2025-01-11</lastmod>
+    <loc>https://protolab.tech/service-appointments/</loc>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://protolab.tech/Kaolin/</loc>
-    <lastmod>2025-01-11</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://protolab.tech/VELARI/</loc>
-    <lastmod>2025-01-11</lastmod>
+    <loc>https://protolab.tech/Chosko/</loc>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://protolab.tech/service-appointments/</loc>
-    <lastmod>2025-01-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://protolab.tech/EvoSimGame/</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://protolab.tech/EmojiSpaceInvaders/</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://protolab.tech/policy.html</loc>
-    <lastmod>2025-01-11</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 </urlset>
-
-
