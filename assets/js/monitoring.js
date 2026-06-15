@@ -61,50 +61,62 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: #000;
-        color: #fff;
+        background: rgba(17, 17, 17, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: #fafafa;
         padding: 20px;
         z-index: 10000;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
-        font-family: system-ui, -apple-system, sans-serif;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 -8px 30px rgba(0,0,0,0.4);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         font-size: 14px;
         line-height: 1.5;
       ">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
           <div style="flex: 1; min-width: 300px;">
-            <p style="margin: 0;">
+            <p style="margin: 0; color: #a3a3a3;">
               We use cookies to improve your experience and analyze website traffic. 
               Your data helps us understand how our site is used.
-              <a href="/policy.html" style="color: #f39c12; text-decoration: underline;" target="_blank" rel="noopener">
+              <a href="/policy.html" style="color: #60a5fa; text-decoration: none; font-weight: 500;" target="_blank" rel="noopener">
                 Learn more about our cookie policy
               </a>
             </p>
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button id="cookie-accept" style="
-              background: #f39c12;
+              background: #3b82f6;
               color: #fff;
               border: none;
               padding: 10px 20px;
-              border-radius: 4px;
+              border-radius: 8px;
               cursor: pointer;
-              font-weight: bold;
+              font-weight: 600;
+              font-family: inherit;
+              font-size: 14px;
+              box-shadow: 0 0 20px rgba(59,130,246,0.4);
             ">Accept All</button>
             <button id="cookie-reject" style="
-              background: transparent;
-              color: #fff;
-              border: 1px solid #fff;
+              background: rgba(255,255,255,0.03);
+              color: #fafafa;
+              border: 1px solid rgba(255,255,255,0.1);
               padding: 10px 20px;
-              border-radius: 4px;
+              border-radius: 8px;
               cursor: pointer;
+              font-weight: 600;
+              font-family: inherit;
+              font-size: 14px;
             ">Reject All</button>
             <button id="cookie-customize" style="
               background: transparent;
-              color: #f39c12;
-              border: 1px solid #f39c12;
+              color: #60a5fa;
+              border: 1px solid rgba(96,165,250,0.4);
               padding: 10px 20px;
-              border-radius: 4px;
+              border-radius: 8px;
               cursor: pointer;
+              font-weight: 600;
+              font-family: inherit;
+              font-size: 14px;
             ">Customize</button>
           </div>
         </div>
@@ -142,64 +154,75 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.8);
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         z-index: 10001;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
       ">
         <div style="
-          background: #fff;
-          border-radius: 8px;
-          padding: 30px;
+          background: #161616;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          padding: 32px;
           max-width: 600px;
           width: 100%;
           max-height: 80vh;
           overflow-y: auto;
-          color: #333;
+          color: #fafafa;
+          box-shadow: 0 25px 60px rgba(0,0,0,0.5);
         ">
-          <h2 style="margin: 0 0 20px 0;">Cookie Preferences</h2>
+          <h2 style="margin: 0 0 20px 0; font-size: 22px; font-weight: 700;">Cookie Preferences</h2>
           
           <div style="margin-bottom: 20px;">
-            <h3 style="margin: 0 0 10px 0; color: #333;">Essential Cookies</h3>
-            <p style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
+            <h3 style="margin: 0 0 10px 0; color: #fafafa; font-size: 16px;">Essential Cookies</h3>
+            <p style="margin: 0 0 10px 0; font-size: 14px; color: #a3a3a3;">
               These cookies are necessary for the website to function and cannot be switched off.
             </p>
-            <label style="display: flex; align-items: center; gap: 10px;">
-              <input type="checkbox" checked disabled style="cursor: not-allowed;">
+            <label style="display: flex; align-items: center; gap: 10px; color: #a3a3a3;">
+              <input type="checkbox" checked disabled style="cursor: not-allowed; accent-color: #3b82f6;">
               <span>Always Active</span>
             </label>
           </div>
 
           <div style="margin-bottom: 30px;">
-            <h3 style="margin: 0 0 10px 0; color: #333;">Analytics Cookies</h3>
-            <p style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
+            <h3 style="margin: 0 0 10px 0; color: #fafafa; font-size: 16px;">Analytics Cookies</h3>
+            <p style="margin: 0 0 10px 0; font-size: 14px; color: #a3a3a3;">
               These cookies help us understand how visitors interact with our website by collecting anonymous information.
             </p>
-            <label style="display: flex; align-items: center; gap: 10px;">
-              <input type="checkbox" id="analytics-toggle">
+            <label style="display: flex; align-items: center; gap: 10px; color: #a3a3a3;">
+              <input type="checkbox" id="analytics-toggle" style="accent-color: #3b82f6;">
               <span>Google Analytics</span>
             </label>
           </div>
 
           <div style="display: flex; gap: 10px; justify-content: flex-end;">
             <button id="modal-cancel" style="
-              background: transparent;
-              color: #666;
-              border: 1px solid #ccc;
+              background: rgba(255,255,255,0.03);
+              color: #fafafa;
+              border: 1px solid rgba(255,255,255,0.1);
               padding: 10px 20px;
-              border-radius: 4px;
+              border-radius: 8px;
               cursor: pointer;
+              font-weight: 600;
+              font-family: inherit;
+              font-size: 14px;
             ">Cancel</button>
             <button id="modal-save" style="
-              background: #f39c12;
+              background: #3b82f6;
               color: #fff;
               border: none;
               padding: 10px 20px;
-              border-radius: 4px;
+              border-radius: 8px;
               cursor: pointer;
-              font-weight: bold;
+              font-weight: 600;
+              font-family: inherit;
+              font-size: 14px;
+              box-shadow: 0 0 20px rgba(59,130,246,0.4);
             ">Save Preferences</button>
           </div>
         </div>
@@ -284,15 +307,19 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background: #f39c12;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 4px;
+        background: rgba(17, 17, 17, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: #fafafa;
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 16px;
+        border-radius: 8px;
         cursor: pointer;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         font-size: 12px;
+        font-weight: 500;
         z-index: 9999;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       `;
       
       button.addEventListener('click', function() {
