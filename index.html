@@ -867,6 +867,169 @@
       }
     }
 
+    /* Why Us Section */
+    .why-us {
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 36px 28px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent-blue);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-glow);
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Process Section */
+    .process {
+      padding: 100px 24px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+
+    .process-steps {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .process-step {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      padding: 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .process-step:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 30px var(--accent-glow);
+      transform: translateX(6px);
+    }
+
+    .process-connector {
+      width: 2px;
+      height: 24px;
+      background: linear-gradient(to bottom, var(--accent-blue), transparent);
+      margin-left: 56px;
+      opacity: 0.4;
+    }
+
+    .step-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1;
+      min-width: 56px;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .why-us,
+      .process {
+        padding: 60px 16px;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .process-step {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .process-connector {
+        margin-left: 32px;
+        height: 16px;
+      }
+    }
+
     /* Focus styles for accessibility */
     a:focus-visible,
     button:focus-visible {
@@ -915,9 +1078,8 @@
       <nav>
         <ul>
           <li><a href="#services">Services</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="Kaolin/">Kaolin</a></li>
-          <li><a href="Chosko/">Chosko</a></li>
+          <li><a href="#why-us">Why Us</a></li>
+          <li><a href="#process">Process</a></li>
         </ul>
       </nav>
       <a href="service-appointments/" class="cta-btn">Book Appointment</a>
@@ -992,42 +1154,76 @@
     </div>
   </section>
 
-  <!-- Projects Section -->
-  <section class="projects" id="projects">
+  <!-- Why Us Section -->
+  <section class="why-us" id="why-us">
     <div class="section-header">
-      <p class="section-label">Our Work</p>
-      <h2 class="section-title">Featured Projects</h2>
-      <p class="section-desc">Explore our portfolio of successful collaborations and innovative creations.</p>
+      <p class="section-label">Why Protolab</p>
+      <h2 class="section-title">Built for Results</h2>
+      <p class="section-desc">We combine technical depth with fast execution — so your ideas move from sketch to shipment without friction.</p>
     </div>
-    <div class="projects-grid">
-      <a href="Kaolin/" class="project-card">
-        <div class="project-image">👕</div>
-        <div class="project-info">
-          <h3>Kaolin</h3>
-          <p>Streetwear brand with premium urban apparel and bold designs.</p>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">48h</div>
+        <div class="stat-label">Typical turnaround</div>
+        <div class="stat-desc">From approved design to finished part, most orders ship within two business days.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0.1mm</div>
+        <div class="stat-label">Print precision</div>
+        <div class="stat-desc">Layer resolution down to 0.1 mm for parts that fit right the first time.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">6+</div>
+        <div class="stat-label">Disciplines under one roof</div>
+        <div class="stat-desc">3D printing, laser cutting, CNC, automation, IoT, and software — no handoffs, no delays.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">End-to-end</div>
+        <div class="stat-label">Full-stack prototyping</div>
+        <div class="stat-desc">Hardware and software together. We build the device and the system that runs it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="process" id="process">
+    <div class="section-header">
+      <p class="section-label">How We Work</p>
+      <h2 class="section-title">From Idea to Reality</h2>
+      <p class="section-desc">A clear, collaborative process designed to move fast without cutting corners.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Brief &amp; Scope</h3>
+          <p>Share your idea — a sketch, a reference, or just a problem to solve. We define scope, materials, and timeline together before anything starts.</p>
         </div>
-      </a>
-      <a href="Chosko/" class="project-card">
-        <div class="project-image">🛹</div>
-        <div class="project-info">
-          <h3>Chosko</h3>
-          <p>Streetwear and skateboarding brand with urban style.</p>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Design &amp; Validate</h3>
+          <p>We model, simulate, or prototype digitally first. You review and approve before a single machine runs.</p>
         </div>
-      </a>
-      <a href="EvoSimGame/" class="project-card">
-        <div class="project-image">🧬</div>
-        <div class="project-info">
-          <h3>EvoSim Game</h3>
-          <p>Interactive evolution simulation game prototype.</p>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Manufacture</h3>
+          <p>Production runs on our in-house machines — 3D printers, laser cutters, CNC — with full quality checks at each stage.</p>
         </div>
-      </a>
-      <a href="EmojiSpaceInvaders/" class="project-card">
-        <div class="project-image">👾</div>
-        <div class="project-info">
-          <h3>Emoji Space Invaders</h3>
-          <p>Retro arcade Space Invaders clone with emoji graphics and canvas rendering.</p>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Deliver &amp; Iterate</h3>
+          <p>Parts ship fast. If revision is needed, we loop back immediately — no restarts, no extra onboarding.</p>
         </div>
-      </a>
+      </div>
     </div>
   </section>
 
@@ -1053,8 +1249,8 @@
             <h4>Quick Links</h4>
             <ul>
               <li><a href="service-appointments/">Book Appointment</a></li>
+              <li><a href="#why-us">Why Us</a></li>
               <li><a href="policy.html">Privacy Policy</a></li>
-              <li><a href="Kaolin/">Kaolin</a></li>
             </ul>
           </div>
         </div>
