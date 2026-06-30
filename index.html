@@ -3,58 +3,57 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description"
-    content="Professional 3D printing, laser cutting, and CNC engraving services for creative product prototyping." />
-  <meta name="keywords" content="3D printing, laser cutting, CNC engraving, prototyping, product design" />
+    content="protolab.tech — a solving-force for any system, any problem." />
   <meta name="author" content="protolab.tech" />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#050507" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Protolab - Innovative Prototyping Solutions" />
-  <meta property="og:description"
-    content="Professional 3D printing, laser cutting, and CNC engraving services for creative product prototyping." />
+  <meta property="og:title" content="protolab.tech" />
+  <meta property="og:description" content="A solving-force for any system, any problem." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://protolab.tech" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Protolab - Innovative Prototyping Solutions" />
-  <meta name="twitter:description"
-    content="Professional 3D printing, laser cutting, and CNC engraving services for creative product prototyping." />
+  <meta name="twitter:title" content="protolab.tech" />
+  <meta name="twitter:description" content="A solving-force for any system, any problem." />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23050507'/><circle cx='50' cy='50' r='3' fill='%23eef3f6'/><circle cx='28' cy='34' r='1.6' fill='%2357c9c2'/><circle cx='72' cy='66' r='1.6' fill='%2357c9c2'/><circle cx='70' cy='30' r='1.2' fill='%236f8aa3'/><circle cx='32' cy='70' r='1.2' fill='%236f8aa3'/></svg>" />
 
-  <title>Protolab - Innovative Prototyping Solutions</title>
+  <title>protolab.tech</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
 
+  <!-- three.js as ESM via import map (no build step; keeps the static stack) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+
   <style>
-    /* CSS Custom Properties */
     :root {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: #111111;
-      --bg-card: #161616;
-      --accent-blue: #3b82f6;
-      --accent-blue-light: #60a5fa;
-      --accent-glow: rgba(59, 130, 246, 0.4);
-      --text-primary: #fafafa;
-      --text-secondary: #a3a3a3;
-      --text-muted: #737373;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.15);
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.1);
+      --bg: #050507;
+      --ink: #e8edf2;
+      --ink-dim: #707a85;
+      --ink-faint: #3a424c;
+      /* accent is driven live from JS per chapter (steel -> cyan -> white) */
+      --accent: #5b6b7a;
+      --hud-line: rgba(232, 237, 242, 0.12);
+      --hud-line-strong: rgba(232, 237, 242, 0.28);
     }
 
-    /* Reset & Base */
     *,
     *::before,
     *::after {
@@ -63,1257 +62,588 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
+    html,
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      cursor: default;
     }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
+    .mono {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-weight: 400;
+      letter-spacing: 0.04em;
     }
 
-    ::-webkit-scrollbar-track {
-      background: var(--bg-primary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #444;
-    }
-
-    /* Typography */
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    /* Animated Background */
-    .animated-bg {
+    /* ============ WebGL canvas (fixed, behind everything) ============ */
+    #gl {
       position: fixed;
       inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .gradient-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.5;
-      animation: float 20s ease-in-out infinite;
-    }
-
-    .orb-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-      top: -200px;
-      right: -200px;
-      animation-delay: 0s;
-    }
-
-    .orb-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
-      bottom: -150px;
-      left: -150px;
-      animation-delay: -7s;
-    }
-
-    .orb-3 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: -14s;
-    }
-
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1);
-      }
-
-      25% {
-        transform: translate(30px, -30px) scale(1.05);
-      }
-
-      50% {
-        transform: translate(-20px, 20px) scale(0.95);
-      }
-
-      75% {
-        transform: translate(20px, 10px) scale(1.02);
-      }
-    }
-
-    /* Floating Particles */
-    .particles {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: var(--accent-blue);
-      border-radius: 50%;
-      opacity: 0.3;
-      animation: particle-float 15s ease-in-out infinite;
-    }
-
-    .particle:nth-child(1) {
-      left: 10%;
-      top: 20%;
-      animation-delay: 0s;
-    }
-
-    .particle:nth-child(2) {
-      left: 20%;
-      top: 80%;
-      animation-delay: -3s;
-    }
-
-    .particle:nth-child(3) {
-      left: 60%;
-      top: 40%;
-      animation-delay: -6s;
-    }
-
-    .particle:nth-child(4) {
-      left: 80%;
-      top: 60%;
-      animation-delay: -9s;
-    }
-
-    .particle:nth-child(5) {
-      left: 40%;
-      top: 90%;
-      animation-delay: -12s;
-    }
-
-    .particle:nth-child(6) {
-      left: 90%;
-      top: 10%;
-      animation-delay: -2s;
-    }
-
-    .particle:nth-child(7) {
-      left: 5%;
-      top: 50%;
-      animation-delay: -5s;
-    }
-
-    .particle:nth-child(8) {
-      left: 70%;
-      top: 75%;
-      animation-delay: -8s;
-    }
-
-    @keyframes particle-float {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-        opacity: 0.3;
-      }
-
-      50% {
-        transform: translateY(-100px) scale(1.5);
-        opacity: 0.6;
-      }
-    }
-
-    /* Glassmorphism Header */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-      transition: all 0.3s ease;
-    }
-
-    header.scrolled {
-      background: rgba(10, 10, 10, 0.95);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-      transition: opacity 0.3s ease;
-    }
-
-    .logo:hover {
-      opacity: 0.8;
-    }
-
-    .logo span {
-      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 32px;
-    }
-
-    nav a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
-      transition: color 0.3s ease;
-      position: relative;
-    }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent-blue);
-      transition: width 0.3s ease;
-    }
-
-    nav a:hover {
-      color: var(--text-primary);
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    .cta-btn {
-      background: var(--accent-blue);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 30px var(--accent-glow), 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Hero Section */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 120px 24px 80px;
-      position: relative;
-    }
-
-    .hero-content {
-      max-width: 900px;
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      padding: 8px 16px;
-      border-radius: 100px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    .hero-badge .dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.5;
-        transform: scale(1.2);
-      }
-    }
-
-    .hero h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(40px, 8vw, 80px);
-      font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      letter-spacing: -2px;
-      animation: fadeInUp 0.8s ease-out 0.1s backwards;
-    }
-
-    .hero h1 .gradient-text {
-      background: linear-gradient(135deg, var(--accent-blue-light) 0%, var(--accent-blue) 50%, #8b5cf6 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      background-size: 200% 200%;
-      animation: gradient-shift 5s ease infinite;
-    }
-
-    @keyframes gradient-shift {
-
-      0%,
-      100% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-    }
-
-    .hero p {
-      font-size: clamp(16px, 2vw, 20px);
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 40px;
-      animation: fadeInUp 0.8s ease-out 0.2s backwards;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.8s ease-out 0.3s backwards;
-    }
-
-    .btn-primary {
-      background: var(--accent-blue);
-      color: white;
-      padding: 14px 28px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px var(--accent-glow);
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-
-    @keyframes pulse-glow {
-
-      0%,
-      100% {
-        box-shadow: 0 0 20px var(--accent-glow);
-      }
-
-      50% {
-        box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(59, 130, 246, 0.2);
-      }
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 50px var(--accent-glow), 0 15px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .btn-secondary {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-primary);
-      padding: 14px 28px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Scroll indicator */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: 12px;
-      animation: fadeInUp 0.8s ease-out 0.5s backwards;
-    }
-
-    .scroll-indicator .mouse {
-      width: 24px;
-      height: 40px;
-      border: 2px solid var(--text-muted);
-      border-radius: 12px;
-      position: relative;
-    }
-
-    .scroll-indicator .mouse::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 8px;
-      background: var(--text-muted);
-      border-radius: 2px;
-      animation: scroll-bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes scroll-bounce {
-
-      0%,
-      100% {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-      }
-
-      50% {
-        transform: translateX(-50%) translateY(10px);
-        opacity: 0.3;
-      }
-    }
-
-    /* Services Section */
-    .services {
-      padding: 100px 24px;
-      position: relative;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 60px;
-    }
-
-    .section-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent-blue);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-
-    .section-desc {
-      color: var(--text-secondary);
-      font-size: 16px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 32px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .service-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: var(--accent-blue);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 40px var(--accent-glow);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--accent-blue), #8b5cf6);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .service-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .service-card p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.7;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Projects Section */
-    .projects {
-      padding: 100px 24px;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      text-decoration: none;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
       display: block;
     }
 
-    .project-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--border-hover);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    /* subtle vignette over the canvas */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
     }
 
-    .project-image {
-      width: 100%;
-      aspect-ratio: 16/10;
-      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+    /* faint scanline / grain texture for the "instrument" feel */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.5) 0 1px, transparent 1px 3px);
+      mix-blend-mode: overlay;
+    }
+
+    /* ============ Scroll content ============ */
+    main {
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter {
+      position: relative;
+      min-height: 100vh;
       display: flex;
       align-items: center;
+      padding: 0 clamp(28px, 8vw, 180px);
+      pointer-events: none;
+    }
+
+    .chapter[data-align="right"] {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .chapter[data-align="center"] {
       justify-content: center;
-      font-size: 48px;
-      position: relative;
-      overflow: hidden;
+      text-align: center;
     }
 
-    .project-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, var(--bg-card), transparent);
-    }
-
-    .project-info {
-      padding: 24px;
-    }
-
-    .project-info h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .project-info p {
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border-subtle);
-      padding: 60px 24px 24px;
-    }
-
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer-brand {
-      max-width: 300px;
-    }
-
-    .footer-brand .logo {
-      display: inline-block;
-      margin-bottom: 16px;
-    }
-
-    .footer-brand p {
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 60px;
-    }
-
-    .footer-col h4 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: var(--text-primary);
-    }
-
-    .footer-col ul {
-      list-style: none;
-    }
-
-    .footer-col li {
-      margin-bottom: 10px;
-    }
-
-    .footer-col a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s ease;
-    }
-
-    .footer-col a:hover {
-      color: var(--text-primary);
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-subtle);
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-bottom p {
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 16px;
-    }
-
-    .social-links a {
-      color: var(--text-secondary);
-      font-size: 20px;
-      transition: all 0.3s ease;
-    }
-
-    .social-links a:hover {
-      color: var(--accent-blue);
-      transform: translateY(-2px);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      nav ul {
-        display: none;
-      }
-
-      .header-container {
-        padding: 12px 16px;
-      }
-
-      .hero {
-        padding: 100px 16px 60px;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary,
-      .btn-secondary {
-        width: 100%;
-        max-width: 280px;
-        text-align: center;
-      }
-
-      .services,
-      .projects {
-        padding: 60px 16px;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-main {
-        flex-direction: column;
-      }
-
-      .footer-links {
-        flex-direction: column;
-        gap: 32px;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-
-    /* Why Us Section */
-    .why-us {
-      padding: 100px 24px;
-      position: relative;
-    }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 36px 28px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+    .line {
+      max-width: 22ch;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transform: translateY(18px);
+      will-change: opacity, transform;
     }
 
-    .stat-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--accent-blue);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-glow);
+    .chapter[data-align="center"] .line {
+      max-width: none;
     }
 
-    .stat-card:hover::before {
+    .line .observation {
+      font-size: clamp(28px, 5.2vw, 64px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .line .annotation {
+      display: inline-block;
+      margin-top: 22px;
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: var(--ink-dim);
+      letter-spacing: 0.18em;
+    }
+
+    .line .annotation b {
+      color: var(--accent);
+      font-weight: 500;
+      transition: color 1.2s ease;
+    }
+
+    /* ============ Final / STATE frame ============ */
+    #state .line {
+      position: relative;
+    }
+
+    #state .wordmark {
+      font-size: clamp(36px, 9vw, 132px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    #state .wordmark em {
+      font-style: normal;
+      color: var(--accent);
+      transition: color 1.2s ease;
+    }
+
+    #state .resolve-link {
+      pointer-events: auto;
+      position: absolute;
+      left: 50%;
+      bottom: clamp(-86px, -7vw, -64px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--ink-dim);
+      text-decoration: none;
+      border-bottom: 1px solid var(--hud-line);
+      padding-bottom: 3px;
+      transition: color 0.5s ease, border-color 0.5s ease;
+    }
+
+    #state .resolve-link:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+
+    /* ============ Persistent HUD ============ */
+    .hud {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      color: var(--ink-dim);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+    }
+
+    .hud .tag {
+      color: var(--ink-dim);
+    }
+
+    .hud .tag b {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* registration / crop marks */
+    .reg {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .reg .crop {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+    }
+
+    .reg .crop::before,
+    .reg .crop::after {
+      content: '';
+      position: absolute;
+      background: var(--hud-line);
+    }
+
+    /* vertical arm */
+    .reg .crop::before {
+      width: 1px;
+      height: 22px;
+    }
+
+    /* horizontal arm */
+    .reg .crop::after {
+      height: 1px;
+      width: 22px;
+    }
+
+    .reg .crop-tl {
+      top: clamp(16px, 2.6vw, 30px);
+      left: clamp(16px, 2.6vw, 30px);
+    }
+
+    .reg .crop-tr {
+      top: clamp(16px, 2.6vw, 30px);
+      right: clamp(16px, 2.6vw, 30px);
+    }
+
+    .reg .crop-tr::before {
+      right: 0;
+    }
+
+    .reg .crop-tr::after {
+      right: 0;
+    }
+
+    .reg .crop-bl {
+      bottom: clamp(16px, 2.6vw, 30px);
+      left: clamp(16px, 2.6vw, 30px);
+    }
+
+    .reg .crop-bl::before {
+      bottom: 0;
+    }
+
+    .reg .crop-bl::after {
+      bottom: 0;
+    }
+
+    .reg .crop-br {
+      bottom: clamp(16px, 2.6vw, 30px);
+      right: clamp(16px, 2.6vw, 30px);
+    }
+
+    .reg .crop-br::before {
+      bottom: 0;
+      right: 0;
+    }
+
+    .reg .crop-br::after {
+      bottom: 0;
+      right: 0;
+    }
+
+    /* center crosshair + orientation tick */
+    .reg .cross {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+    }
+
+    .reg .cross-h,
+    .reg .cross-v {
+      position: absolute;
+      background: var(--hud-line);
+    }
+
+    .reg .cross-h {
+      width: 28px;
+      height: 1px;
+      left: -14px;
+      top: 0;
+    }
+
+    .reg .cross-v {
+      width: 1px;
+      height: 28px;
+      left: 0;
+      top: -14px;
+    }
+
+    .reg .cross-ring {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      left: -27px;
+      top: -27px;
+      border: 1px solid var(--hud-line);
+      border-radius: 50%;
+    }
+
+    .reg .cross-tick {
+      position: absolute;
+      width: 1px;
+      height: 12px;
+      left: 0;
+      top: -39px;
+      background: var(--hud-line-strong);
+    }
+
+    .reg .cross-n {
+      position: absolute;
+      left: 8px;
+      top: -44px;
+      color: var(--ink-faint);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+    }
+
+    /* top-left brackets */
+    .hud-tl {
+      position: absolute;
+      top: clamp(18px, 3vw, 34px);
+      left: clamp(18px, 3vw, 34px);
+      line-height: 1.9;
+    }
+
+    .hud-tl .neg {
+      color: var(--accent);
+      transition: color 1.2s ease;
+    }
+
+    /* top-right chapter index */
+    .hud-tr {
+      position: absolute;
+      top: clamp(18px, 3vw, 34px);
+      right: clamp(18px, 3vw, 34px);
+      text-align: right;
+      line-height: 2.1;
+    }
+
+    .hud-tr .idx {
+      display: block;
+      color: var(--ink-faint);
+      transition: color 0.6s ease, letter-spacing 0.6s ease;
+    }
+
+    .hud-tr .idx .bullet {
+      opacity: 0;
+      margin-right: 8px;
+      color: var(--accent);
+      transition: opacity 0.6s ease;
+    }
+
+    .hud-tr .idx.active {
+      color: var(--ink);
+      letter-spacing: 0.22em;
+    }
+
+    .hud-tr .idx.active .bullet {
       opacity: 1;
     }
 
-    .stat-number {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 42px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      line-height: 1;
-      margin-bottom: 8px;
+    .hud-tr .idx.past {
+      color: var(--ink-dim);
+    }
+
+    /* progress rail under chapter index */
+    .hud-tr .rail {
+      margin-top: 14px;
+      margin-left: auto;
+      width: 120px;
+      height: 1px;
+      background: var(--hud-line);
       position: relative;
-      z-index: 1;
     }
 
-    .stat-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 1;
+    .hud-tr .rail .fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.1s linear, background 1.2s ease;
     }
 
-    .stat-desc {
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.7;
-      position: relative;
-      z-index: 1;
+    .hud-tr .pct {
+      display: block;
+      margin-top: 8px;
+      color: var(--ink-faint);
     }
 
-    /* Process Section */
-    .process {
-      padding: 100px 24px;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    /* bottom-left section counter */
+    .hud-bl {
+      position: absolute;
+      bottom: clamp(18px, 3vw, 34px);
+      left: clamp(18px, 3vw, 34px);
     }
 
-    .process-steps {
-      max-width: 800px;
-      margin: 0 auto;
+    .hud-bl .sec {
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+    }
+
+    .hud-bl .sec .accent {
+      color: var(--accent);
+      transition: color 1.2s ease;
+    }
+
+    .hud-bl .coords {
+      margin-top: 6px;
+      color: var(--ink-faint);
+    }
+
+    /* bottom-right readout */
+    .hud-br {
+      position: absolute;
+      bottom: clamp(18px, 3vw, 34px);
+      right: clamp(18px, 3vw, 34px);
+      text-align: right;
+      color: var(--ink-faint);
+      line-height: 1.9;
+    }
+
+    .hud-br .live {
+      color: var(--ink-dim);
+    }
+
+    /* loading state */
+    .boot {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
-      gap: 0;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--ink-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      transition: opacity 0.8s ease;
     }
 
-    .process-step {
-      display: flex;
-      gap: 32px;
-      align-items: flex-start;
-      padding: 32px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      transition: all 0.4s ease;
-      position: relative;
+    .boot.gone {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .process-step:hover {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 30px var(--accent-glow);
-      transform: translateX(6px);
+    /* scroll hint, fades after first scroll */
+    .scroll-hint {
+      position: fixed;
+      bottom: clamp(18px, 3vw, 34px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      color: var(--ink-faint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
     }
 
-    .process-connector {
-      width: 2px;
-      height: 24px;
-      background: linear-gradient(to bottom, var(--accent-blue), transparent);
-      margin-left: 56px;
-      opacity: 0.4;
-    }
-
-    .step-number {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 36px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      line-height: 1;
-      min-width: 56px;
-      flex-shrink: 0;
-    }
-
-    .step-content h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .step-content p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    @media (max-width: 768px) {
-      .why-us,
-      .process {
-        padding: 60px 16px;
+    @media (max-width: 720px) {
+      .hud-br {
+        display: none;
       }
 
-      .stats-row {
-        grid-template-columns: 1fr;
+      .hud-tr .rail {
+        width: 78px;
       }
 
-      .process-step {
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .process-connector {
-        margin-left: 32px;
-        height: 16px;
+      .line .observation {
+        font-size: clamp(26px, 8vw, 40px);
       }
     }
 
-    /* Focus styles for accessibility */
-    a:focus-visible,
-    button:focus-visible {
-      outline: 2px solid var(--accent-blue);
-      outline-offset: 2px;
-    }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+      .scroll-hint {
+        display: none;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- Animated Background -->
-  <div class="animated-bg">
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
-    <div class="gradient-orb orb-3"></div>
+  <!-- WebGL point-cloud canvas -->
+  <canvas id="gl"></canvas>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <!-- Registration / crop marks (blueprint framing) -->
+  <div class="reg" aria-hidden="true">
+    <span class="crop crop-tl"></span>
+    <span class="crop crop-tr"></span>
+    <span class="crop crop-bl"></span>
+    <span class="crop crop-br"></span>
+    <div class="cross">
+      <span class="cross-h"></span>
+      <span class="cross-v"></span>
+      <span class="cross-ring"></span>
+      <span class="cross-tick"></span>
+      <span class="cross-n mono">N</span>
+    </div>
   </div>
 
-  <!-- Particles -->
-  <div class="particles">
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
+  <!-- Scroll content -->
+  <main>
+    <section class="chapter" data-chapter="0" data-align="left">
+      <div class="line">
+        <div class="observation">Every system tends toward disorder.</div>
+        <span class="annotation mono">[ ENTROPY <b>&rarr;</b> ]</span>
+      </div>
+    </section>
+
+    <section class="chapter" data-chapter="1" data-align="right">
+      <div class="line">
+        <div class="observation">A field is just structure, briefly held.</div>
+        <span class="annotation mono">[ <b><span class="npoints">N</span></b> points ]</span>
+      </div>
+    </section>
+
+    <section class="chapter" data-chapter="2" data-align="left">
+      <div class="line">
+        <div class="observation">Order is a temporary arrangement.</div>
+        <span class="annotation mono">[ &Delta; <b>&asymp; 0</b> ]</span>
+      </div>
+    </section>
+
+    <section class="chapter" data-chapter="3" data-align="right">
+      <div class="line">
+        <div class="observation">Nothing stays resolved.</div>
+        <span class="annotation mono">[ drift <b>&times; t</b> ]</span>
+      </div>
+    </section>
+
+    <section class="chapter" data-chapter="4" data-align="left">
+      <div class="line">
+        <div class="observation">Something has to push back.</div>
+        <span class="annotation mono">[ <b>&minus;&nabla;S</b> ]</span>
+      </div>
+    </section>
+
+    <section class="chapter" id="state" data-chapter="5" data-align="center">
+      <div class="line">
+        <div class="wordmark">protolab<em>.tech</em></div>
+        <a class="resolve-link mono" href="service-appointments/">/service-appointments</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Persistent HUD -->
+  <div class="hud" aria-hidden="true">
+    <div class="hud-tl mono">
+      <div class="tag">( <b>PROTOLAB.TECH</b> )</div>
+      <div class="tag">[ <span class="neg">NEGENTROPY</span> ]</div>
+    </div>
+
+    <div class="hud-tr mono">
+      <span class="idx" data-i="0"><span class="bullet">&middot;</span>NOISE</span>
+      <span class="idx" data-i="1"><span class="bullet">&middot;</span>FIELD</span>
+      <span class="idx" data-i="2"><span class="bullet">&middot;</span>ORDER</span>
+      <span class="idx" data-i="3"><span class="bullet">&middot;</span>DRIFT</span>
+      <span class="idx" data-i="4"><span class="bullet">&middot;</span>RESOLVE</span>
+      <span class="idx" data-i="5"><span class="bullet">&middot;</span>STATE</span>
+      <div class="rail">
+        <div class="fill"></div>
+      </div>
+      <span class="pct">0.000</span>
+    </div>
+
+    <div class="hud-bl mono">
+      <div class="sec">SEC.<span class="secnum">001</span> &mdash; <span class="accent secname">NOISE</span></div>
+      <div class="coords">x <span class="cx">+0.00</span> &nbsp; y <span class="cy">+0.00</span></div>
+    </div>
+
+    <div class="hud-br mono">
+      <div class="live">SIM <span class="simstate">RUNNING</span></div>
+      <div>dt <span class="fps">0.000</span></div>
+      <div>N <span class="ncount">0</span></div>
+    </div>
   </div>
 
-  <!-- Header -->
-  <header id="header">
-    <div class="header-container">
-      <a href="/" class="logo">protolab<span>.tech</span></a>
-      <nav>
-        <ul>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#why-us">Why Us</a></li>
-          <li><a href="#process">Process</a></li>
-        </ul>
-      </nav>
-      <a href="service-appointments/" class="cta-btn">Book Appointment</a>
-    </div>
-  </header>
+  <div class="scroll-hint mono">SCROLL</div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="dot"></span>
-        Available for new projects
-      </div>
-      <h1>Transform Ideas into<br><span class="gradient-text">Reality</span></h1>
-      <p>Professional prototyping services including 3D printing, laser cutting, and CNC engraving. We bring your
-        creative visions to life with precision and passion.</p>
-      <div class="hero-actions">
-        <a href="service-appointments/" class="btn-primary">Start Your Project</a>
-        <a href="#services" class="btn-secondary">Explore Services</a>
-      </div>
-    </div>
-    <div class="scroll-indicator">
-      <div class="mouse"></div>
-      <span>Scroll to explore</span>
-    </div>
-  </section>
+  <div class="boot mono"><span>INITIALIZING FIELD</span></div>
 
-  <!-- Services Section -->
-  <section class="services" id="services">
-    <div class="section-header">
-      <p class="section-label">Our Services</p>
-      <h2 class="section-title">Precision Prototyping</h2>
-      <p class="section-desc">From concept to creation, we offer cutting-edge manufacturing services tailored to your
-        needs.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">🖨️</div>
-        <h3>3D Printing</h3>
-        <p>High-quality additive manufacturing with various materials including PLA, ABS, PETG, and resin for detailed
-          prototypes and functional parts.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">✂️</div>
-        <h3>Laser Cutting</h3>
-        <p>Precise laser cutting and engraving on wood, acrylic, leather, and more. Perfect for intricate designs and
-          custom signage.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">⚙️</div>
-        <h3>CNC Engraving</h3>
-        <p>Computer-controlled precision engraving for metals, plastics, and wood. Ideal for industrial parts and
-          personalized items.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🤖</div>
-        <h3>Industrial Automation</h3>
-        <p>Custom software solutions for industrial automation, process optimization, and smart manufacturing systems.
-        </p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🏠</div>
-        <h3>Home Automation</h3>
-        <p>Smart home solutions including IoT integration, automated controls, and custom home management systems.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">💻</div>
-        <h3>Web & Software</h3>
-        <p>Website creation, custom software development, and tailored digital solutions for your unique business needs.
-        </p>
-      </div>
-    </div>
-  </section>
+  <!-- smooth scroll + scroll-driven state (classic scripts expose globals) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-  <!-- Why Us Section -->
-  <section class="why-us" id="why-us">
-    <div class="section-header">
-      <p class="section-label">Why Protolab</p>
-      <h2 class="section-title">Built for Results</h2>
-      <p class="section-desc">We combine technical depth with fast execution — so your ideas move from sketch to shipment without friction.</p>
-    </div>
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-number">48h</div>
-        <div class="stat-label">Typical turnaround</div>
-        <div class="stat-desc">From approved design to finished part, most orders ship within two business days.</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">0.1mm</div>
-        <div class="stat-label">Print precision</div>
-        <div class="stat-desc">Layer resolution down to 0.1 mm for parts that fit right the first time.</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">6+</div>
-        <div class="stat-label">Disciplines under one roof</div>
-        <div class="stat-desc">3D printing, laser cutting, CNC, automation, IoT, and software — no handoffs, no delays.</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">End-to-end</div>
-        <div class="stat-label">Full-stack prototyping</div>
-        <div class="stat-desc">Hardware and software together. We build the device and the system that runs it.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process Section -->
-  <section class="process" id="process">
-    <div class="section-header">
-      <p class="section-label">How We Work</p>
-      <h2 class="section-title">From Idea to Reality</h2>
-      <p class="section-desc">A clear, collaborative process designed to move fast without cutting corners.</p>
-    </div>
-    <div class="process-steps">
-      <div class="process-step">
-        <div class="step-number">01</div>
-        <div class="step-content">
-          <h3>Brief &amp; Scope</h3>
-          <p>Share your idea — a sketch, a reference, or just a problem to solve. We define scope, materials, and timeline together before anything starts.</p>
-        </div>
-      </div>
-      <div class="process-connector"></div>
-      <div class="process-step">
-        <div class="step-number">02</div>
-        <div class="step-content">
-          <h3>Design &amp; Validate</h3>
-          <p>We model, simulate, or prototype digitally first. You review and approve before a single machine runs.</p>
-        </div>
-      </div>
-      <div class="process-connector"></div>
-      <div class="process-step">
-        <div class="step-number">03</div>
-        <div class="step-content">
-          <h3>Manufacture</h3>
-          <p>Production runs on our in-house machines — 3D printers, laser cutters, CNC — with full quality checks at each stage.</p>
-        </div>
-      </div>
-      <div class="process-connector"></div>
-      <div class="process-step">
-        <div class="step-number">04</div>
-        <div class="step-content">
-          <h3>Deliver &amp; Iterate</h3>
-          <p>Parts ship fast. If revision is needed, we loop back immediately — no restarts, no extra onboarding.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-container">
-      <div class="footer-main">
-        <div class="footer-brand">
-          <a href="/" class="logo">protolab<span>.tech</span></a>
-          <p>Transforming creative ideas into tangible reality through precision manufacturing and innovative
-            prototyping solutions.</p>
-        </div>
-        <div class="footer-links">
-          <div class="footer-col">
-            <h4>Services</h4>
-            <ul>
-              <li><a href="#services">3D Printing</a></li>
-              <li><a href="#services">Laser Cutting</a></li>
-              <li><a href="#services">CNC Engraving</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="service-appointments/">Book Appointment</a></li>
-              <li><a href="#why-us">Why Us</a></li>
-              <li><a href="policy.html">Privacy Policy</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 protolab.tech. All rights reserved.</p>
-        <div class="social-links">
-          <a href="https://github.com/protolab-tech" aria-label="GitHub">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Header scroll effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    // Observe service and project cards
-    document.querySelectorAll('.service-card, .project-card').forEach((card, i) => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(30px)';
-      card.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
-      observer.observe(card);
-    });
-  </script>
+  <script type="module" src="assets/js/negentropy.js"></script>
 </body>
 
 </html>
