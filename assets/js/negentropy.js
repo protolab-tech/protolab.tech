@@ -268,8 +268,10 @@ varying float vGlow;
 void main(){
   vec2 uv = gl_PointCoord - 0.5;
   float d = length(uv);
-  float core = smoothstep(0.5, 0.0, d);
-  float alpha = core * vAlpha * uOpacity;
+  // tight, hard-edged core with a faint halo — crisp instead of blurry
+  float core = smoothstep(0.34, 0.16, d);
+  float halo = smoothstep(0.5, 0.24, d) * 0.22;
+  float alpha = (core + halo) * vAlpha * uOpacity;
   if (alpha < 0.003) discard;
   vec3 col = vColor + vGlow * 0.18;
   gl_FragColor = vec4(col, alpha);
@@ -284,7 +286,7 @@ function start() {
   try {
     renderer = new THREE.WebGLRenderer({
       canvas: dom.canvas,
-      antialias: false,
+      antialias: true,
       alpha: false,
       powerPreference: 'high-performance',
     });
@@ -293,7 +295,8 @@ function start() {
   }
   if (!renderer || !renderer.getContext()) return fallback();
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 2 : 1.75);
+  // full device pixel ratio (capped at 2) for a crisp render
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
   renderer.setPixelRatio(pixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x050507, 1);
@@ -346,7 +349,7 @@ function start() {
   const uniforms = {
     uTime: { value: 0 },
     uProgress: { value: 0 },
-    uSize: { value: isMobile ? 3.0 : 2.3 },
+    uSize: { value: isMobile ? 3.4 : 2.7 },
     uOpacity: { value: 0.92 },
     uPixelRatio: { value: pixelRatio },
     uAccent: { value: new THREE.Color(isMobile ? MOBILE_ACCENT : ACCENTS[0]) },
@@ -473,6 +476,22 @@ function start() {
     });
     if (window.ScrollTrigger) lenis.on('scroll', window.ScrollTrigger.update);
   }
+
+  // clicking a text cluster advances the sequence to the next section
+  function scrollToSection(k) {
+    const sec = dom.sections[k];
+    if (!sec) return;
+    const top = sec.getBoundingClientRect().top + window.scrollY;
+    if (lenis) lenis.scrollTo(top, { duration: 1.6 });
+    else window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
+  }
+  dom.lines.forEach((line, k) => {
+    if (k >= dom.sections.length - 1) return; // final frame holds
+    line.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // let bare links navigate
+      scrollToSection(k + 1);
+    });
+  });
 
   // pointer parallax
   if (!isMobile) {
