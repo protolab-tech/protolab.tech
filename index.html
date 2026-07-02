@@ -145,6 +145,12 @@
       will-change: opacity, transform;
     }
 
+    /* text clusters advance the sequence on click */
+    .chapter:not(#state) .line {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
     .chapter[data-align="center"] .line {
       max-width: none;
     }
@@ -171,6 +177,29 @@
       transition: color 1.2s ease;
     }
 
+    /* bare, unlabeled link (shared by the early cluster and the final frame) */
+    .bare-link {
+      pointer-events: auto;
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--ink-dim);
+      text-decoration: none;
+      border-bottom: 1px solid var(--hud-line);
+      padding-bottom: 3px;
+      transition: color 0.5s ease, border-color 0.5s ease;
+    }
+
+    .bare-link:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+
+    .line .early-link {
+      display: inline-block;
+      margin-top: 30px;
+      font-size: 12px;
+    }
+
     /* ============ Final / STATE frame ============ */
     #state .line {
       position: relative;
@@ -191,23 +220,10 @@
     }
 
     #state .resolve-link {
-      pointer-events: auto;
       position: absolute;
       left: 50%;
       bottom: clamp(-86px, -7vw, -64px);
       transform: translateX(-50%);
-      white-space: nowrap;
-      font-size: 13px;
-      color: var(--ink-dim);
-      text-decoration: none;
-      border-bottom: 1px solid var(--hud-line);
-      padding-bottom: 3px;
-      transition: color 0.5s ease, border-color 0.5s ease;
-    }
-
-    #state .resolve-link:hover {
-      color: var(--ink);
-      border-color: var(--accent);
     }
 
     /* ============ Persistent HUD ============ */
@@ -563,6 +579,8 @@
       <div class="line">
         <div class="observation">Every system tends toward disorder.</div>
         <span class="annotation mono">[ ENTROPY <b>&rarr;</b> ]</span>
+        <br>
+        <a class="bare-link early-link mono" href="service-appointments/">/service-appointments</a>
       </div>
     </section>
 
@@ -597,7 +615,7 @@
     <section class="chapter" id="state" data-chapter="5" data-align="center">
       <div class="line">
         <div class="wordmark">protolab<em>.tech</em></div>
-        <a class="resolve-link mono" href="service-appointments/">/service-appointments</a>
+        <a class="bare-link resolve-link mono" href="service-appointments/">/service-appointments</a>
       </div>
     </section>
   </main>
