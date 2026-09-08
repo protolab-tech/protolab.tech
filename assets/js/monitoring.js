@@ -1,6 +1,8 @@
 // GDPR/CCPA Compliant Cookie Management System
 (function() {
   'use strict';
+
+  var measurementId = 'G-5B3MWGZ9SZ';
   
   // Cookie utility functions
   var cookieUtils = {
@@ -39,13 +41,15 @@
     }
 
     var existingConsent = cookieUtils.get('protolab_cookie_consent');
+    var analyticsConsent = cookieUtils.get('protolab_analytics_consent');
     
-    if (existingConsent === 'accepted') {
+    if (existingConsent === 'accepted' || (existingConsent === 'customized' && analyticsConsent === 'true')) {
       loadAnalytics();
       return;
     }
     
-    if (existingConsent === 'rejected') {
+    if (existingConsent === 'rejected' || (existingConsent === 'customized' && analyticsConsent === 'false')) {
+      disableAnalytics();
       return; // Don't show banner again
     }
 
@@ -136,6 +140,7 @@
     document.getElementById('cookie-reject').addEventListener('click', function() {
       cookieUtils.set('protolab_cookie_consent', 'rejected', 365);
       cookieUtils.set('protolab_analytics_consent', 'false', 365);
+      disableAnalytics();
       hideBanner();
     });
 
@@ -249,6 +254,8 @@
       
       if (analyticsEnabled) {
         loadAnalytics();
+      } else {
+        disableAnalytics();
       }
       
       if (modal.parentNode) {
@@ -273,12 +280,13 @@
   }
 
   function loadAnalytics() {
-    if (window.gtag || cookieUtils.get('protolab_analytics_consent') !== 'true') {
+    if (window.gtag || (requiresConsent && cookieUtils.get('protolab_analytics_consent') !== 'true')) {
       return; // Avoid loading multiple times or if not consented
     }
+    window['ga-disable-' + measurementId] = false;
     
     var gtagScript = document.createElement('script');
-    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-5B3MWGZ9SZ';
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
     gtagScript.async = true;
     document.head.appendChild(gtagScript);
 
@@ -286,10 +294,16 @@
     function gtag(){dataLayer.push(arguments);}
     window.gtag = gtag;
     gtag('js', new Date());
-    gtag('config', 'G-5B3MWGZ9SZ', {
+    gtag('config', measurementId, {
       anonymize_ip: true,
       cookie_flags: 'SameSite=Strict;Secure'
     });
+  }
+
+  function disableAnalytics() {
+    window['ga-disable-' + measurementId] = true;
+    cookieUtils.delete('_ga');
+    cookieUtils.delete('_ga_' + measurementId.replace('G-', ''));
   }
 
   // Add cookie preference management button (for returning users)
