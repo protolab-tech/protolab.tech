@@ -40,7 +40,7 @@
 
     var existingConsent = cookieUtils.get('protolab_cookie_consent');
     
-    if (existingConsent === 'accepted') {
+    if (existingConsent === 'accepted' || existingConsent === 'customized') {
       loadAnalytics();
       return;
     }
