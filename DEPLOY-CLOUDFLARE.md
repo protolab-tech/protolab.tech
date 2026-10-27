@@ -13,6 +13,24 @@ Nothing here has been deployed and no DNS has been changed.
 The site loads nothing from other hosts (fonts, three.js, GSAP, Lenis and sql.js are in `assets/`) except
 the Google Calendar embedded on `/service-appointments/`, and it sets no cookies, so it needs no cookie banner.
 
+## Decide first: Register.it deletes the mail and the PEC when the nameservers leave
+
+protolab.tech's mail (`mail.register.it`) and its PEC (`pec.protolab.tech`) are Register.it services. Register.it's
+help page on switching a domain to external nameservers says every Register.it service on the domain —
+*«caselle email, caselle PEC, pacchetti hosting ed altro»* — is deactivated and **deleted**
+([register.it/assistenza/cambiare-dns](https://www.register.it/assistenza/cambiare-dns/)). Copying the MX records
+into Cloudflare does not save them. A Worker custom domain needs the zone on Cloudflare's nameservers (the
+"partial" CNAME setup is Business plan only), so steps 5–9 cannot be done for free while Register.it keeps the mail.
+
+- **A** — keep Register.it's DNS and keep serving from **GitHub Pages**: merge this branch (step 1) and stop there.
+  The privacy fixes (self-hosted fonts and scripts, no Google Analytics, no banner) work on GitHub Pages too.
+- **B** — move the mailboxes (IMAP export) and the PEC to providers that do not depend on who runs the DNS first,
+  then do every step below with the new providers' mail records.
+- **C** — get Register.it to confirm in writing that mail and PEC stay with external nameservers.
+
+DNSSEC is **on** at Register.it today: under B or C it must be switched off there about a day before step 5.
+Details and the full record list: `dns-protolab.tech.md`.
+
 ## Steps (in this order, nothing goes offline)
 
 1. **Merge** the `cloudflare` branch into `main` on GitHub. GitHub Pages keeps serving `main` meanwhile, and the
@@ -31,7 +49,7 @@ the Google Calendar embedded on `/service-appointments/`, and it sets no cookies
 4. **Check** `https://protolab-tech.<your-subdomain>.workers.dev`: the home page's 3D field, `/Chosko/`,
    `/Kaolin/`, `/EvoSimGame/`, `/EmojiSpaceInvaders/`, `/service-appointments/`, `/policy.html` (redirects to
    `/policy`), and any made-up address (shows the 404 page).
-5. **Move the DNS** to Cloudflare as described in `dns-protolab.tech.md` (the DNS move list prepared with this
+5. **Only after the decision above (B or C): move the DNS** to Cloudflare as described in `dns-protolab.tech.md` (the DNS move list prepared with this
    branch): DNSSEC off at Register.it first, add the zone (Free plan), compare the imported records with the
    list, every record **DNS only** (grey) for now, change the nameservers at Register.it, wait until the zone
    shows **Active**. The registration stays at Register.it; GitHub Pages keeps serving the site meanwhile.
