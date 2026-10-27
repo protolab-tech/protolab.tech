@@ -12,7 +12,6 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://protolab.tech/service-appointments/" />
 
-    <link rel="preconnect" href="https://calendar.google.com">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -268,6 +267,33 @@
             height: 100%;
             border: none;
             filter: invert(0.9) hue-rotate(180deg);
+        }
+
+        .calendar-gate {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .calendar-gate p {
+            max-width: 46ch;
+            margin: 0;
+        }
+
+        .calendar-gate button {
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
         }
 
         /* Form Styling */
@@ -555,10 +581,12 @@
         <section aria-labelledby="schedule-title">
             <h2 id="schedule-title">My Schedule</h2>
             <p class="section-desc">Check my availability before requesting an appointment.</p>
-            <div class="calendar-container">
-                <iframe title="Availability Calendar"
-                    src="https://calendar.google.com/calendar/embed?src=alban.zalli@outlook.com&amp;ctz=Europe/Rome"
-                    loading="lazy"></iframe>
+            <div class="calendar-container" id="calendar"
+                data-src="https://calendar.google.com/calendar/embed?src=alban.zalli@outlook.com&amp;ctz=Europe/Rome">
+                <div class="calendar-gate">
+                    <p>The calendar is shown by Google Calendar. Opening it connects your browser to Google, which may set its own cookies.</p>
+                    <button type="button" id="calendar-load">Show my availability</button>
+                </div>
             </div>
         </section>
 
@@ -623,6 +651,16 @@
     </div>
 
     <!-- Structured Data -->
+    <script>
+        // The Google Calendar loads only when asked: until then the page makes no request to Google.
+        document.getElementById('calendar-load').addEventListener('click', function () {
+            var box = document.getElementById('calendar');
+            var frame = document.createElement('iframe');
+            frame.title = 'Availability Calendar';
+            frame.src = box.getAttribute('data-src');
+            box.replaceChildren(frame);
+        });
+    </script>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
