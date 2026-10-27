@@ -1,0 +1,18 @@
+// Cloudflare Workers with static assets: the site is plain files, copied into dist/ by `node build.js`.
+// How to put it online: DEPLOY-CLOUDFLARE.md.
+{
+	"name": "protolab-tech",
+	"compatibility_date": "2026-10-27",
+	// Served on protolab-tech.<account>.workers.dev (kept out of search results by _headers).
+	"workers_dev": true,
+	// No "routes" key on purpose: protolab.tech is attached in the dashboard (Worker → Settings → Domains &
+	// Routes → Add → Custom domain) once the zone is active on Cloudflare. Without "routes" here, a deploy
+	// leaves the dashboard's domains alone; adding "routes" would replace them on the next deploy.
+	"assets": {
+		"directory": "./dist",
+		// A path with no file gets the nearest 404.html, with status 404.
+		"not_found_handling": "404-page",
+		// /Chosko/ serves Chosko/index.html; /policy.html is answered with a redirect to /policy.
+		"html_handling": "auto-trailing-slash"
+	}
+}

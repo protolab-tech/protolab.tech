@@ -1,0 +1,17 @@
+# Response headers for Cloudflare Workers static assets (read by Cloudflare, not served as a file).
+# https://developers.cloudflare.com/workers/static-assets/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Third-party code and fonts live in folders or files named after their version: a new version gets a new
+# name, so browsers may keep these for a year.
+/assets/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/fonts/files/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Keep the *.workers.dev address (and preview URLs) out of search results: protolab.tech is the real one.
+https://:version.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
