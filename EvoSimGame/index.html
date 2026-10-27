@@ -36,7 +36,7 @@
   <script src="assets/js/config.js"></script>
   
   <!-- SQL.js for evolution database -->
-  <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+  <script src="../assets/vendor/sql.js-1.15.2/sql-wasm.js"></script>
   
   <!-- Security headers -->
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -1392,7 +1392,7 @@
   async function initEvolutionDB() {
     try {
       const SQL = await initSqlJs({
-        locateFile: file => `https://sql.js.org/dist/${file}`
+        locateFile: file => `../assets/vendor/sql.js-1.15.2/${file}`
       });
       
       evolutionDB = new SQL.Database();
