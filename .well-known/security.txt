@@ -1,0 +1,5 @@
+Contact: mailto:security@zetaiti.com
+Expires: 2027-10-27T00:00:00Z
+Preferred-Languages: en, it
+Canonical: https://protolab.tech/.well-known/security.txt
+Policy: https://zetaiti.com/en/security/

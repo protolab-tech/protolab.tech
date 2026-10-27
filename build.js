@@ -10,7 +10,8 @@ const ROOT = __dirname;
 const DIST = path.join(ROOT, 'dist');
 
 // Never published. Names starting with a dot (.git, .claude, .wrangler, .nojekyll, .hintrc, .gitignore) are
-// skipped everywhere; these are skipped too, wherever they are.
+// skipped everywhere, except the top-level .well-known/ (RFC 8615: security.txt); these are skipped too, wherever
+// they are.
 const SKIP_NAMES = new Set(['dist', 'node_modules', 'build.js', 'wrangler.jsonc', 'wrangler.json', 'wrangler.toml', 'CNAME']);
 const SKIP_EXT = new Set(['.md', '.jsx']);
 
@@ -18,7 +19,8 @@ let files = 0;
 let bytes = 0;
 function copy(from, to) {
   for (const e of fs.readdirSync(from, { withFileTypes: true })) {
-    if (e.name.startsWith('.') || SKIP_NAMES.has(e.name)) continue;
+    const published = from === ROOT && e.name === '.well-known' && e.isDirectory();
+    if ((e.name.startsWith('.') && !published) || SKIP_NAMES.has(e.name)) continue;
     const a = path.join(from, e.name);
     const b = path.join(to, e.name);
     if (e.isDirectory()) {
@@ -34,7 +36,7 @@ function copy(from, to) {
 
 fs.rmSync(DIST, { recursive: true, force: true });
 copy(ROOT, DIST);
-for (const must of ['index.html', '404.html', '_headers']) {
+for (const must of ['index.html', '404.html', '_headers', '.well-known/security.txt']) {
   if (!fs.existsSync(path.join(DIST, must))) {
     console.error(`dist/${must} is missing`);
     process.exit(1);

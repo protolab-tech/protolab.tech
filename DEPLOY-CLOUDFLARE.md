@@ -6,7 +6,8 @@ Nothing here has been deployed and no DNS has been changed.
 
 | File | What it does |
 |---|---|
-| `build.js` | `node build.js` copies the published files into `dist/` (no dependencies). It leaves out the repository's own files: dot-folders, `CNAME`, `wrangler.jsonc`, `build.js`, `*.md`, the unused `*.jsx` source. |
+| `build.js` | `node build.js` copies the published files into `dist/` (no dependencies). It leaves out the repository's own files: dot-folders (all but `.well-known/`), `CNAME`, `wrangler.jsonc`, `build.js`, `*.md`, the unused `*.jsx` source. |
+| `.well-known/security.txt` | Where to report a vulnerability (RFC 9116): `security@zetaiti.com`, the policy on zetaiti.com's Security page. Served by Workers (assets upload dot-folders) and by GitHub Pages (the `.nojekyll` file keeps Jekyll from dropping it). Its `Expires` (2027-10-27) must be moved forward, at most a year, before that day. |
 | `wrangler.jsonc` | Worker `protolab-tech`, serves `dist/`; a missing page gets `404.html` with status 404; `/Chosko/` serves `Chosko/index.html`; `/policy.html` redirects to `/policy`. |
 | `_headers` | `nosniff` and a referrer policy on every response, long caching for `/assets/vendor/` and the font files (their names carry versions), and `noindex` on the `*.workers.dev` address. |
 
