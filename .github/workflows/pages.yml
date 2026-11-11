@@ -1,5 +1,8 @@
-# Publishes the site with GitHub Pages from a build (scripts/build-site.mjs): the pages and assets, without the
-# repository's own files (the build, the licence text, editor settings).
+# Publishes the site with GitHub Pages from a build (scripts/build-site.mjs). Since 11 Nov 2026 it publishes, by
+# default, small pages that send every old address on to zetaiti.com (the owner's decision: protolab.tech has the same
+# company details as Zetaiti S.r.l.s. and closes by the end of 2026). The full site is still in the repository: set the
+# repository variable SITE_MODE to "site" (Settings -> Secrets and variables -> Actions -> Variables) and re-run this
+# workflow to publish it again.
 # Needs the repository's Pages source set to "GitHub Actions".
 name: pages
 on:
@@ -22,6 +25,8 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/build-site.mjs _site
+        env:
+          SITE_MODE: ${{ vars.SITE_MODE || 'redirect' }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
